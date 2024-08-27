@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://i4kh5lw8cr25"]
+
+[ext_resource type="Script" path="res://Main.cs" id="1_3ksfm"]
+[ext_resource type="Script" path="res://Puck.cs" id="1_y6cti"]
+[ext_resource type="Texture2D" uid="uid://dki2lbcjmcppx" path="res://ball.png" id="2_0pexw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jiesq"]
+radius = 50.0
+
+[node name="Main" type="Node2D" node_paths=PackedStringArray("Puck")]
+script = ExtResource("1_3ksfm")
+Puck = NodePath("Puck")
+
+[node name="Puck" type="RigidBody2D" parent="."]
+position = Vector2(600, 300)
+input_pickable = true
+gravity_scale = 0.0
+script = ExtResource("1_y6cti")
+Speed = 200.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Puck"]
+shape = SubResource("CircleShape2D_jiesq")
+
+[node name="Sprite2D" type="Sprite2D" parent="Puck"]
+scale = Vector2(10, 10)
+texture = ExtResource("2_0pexw")
+
+[connection signal="input_event" from="Puck" to="." method="_on_puck_input_event"]
+[connection signal="mouse_entered" from="Puck" to="." method="_on_puck_mouse_entered"]
+[connection signal="mouse_exited" from="Puck" to="." method="_on_puck_mouse_exited"]
