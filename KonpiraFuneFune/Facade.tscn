@@ -1,0 +1,45 @@
+[gd_scene load_steps=9 format=3 uid="uid://b61v7kv5ef6j2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_djrnf"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0v7vf"]
+material = SubResource("StandardMaterial3D_djrnf")
+size = Vector3(200, 0.2, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yjeuu"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ul2fk"]
+material = SubResource("StandardMaterial3D_yjeuu")
+size = Vector3(200, 200, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqtts"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dn1vj"]
+material = SubResource("StandardMaterial3D_aqtts")
+size = Vector3(0.2, 200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njcsk"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4ml61"]
+material = SubResource("StandardMaterial3D_njcsk")
+size = Vector3(0.2, 200, 200)
+
+[node name="Facade" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_0v7vf")
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ul2fk")
+
+[node name="LeftWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0)
+mesh = SubResource("BoxMesh_dn1vj")
+
+[node name="RightWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
+mesh = SubResource("BoxMesh_4ml61")

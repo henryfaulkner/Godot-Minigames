@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cvbqtufp4r70m"
+path="res://.godot/imported/GrabHand.obj-7a36173d45cfb75d0139c92772e37010.mesh"
+
+[deps]
+
+files=["res://.godot/imported/GrabHand.obj-7a36173d45cfb75d0139c92772e37010.mesh"]
+
+source_file="res://3dModels/OBJ/GrabHand.obj"
+dest_files=["res://.godot/imported/GrabHand.obj-7a36173d45cfb75d0139c92772e37010.mesh", "res://.godot/imported/GrabHand.obj-7a36173d45cfb75d0139c92772e37010.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

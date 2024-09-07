@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bhfo83e6jhuhi"
+path="res://.godot/imported/KnockHand.obj-0834dfd2f403baffd2d76f5d0fde664d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/KnockHand.obj-0834dfd2f403baffd2d76f5d0fde664d.mesh"]
+
+source_file="res://3dModels/OBJ/KnockHand.obj"
+dest_files=["res://.godot/imported/KnockHand.obj-0834dfd2f403baffd2d76f5d0fde664d.mesh", "res://.godot/imported/KnockHand.obj-0834dfd2f403baffd2d76f5d0fde664d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
