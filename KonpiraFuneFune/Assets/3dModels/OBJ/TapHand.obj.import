@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ddauqqie6o2vg"
+path="res://.godot/imported/TapHand.obj-bf03180bd0687b1beed222e39cc0e0be.mesh"
+
+[deps]
+
+files=["res://.godot/imported/TapHand.obj-bf03180bd0687b1beed222e39cc0e0be.mesh"]
+
+source_file="res://Assets/3dModels/OBJ/TapHand.obj"
+dest_files=["res://.godot/imported/TapHand.obj-bf03180bd0687b1beed222e39cc0e0be.mesh", "res://.godot/imported/TapHand.obj-bf03180bd0687b1beed222e39cc0e0be.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
