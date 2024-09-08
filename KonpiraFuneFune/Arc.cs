@@ -8,13 +8,25 @@ public partial class Arc : Path3D
 	public override void _Ready()
 	{
 		// assume 3 points for quadratic bezier; else, explode
-		var manualPoints = Curve.GetBakedPoints();
+		if (Curve.PointCount < 3)
+		{
+			GD.PrintErr("Bezier curve requires exactly 3 points.");
+			return;
+		}
+
+		Vector3 p0 = Curve.GetPointPosition(0);
+		Vector3 p1 = Curve.GetPointPosition(1);
+		Vector3 p2 = Curve.GetPointPosition(2);
+
 		Curve.ClearPoints();
 
-		var forRatio = NUM_POINTS / 100;
-		for (int i = 0; i < 1.0; i += forRatio)
+		for (int i = 0; i < NUM_POINTS; i++)
 		{
-			Curve.AddPoint(QuadraticBezier(manualPoints[0], manualPoints[1], manualPoints[2], i));
+			// Normalize t to be in the range [0, 1]
+			float t = (float)i / (NUM_POINTS - 1);
+			var point = QuadraticBezier(p0, p1, p2, t);
+			//GD.Print($"Curve Point {point}");
+			Curve.AddPoint(point);
 		}
 	}
 
@@ -22,7 +34,6 @@ public partial class Arc : Path3D
 	{
 		Vector3 q0 = p0.Lerp(p1, t);
 		Vector3 q1 = p1.Lerp(p2, t);
-		Vector3 r = q0.Lerp(q1, t);
-		return r;
+		return q0.Lerp(q1, t);
 	}
 }
