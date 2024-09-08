@@ -15,16 +15,19 @@ public partial class Character : MeshInstance3D
 
 	public void Tap()
 	{
+		GD.Print("change to Tap Mesh");
 		Mesh = TapMesh;
 	}
 
 	public void Grab()
 	{
+		GD.Print("change to Grab Mesh");
 		Mesh = GrabMesh;
 	}
 
 	public void Knock()
 	{
+		GD.Print("change to Knock Mesh");
 		Mesh = KnockMesh;
 	}
 }

@@ -6,4 +6,10 @@ public partial class Enumerations
         Grab,
         Knock,
     }
+
+    public enum BowlStates
+    {
+        Resting,
+        Carrying,
+    }
 }

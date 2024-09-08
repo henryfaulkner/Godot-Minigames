@@ -12,21 +12,31 @@ public partial class GameScene : Node3D
 	[Export]
 	private Controller Player1_Controller { get; set; }
 
-	private PlayerConfigBusiness Player1_PlayerConfigBusiness { get; set; }
+	private Player Player1 { get; set; }
 
-	private ICommand Player1_Command { get; set; }
+	private int CommanderIdIndex { get; set; }
+
+	private CommandService _serviceCommand;
 
 	public override void _Ready()
 	{
-		Player1_PlayerConfigBusiness = new PlayerConfigBusiness("Player1.json");
-		Player1_Controller.Command += SetPlayer1Command;
-		SetPlayerInputs(Player1_Controller, Player1_PlayerConfigBusiness.Load());
+		_serviceCommand = GetNode<CommandService>("/root/CommandService");
+		if (_serviceCommand == null)
+		{
+			GD.Print("GameScene: Service Command is null");
+			return;
+		}
+		_serviceCommand.Init();
+
+		CommanderIdIndex = 0;
+		Player1 = CreatePlayer1(CommanderIdIndex);
+		CommanderIdIndex = 1;
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		bool player1HitSurface = ProcessPathFollow(Player1_PathFollow, delta);
-		if (player1HitSurface && Player1_Command != null) Player1_Command.Execute();
+		if (player1HitSurface && Player1.LatestCommand != null) Player1.LatestCommand.Execute();
 	}
 
 	private bool ProcessPathFollow(PathFollow3D pf, double delta)
@@ -56,32 +66,16 @@ public partial class GameScene : Node3D
 		return result;
 	}
 
-	private void SetPlayerInputs(Controller controller, PlayerConfigModel config)
+	public Player CreatePlayer1(int id)
 	{
-		GD.Print($"config.TapInputKey {config.TapInputKey}");
-		GD.Print($"config.GrabInputKey {config.GrabInputKey}");
-		GD.Print($"config.KnockInputKey {config.KnockInputKey}");
-		controller.SetTapInput(config.TapInputKey);
-		controller.SetGrabInput(config.GrabInputKey);
-		controller.SetKnockInput(config.KnockInputKey);
-	}
-
-	private void SetPlayer1Command(int commandType)
-	{
-		switch (commandType)
-		{
-			case (int)Enumerations.Commands.Tap:
-				Player1_Command = CommandFactory.CreateTapCommand();
-				break;
-			case (int)Enumerations.Commands.Grab:
-				Player1_Command = CommandFactory.CreateGrabCommand();
-				break;
-			case (int)Enumerations.Commands.Knock:
-				Player1_Command = CommandFactory.CreateKnockCommand();
-				break;
-			default:
-				GD.Print("SetPlayer1Command no mapping found");
-				break;
-		}
+		var result = new Player(_serviceCommand);
+		result.Id = id;
+		result.Name = "Player 1";
+		result.PathFollow = Player1_PathFollow;
+		result.Controller = Player1_Controller;
+		result.PlayerConfigBusiness = new PlayerConfigBusiness("Player1.json");
+		result.Controller.Command += result.SetLatestCommand;
+		result.SetInputKeys(result.PlayerConfigBusiness.Load());
+		return result;
 	}
 }

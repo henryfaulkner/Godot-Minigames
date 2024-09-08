@@ -15,6 +15,10 @@ run/main_scene="res://src/Pages/GameScene.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+CommandService="*res://src/Core/Commands/CommandService.cs"
+
 [dotnet]
 
 project/assembly_name="KonpiraFuneFune"
