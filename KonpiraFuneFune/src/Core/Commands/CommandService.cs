@@ -12,19 +12,19 @@ public partial class CommandService : Node
 	}
 
 	[Signal]
-	public delegate void AttachBowlToHandEventHandler();
-	public void EmitAttachBowlToHandSignal()
+	public delegate void AttachBowlToHandEventHandler(int commanderId);
+	public void EmitAttachBowlToHandSignal(int commanderId)
 	{
 		GD.Print("Call EmitAttachBowlToHandSignal");
-		EmitSignal(SignalName.AttachBowlToHand);
+		EmitSignal(SignalName.AttachBowlToHand, commanderId);
 	}
 
 	[Signal]
-	public delegate void DetachBowlFromHandEventHandler();
-	public void EmitDetachBowlFromHandSignal()
+	public delegate void DetachBowlFromHandEventHandler(int commanderId);
+	public void EmitDetachBowlFromHandSignal(int commanderId)
 	{
 		GD.Print("Call EmitDetachBowlFromHandSignal");
-		EmitSignal(SignalName.DetachBowlFromHand);
+		EmitSignal(SignalName.DetachBowlFromHand, commanderId);
 	}
 
 	public bool AreBowlCarrierAndCommanderEqual(AbstractCommander commander)
@@ -34,10 +34,10 @@ public partial class CommandService : Node
 	}
 
 	[Signal]
-	public delegate void PlayerLostEventHandler(int playerId);
-	public void EmitPlayerLostSignal(int playerId)
+	public delegate void PlayerLostEventHandler(int commanderId);
+	public void EmitPlayerLostSignal(int commanderId)
 	{
 		GD.Print("Call EmitPlayerLostSignal");
-		EmitSignal(SignalName.PlayerLost, playerId);
+		EmitSignal(SignalName.PlayerLost, commanderId);
 	}
 }

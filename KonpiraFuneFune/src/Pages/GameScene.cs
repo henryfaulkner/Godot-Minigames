@@ -1,8 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 
 public partial class GameScene : Node3D
 {
+	[Export]
+	private Bowl Bowl { get; set; }
+
 	[Export]
 	private float Speed { get; set; }
 
@@ -13,24 +19,32 @@ public partial class GameScene : Node3D
 	private Controller Player1_Controller { get; set; }
 
 	private Player Player1 { get; set; }
+	private List<Player> PlayerList { get; set; }
 
 	private int CommanderIdIndex { get; set; }
-
+	private List<AbstractCommander> CommanderList { get; set; }
 	private CommandService _serviceCommand;
 
 	public override void _Ready()
 	{
+		PlayerList = new List<Player>();
+		CommanderList = new List<AbstractCommander>();
+
 		_serviceCommand = GetNode<CommandService>("/root/CommandService");
 		if (_serviceCommand == null)
 		{
 			GD.Print("GameScene: Service Command is null");
 			return;
 		}
+
 		_serviceCommand.Init();
+		_serviceCommand.AttachBowlToHand += AttachBowlToPlayer;
+		_serviceCommand.DetachBowlFromHand += AttachBowlToBase;
 
 		CommanderIdIndex = 0;
 		Player1 = CreatePlayer1(CommanderIdIndex);
-		CommanderIdIndex = 1;
+		PlayerList.Add(Player1);
+		CommanderList.Add(Player1);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -66,6 +80,61 @@ public partial class GameScene : Node3D
 		return result;
 	}
 
+	private void AttachBowlToBase(int commanderId)
+	{
+		GD.Print($"AttachBowlToBase");
+		AttachBowlTo(Bowl, this);
+	}
+
+	private void AttachBowlToPlayer(int commanderId)
+	{
+		try
+		{
+			GD.Print("AttachBowlToPlayer + ", commanderId);
+			var player = GetPlayerByCommanderId(commanderId);
+			AttachBowlTo(Bowl, player.PathFollow);
+		}
+		catch (Exception ex)
+		{
+			GD.Print($"exception: {ex.Message}");
+		}
+	}
+
+	private void AttachBowlTo(Bowl bowl, Node3D target)
+	{
+		if (bowl == null)
+		{
+			GD.PrintErr("Bowl is null. Cannot attach it to the target.");
+			return;
+		}
+		if (target == null)
+		{
+			GD.PrintErr("Target is null. Cannot attach the bowl.");
+			return;
+		}
+		
+		if (!(bowl is Node3D))
+		{
+			GD.PrintErr("Bowl is not a Node3D. AddChild will fail.");
+			return;
+		}
+		
+		if (bowl.GetParent() != null)
+		{
+			GD.Print("Bowl already has a parent. Removing from current parent.");
+			bowl.GetParent().RemoveChild(bowl);
+		}
+		
+		if (!target.IsInsideTree())
+		{
+			GD.PrintErr("Target is not inside the scene tree. AddChild might fail.");
+			return;
+		}
+		
+		target.AddChild(bowl);
+		bowl.Owner = target;
+	}
+
 	public Player CreatePlayer1(int id)
 	{
 		var result = new Player(_serviceCommand);
@@ -77,5 +146,10 @@ public partial class GameScene : Node3D
 		result.Controller.Command += result.SetLatestCommand;
 		result.SetInputKeys(result.PlayerConfigBusiness.Load());
 		return result;
+	}
+
+	public Player GetPlayerByCommanderId(int commanderId)
+	{
+		return PlayerList.Where(x => x.Id == commanderId).First();
 	}
 }

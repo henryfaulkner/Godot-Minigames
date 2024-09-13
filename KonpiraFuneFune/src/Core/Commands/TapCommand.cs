@@ -22,7 +22,7 @@ public partial class TapCommand : Node, ICommand
 		if (_serviceCommand.BowlState == Enumerations.BowlStates.Carrying
 			&& _serviceCommand.AreBowlCarrierAndCommanderEqual(_commander))
 		{
-			_serviceCommand.EmitDetachBowlFromHandSignal();
+			_serviceCommand.EmitDetachBowlFromHandSignal(_commander.Id);
 			_serviceCommand.BowlState = Enumerations.BowlStates.Resting;
 			_serviceCommand.BowlCarrier = _commander;
 		}

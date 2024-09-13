@@ -21,7 +21,7 @@ public partial class GrabCommand : Node, ICommand
 
 		if (_serviceCommand.BowlState == Enumerations.BowlStates.Resting)
 		{
-			_serviceCommand.EmitAttachBowlToHandSignal();
+			_serviceCommand.EmitAttachBowlToHandSignal(_commander.Id);
 			_serviceCommand.BowlState = Enumerations.BowlStates.Carrying;
 			_serviceCommand.BowlCarrier = _commander;
 		}

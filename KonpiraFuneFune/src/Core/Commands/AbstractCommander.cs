@@ -1,5 +1,5 @@
-public abstract class AbstractCommander
+public class AbstractCommander
 {
-    public abstract int Id { get; set; }
-    public abstract string Name { get; set; }
+	public virtual int Id { get; set; }
+	public virtual string Name { get; set; }
 }
