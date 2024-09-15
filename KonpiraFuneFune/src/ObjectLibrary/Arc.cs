@@ -17,6 +17,10 @@ public partial class Arc : Path3D
 		Vector3 p0 = Curve.GetPointPosition(0);
 		Vector3 p1 = Curve.GetPointPosition(1);
 		Vector3 p2 = Curve.GetPointPosition(2);
+		
+		GD.Print($"p0: x = {p0.X}, y = {p0.Y}, z = {p0.Z}");
+		GD.Print($"p1: x = {p1.X}, y = {p1.Y}, z = {p1.Z}");
+		GD.Print($"p2: x = {p2.X}, y = {p2.Y}, z = {p2.Z}");
 
 		Curve.ClearPoints();
 

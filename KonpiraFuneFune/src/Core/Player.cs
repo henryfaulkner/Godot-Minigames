@@ -4,16 +4,19 @@ public class Player : AbstractCommander
 {
 	private readonly CommandService _serviceCommand;
 
-	public Player(CommandService serviceCommand)
+	public string ConfigFileName { get; private set; }
+
+	public Player(CommandService serviceCommand, string configFileName)
 	{
 		_serviceCommand = serviceCommand;
+		ConfigFileName = configFileName;
 	}
 
 	public override int Id { get; set; }
 	public override string Name { get; set; }
 	public PathFollow3D PathFollow { get; set; }
+	public RemoteTransform3D BowlTransform { get; set; }
 	public Controller Controller { get; set; }
-	public PlayerConfigBusiness PlayerConfigBusiness { get; set; }
 	public ICommand LatestCommand { get; set; }
 
 	public void SetInputKeys(PlayerConfigModel config)

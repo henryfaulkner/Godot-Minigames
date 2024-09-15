@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 public partial class GameScene : Node3D
 {
@@ -16,9 +15,24 @@ public partial class GameScene : Node3D
 	private PathFollow3D Player1_PathFollow { get; set; }
 
 	[Export]
+	private RemoteTransform3D Player1_BowlTransform { get; set; }
+
+	[Export]
 	private Controller Player1_Controller { get; set; }
 
+	[Export]
+	private PathFollow3D Player2_PathFollow { get; set; }
+
+	[Export]
+	private RemoteTransform3D Player2_BowlTransform { get; set; }
+
+	[Export]
+	private Controller Player2_Controller { get; set; }
+
 	private Player Player1 { get; set; }
+	private const string Player1_ConfigFileName = "Player1";
+	private Player Player2 { get; set; }
+	private const string Player2_ConfigFileName = "Player2";
 	private List<Player> PlayerList { get; set; }
 
 	private int CommanderIdIndex { get; set; }
@@ -39,18 +53,44 @@ public partial class GameScene : Node3D
 
 		_serviceCommand.Init();
 		_serviceCommand.AttachBowlToHand += AttachBowlToPlayer;
-		_serviceCommand.DetachBowlFromHand += AttachBowlToBase;
+		_serviceCommand.DetachBowlFromHand += DetachBowlFromPlayer;
 
-		CommanderIdIndex = 0;
-		Player1 = CreatePlayer1(CommanderIdIndex);
-		PlayerList.Add(Player1);
-		CommanderList.Add(Player1);
+		try
+		{
+			Player1 = CreatePlayer1();
+			PlayerList.Add(Player1);
+			CommanderList.Add(Player1);
+		}
+		catch (Exception exception)
+		{
+			GD.Print($"Player1 creation failed. {exception.Message}");
+		}
+
+		try
+		{
+			//Player2 = CreatePlayer2();
+			//PlayerList.Add(Player2);
+			//CommanderList.Add(Player2);
+		}
+		catch (Exception exception)
+		{
+			GD.Print($"Player2 creation failed. {exception.Message}");
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		bool player1HitSurface = ProcessPathFollow(Player1_PathFollow, delta);
-		if (player1HitSurface && Player1.LatestCommand != null) Player1.LatestCommand.Execute();
+		if (Player1 != null)
+		{
+			bool playerHitSurface = ProcessPathFollow(Player1.PathFollow, delta);
+			if (playerHitSurface && Player1.LatestCommand != null) Player1.LatestCommand.Execute();
+		}
+
+		if (Player2 != null)
+		{
+			bool playerHitSurface = ProcessPathFollow(Player2.PathFollow, delta);
+			if (playerHitSurface && Player2.LatestCommand != null) Player2.LatestCommand.Execute();
+		}
 	}
 
 	private bool ProcessPathFollow(PathFollow3D pf, double delta)
@@ -77,13 +117,8 @@ public partial class GameScene : Node3D
 		{
 			pf.ProgressRatio += Speed * (float)delta;
 		}
+		GD.Print($"ProgressRatio: {pf.ProgressRatio}");
 		return result;
-	}
-
-	private void AttachBowlToBase(int commanderId)
-	{
-		GD.Print($"AttachBowlToBase");
-		AttachBowlTo(Bowl, this);
 	}
 
 	private void AttachBowlToPlayer(int commanderId)
@@ -92,7 +127,7 @@ public partial class GameScene : Node3D
 		{
 			GD.Print("AttachBowlToPlayer + ", commanderId);
 			var player = GetPlayerByCommanderId(commanderId);
-			AttachBowlTo(Bowl, player.PathFollow);
+			AttachBowlToPathFollow(player);
 		}
 		catch (Exception ex)
 		{
@@ -100,56 +135,76 @@ public partial class GameScene : Node3D
 		}
 	}
 
-	private void AttachBowlTo(Bowl bowl, Node3D target)
+	private void DetachBowlFromPlayer(int commanderId)
 	{
-		if (bowl == null)
+		try
 		{
-			GD.PrintErr("Bowl is null. Cannot attach it to the target.");
-			return;
+			GD.Print("DetachBowlFromPlayer + ", commanderId);
+			var player = GetPlayerByCommanderId(commanderId);
+			DetachBowlFromPathFollow(player);
 		}
-		if (target == null)
+		catch (Exception ex)
 		{
-			GD.PrintErr("Target is null. Cannot attach the bowl.");
-			return;
+			GD.Print($"exception: {ex.Message}");
 		}
-		
-		if (!(bowl is Node3D))
-		{
-			GD.PrintErr("Bowl is not a Node3D. AddChild will fail.");
-			return;
-		}
-		
-		if (bowl.GetParent() != null)
-		{
-			GD.Print("Bowl already has a parent. Removing from current parent.");
-			bowl.GetParent().RemoveChild(bowl);
-		}
-		
-		if (!target.IsInsideTree())
-		{
-			GD.PrintErr("Target is not inside the scene tree. AddChild might fail.");
-			return;
-		}
-		
-		target.AddChild(bowl);
-		bowl.Owner = target;
 	}
 
-	public Player CreatePlayer1(int id)
+	private void DetachBowlFromPlayers(List<Player> players)
 	{
-		var result = new Player(_serviceCommand);
-		result.Id = id;
-		result.Name = "Player 1";
+		players.ForEach(player => DetachBowlFromPathFollow(player));
+	}
+
+	private Player CreatePlayer1()
+	{
+		var result = new Player(_serviceCommand, Player1_ConfigFileName);
+
 		result.PathFollow = Player1_PathFollow;
+		result.BowlTransform = Player1_BowlTransform;
 		result.Controller = Player1_Controller;
-		result.PlayerConfigBusiness = new PlayerConfigBusiness("Player1.json");
+
+		var pcb = new PlayerConfigBusiness();
+		var config = pcb.Load(result.ConfigFileName);
+		result.Id = config.CommanderId;
+		result.Name = config.Name;
+		result.SetInputKeys(config);
+
+		// Command func must be set after InputKeys are initialized
 		result.Controller.Command += result.SetLatestCommand;
-		result.SetInputKeys(result.PlayerConfigBusiness.Load());
+
+		return result;
+	}
+
+	private Player CreatePlayer2()
+	{
+		var result = new Player(_serviceCommand, Player2_ConfigFileName);
+		var pcb = new PlayerConfigBusiness();
+		var config = pcb.Load(result.ConfigFileName);
+
+		result.PathFollow = Player2_PathFollow;
+		result.BowlTransform = Player2_BowlTransform;
+		result.Controller = Player2_Controller;
+		result.Controller.Command += result.SetLatestCommand;
+
+		result.Id = config.CommanderId;
+		result.Name = config.Name;
+		result.SetInputKeys(config);
+
 		return result;
 	}
 
 	public Player GetPlayerByCommanderId(int commanderId)
 	{
 		return PlayerList.Where(x => x.Id == commanderId).First();
+	}
+
+	private void AttachBowlToPathFollow(Player player)
+	{
+		DetachBowlFromPlayers(PlayerList);
+		player.BowlTransform.UpdatePosition = true;
+	}
+
+	private void DetachBowlFromPathFollow(Player player)
+	{
+		player.BowlTransform.UpdatePosition = false;
 	}
 }

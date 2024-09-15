@@ -1,10 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://c41ag4ylqntjx"]
+[gd_scene load_steps=12 format=3 uid="uid://c41ag4ylqntjx"]
 
 [ext_resource type="Script" path="res://src/Pages/GameScene.cs" id="1_d151q"]
 [ext_resource type="PackedScene" uid="uid://b61v7kv5ef6j2" path="res://src/ObjectLibrary/Facade.tscn" id="1_uaqck"]
 [ext_resource type="ArrayMesh" uid="uid://cbi4lgy7orvvg" path="res://Assets/3dModels/OBJ/Bowl.obj" id="2_l52qb"]
 [ext_resource type="ArrayMesh" uid="uid://cg8eel80s8q2d" path="res://Assets/3dModels/OBJ/GrabHand.obj" id="3_mygm1"]
-[ext_resource type="Script" path="res://src/Pages/Bowl.cs" id="4_drdjb"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/Bowl.cs" id="4_drdjb"]
 [ext_resource type="Script" path="res://src/ObjectLibrary/Arc.cs" id="4_uco0g"]
 [ext_resource type="Script" path="res://src/Core/Controller.cs" id="6_0ddtj"]
 [ext_resource type="Script" path="res://src/ObjectLibrary/Character.cs" id="6_1msvg"]
@@ -17,40 +17,72 @@ _data = {
 }
 point_count = 3
 
-[node name="GameScene" type="Node3D" node_paths=PackedStringArray("Bowl", "Player1_PathFollow", "Player1_Controller")]
+[sub_resource type="Curve3D" id="Curve3D_vleb8"]
+_data = {
+"points": PackedVector3Array(0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, -20, 20, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="GameScene" type="Node3D" node_paths=PackedStringArray("Bowl", "Player1_PathFollow", "Player1_BowlTransform", "Player1_Controller", "Player2_PathFollow", "Player2_BowlTransform")]
 script = ExtResource("1_d151q")
 Bowl = NodePath("Bowl")
 Speed = 1.0
-Player1_PathFollow = NodePath("Path3D/PathFollow3D")
-Player1_Controller = NodePath("Controller1")
+Player1_PathFollow = NodePath("Player1Path/PathFollow3D")
+Player1_BowlTransform = NodePath("Player1Path/PathFollow3D/RemoteTransform3D")
+Player1_Controller = NodePath("Player1Controller")
+Player2_PathFollow = NodePath("Player2Path/PathFollow3D")
+Player2_BowlTransform = NodePath("Player2Path/PathFollow3D/RemoteTransform3D")
 
 [node name="Facade" parent="." instance=ExtResource("1_uaqck")]
 
 [node name="Bowl" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.358, 50)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
 mesh = ExtResource("2_l52qb")
 script = ExtResource("4_drdjb")
 
-[node name="Path3D" type="Path3D" parent="."]
+[node name="Player1Path" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
 curve = SubResource("Curve3D_1v0fq")
 script = ExtResource("4_uco0g")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+[node name="PathFollow3D" type="PathFollow3D" parent="Player1Path"]
 rotation_mode = 0
 loop = false
 tilt_enabled = false
 
-[node name="Player1" type="MeshInstance3D" parent="Path3D/PathFollow3D"]
+[node name="Player1" type="MeshInstance3D" parent="Player1Path/PathFollow3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5, 0)
 mesh = ExtResource("3_mygm1")
 skeleton = NodePath("../../..")
 script = ExtResource("6_1msvg")
 
-[node name="Player2" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 30, 5, 50)
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player1Path/PathFollow3D"]
+remote_path = NodePath("../../../Bowl")
+update_position = false
+update_rotation = false
+update_scale = false
+
+[node name="Player2Path" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 50)
+curve = SubResource("Curve3D_vleb8")
+script = ExtResource("4_uco0g")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Player2Path"]
+rotation_mode = 0
+loop = false
+tilt_enabled = false
+
+[node name="Player2" type="MeshInstance3D" parent="Player2Path/PathFollow3D"]
 mesh = ExtResource("3_mygm1")
-skeleton = NodePath("../Path3D/PathFollow3D/Player1")
+skeleton = NodePath("../..")
+script = ExtResource("6_1msvg")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player2Path/PathFollow3D"]
+remote_path = NodePath("../../../Bowl")
+update_position = false
+update_rotation = false
+update_scale = false
 
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("Target")]
 transform = Transform3D(1, 0, 0, 0, 0.161604, -0.986856, 0, 0.986856, 0.161604, 0, 23.9163, 100)
@@ -62,6 +94,8 @@ Target = NodePath("../Bowl")
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 2.28054, 45.5716, 113.491)
 light_energy = 2.0
 
-[node name="Controller1" type="Node3D" parent="." node_paths=PackedStringArray("Character")]
+[node name="Player1Controller" type="Node3D" parent="." node_paths=PackedStringArray("Character")]
 script = ExtResource("6_0ddtj")
-Character = NodePath("../Path3D/PathFollow3D/Player1")
+Character = NodePath("../Player1Path/PathFollow3D/Player1")
+
+[node name="Player2Controller" type="Node3D" parent="."]

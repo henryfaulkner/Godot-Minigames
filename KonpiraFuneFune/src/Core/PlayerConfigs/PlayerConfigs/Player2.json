@@ -1,0 +1,7 @@
+{
+	"CommanderId": 2,
+	"Name": "Player 2",
+	"TapInputKey": "i",
+	"GrabInputKey": "o",
+	"KnockInputKey": "p"
+}
