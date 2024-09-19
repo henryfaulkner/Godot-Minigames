@@ -26,7 +26,7 @@ public partial class KnockCommand : Node, ICommand
 			_serviceCommand.BowlState = Enumerations.BowlStates.Resting;
 			_serviceCommand.BowlCarrier = _commander;
 		}
-		else if (_serviceCommand.BowlState == Enumerations.BowlStates.Resting)
+		else
 		{
 			_serviceCommand.EmitPlayerLostSignal(_commander.Id);
 		}

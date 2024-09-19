@@ -15,6 +15,7 @@ public class Player : AbstractCommander
 	public override int Id { get; set; }
 	public override string Name { get; set; }
 	public PathFollow3D PathFollow { get; set; }
+	public int DirectionSign { get; set; }
 	public RemoteTransform3D BowlTransform { get; set; }
 	public Controller Controller { get; set; }
 	public ICommand LatestCommand { get; set; }

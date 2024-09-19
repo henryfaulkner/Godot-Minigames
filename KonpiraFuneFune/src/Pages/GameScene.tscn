@@ -19,25 +19,26 @@ point_count = 3
 
 [sub_resource type="Curve3D" id="Curve3D_vleb8"]
 _data = {
-"points": PackedVector3Array(0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, -20, 20, 0),
+"points": PackedVector3Array(0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0),
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
 
-[node name="GameScene" type="Node3D" node_paths=PackedStringArray("Bowl", "Player1_PathFollow", "Player1_BowlTransform", "Player1_Controller", "Player2_PathFollow", "Player2_BowlTransform")]
+[node name="GameScene" type="Node3D" node_paths=PackedStringArray("Bowl", "Player1_PathFollow", "Player1_BowlTransform", "Player1_Controller", "Player2_PathFollow", "Player2_BowlTransform", "Player2_Controller")]
 script = ExtResource("1_d151q")
 Bowl = NodePath("Bowl")
 Speed = 1.0
 Player1_PathFollow = NodePath("Player1Path/PathFollow3D")
 Player1_BowlTransform = NodePath("Player1Path/PathFollow3D/RemoteTransform3D")
 Player1_Controller = NodePath("Player1Controller")
-Player2_PathFollow = NodePath("Player2Path/PathFollow3D")
-Player2_BowlTransform = NodePath("Player2Path/PathFollow3D/RemoteTransform3D")
+Player2_PathFollow = NodePath("Player2Path/Player2PathFollow")
+Player2_BowlTransform = NodePath("Player2Path/Player2PathFollow/RemoteTransform3D")
+Player2_Controller = NodePath("Player2Controller")
 
 [node name="Facade" parent="." instance=ExtResource("1_uaqck")]
 
 [node name="Bowl" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08184, 50)
 mesh = ExtResource("2_l52qb")
 script = ExtResource("4_drdjb")
 
@@ -47,6 +48,8 @@ curve = SubResource("Curve3D_1v0fq")
 script = ExtResource("4_uco0g")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Player1Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 20, 0)
+progress = 40.0
 rotation_mode = 0
 loop = false
 tilt_enabled = false
@@ -58,7 +61,6 @@ skeleton = NodePath("../../..")
 script = ExtResource("6_1msvg")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player1Path/PathFollow3D"]
-remote_path = NodePath("../../../Bowl")
 update_position = false
 update_rotation = false
 update_scale = false
@@ -68,18 +70,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 50)
 curve = SubResource("Curve3D_vleb8")
 script = ExtResource("4_uco0g")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Player2Path"]
+[node name="Player2PathFollow" type="PathFollow3D" parent="Player2Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 20, 0)
+progress = 40.0
 rotation_mode = 0
 loop = false
 tilt_enabled = false
 
-[node name="Player2" type="MeshInstance3D" parent="Player2Path/PathFollow3D"]
+[node name="Player2" type="MeshInstance3D" parent="Player2Path/Player2PathFollow"]
 mesh = ExtResource("3_mygm1")
 skeleton = NodePath("../..")
 script = ExtResource("6_1msvg")
 
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player2Path/PathFollow3D"]
-remote_path = NodePath("../../../Bowl")
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player2Path/Player2PathFollow"]
 update_position = false
 update_rotation = false
 update_scale = false
@@ -98,4 +101,6 @@ light_energy = 2.0
 script = ExtResource("6_0ddtj")
 Character = NodePath("../Player1Path/PathFollow3D/Player1")
 
-[node name="Player2Controller" type="Node3D" parent="."]
+[node name="Player2Controller" type="Node3D" parent="." node_paths=PackedStringArray("Character")]
+script = ExtResource("6_0ddtj")
+Character = NodePath("../Player2Path/Player2PathFollow/Player2")

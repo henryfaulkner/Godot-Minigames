@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dw48r7oe41tp6"
+path="res://.godot/imported/13. Menu Scroll copy.wav-ca12d4aec4bb55b1d121791fea3091f3.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/13. Menu Scroll copy.wav"
+dest_files=["res://.godot/imported/13. Menu Scroll copy.wav-ca12d4aec4bb55b1d121791fea3091f3.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

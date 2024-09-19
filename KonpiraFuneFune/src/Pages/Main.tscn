@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=3 uid="uid://dug3inb0g72v4"]
+
+[ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_cnm6e"]
+[ext_resource type="Texture2D" uid="uid://qnmc7sjvl0y8" path="res://Assets/Images/MainMenu/ascii_1248_480.png" id="2_7buuc"]
+[ext_resource type="AudioStream" uid="uid://bycft7j8ap3vv" path="res://Assets/Sounds/2. Menu Select copy.wav" id="5_c0n12"]
+[ext_resource type="AudioStream" uid="uid://dw48r7oe41tp6" path="res://Assets/Sounds/13. Menu Scroll copy.wav" id="6_h8r83"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_cnm6e")
+metadata/_edit_vertical_guides_ = [2540.0]
+
+[node name="Main#MarginContainer" type="MarginContainer" parent="."]
+offset_right = 2288.0
+offset_bottom = 1130.0
+scale = Vector2(0.89, 1)
+size_flags_horizontal = 6
+size_flags_vertical = 3
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 190
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 80
+
+[node name="MarginContainer#HBoxContainer" type="HBoxContainer" parent="Main#MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer_HBoxContainer#VBoxContainer" type="VBoxContainer" parent="Main#MarginContainer/MarginContainer#HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer#MarginContainer" type="MarginContainer" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 100
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_MarginContainer#TextureRect" type="TextureRect" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#MarginContainer"]
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("2_7buuc")
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer" type="VBoxContainer" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer#Play" type="Button" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer"]
+layout_direction = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Play"
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer_Play#Select_AudioStreamPlayer" type="AudioStreamPlayer" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer#Play"]
+stream = ExtResource("5_c0n12")
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer#HBoxContainer" type="HBoxContainer" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer"]
+layout_direction = 1
+layout_mode = 2
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer_HBoxContainer#Options" type="Button" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer#HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Options"
+
+[node name="MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer_HBoxContainer#Quit" type="Button" parent="Main#MarginContainer/MarginContainer#HBoxContainer/MarginContainer_HBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer#VBoxContainer/MarginContainer_HBoxContainer_VBoxContainer_VBoxContainer#HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quit"
+
+[node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_h8r83")
