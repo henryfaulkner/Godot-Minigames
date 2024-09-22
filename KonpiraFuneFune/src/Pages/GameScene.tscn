@@ -27,7 +27,7 @@ point_count = 3
 [node name="GameScene" type="Node3D" node_paths=PackedStringArray("Bowl", "Player1_PathFollow", "Player1_BowlTransform", "Player1_Controller", "Player2_PathFollow", "Player2_BowlTransform", "Player2_Controller")]
 script = ExtResource("1_d151q")
 Bowl = NodePath("Bowl")
-Speed = 1.0
+Speed = 0.6
 Player1_PathFollow = NodePath("Player1Path/PathFollow3D")
 Player1_BowlTransform = NodePath("Player1Path/PathFollow3D/RemoteTransform3D")
 Player1_Controller = NodePath("Player1Controller")
@@ -88,7 +88,7 @@ update_rotation = false
 update_scale = false
 
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("Target")]
-transform = Transform3D(1, 0, 0, 0, 0.161604, -0.986856, 0, 0.986856, 0.161604, 0, 23.9163, 100)
+transform = Transform3D(1, 0, 0, 0, 0.161604, -0.986856, 0, 0.986856, 0.161604, 0, 36.4025, 100)
 visible = false
 script = ExtResource("6_mx0ui")
 Target = NodePath("../Bowl")

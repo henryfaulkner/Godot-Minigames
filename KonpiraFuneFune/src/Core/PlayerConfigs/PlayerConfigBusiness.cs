@@ -2,9 +2,29 @@ using Godot;
 using Newtonsoft.Json;
 using System;
 
+// In the future, I should prob use cfg file format over json file format
+// based on: https://github.com/godotengine/godot-demo-projects/blob/3.0-d69cc10/gui/input_mapping/controls.gd
 public class PlayerConfigBusiness
 {
+	private static readonly string[] _INPUT_ACTIONS = new string[] { "tap", "grab", "knock" };
 	private static readonly string _CONFIG_FILE_DIRECTORY = "res://src/Core/PlayerConfigs/PlayerConfigs/";
+
+	public PlayerConfigBusiness(string fileName)
+	{
+		try
+		{
+			Load(fileName);
+			foreach (var actionName in _INPUT_ACTIONS)
+			{
+				// assume we want the first key binding
+				var inputEvent = InputMap.ActionGetEvents(actionName)[0];
+			}
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"PlayerConfigBusiness did not construct properly. {e.Message}");
+		}
+	}
 
 	public void Commit(string fileName, PlayerConfigModel config)
 	{
@@ -17,8 +37,8 @@ public class PlayerConfigBusiness
 		}
 		catch (Exception exception)
 		{
-			GD.Print($"Commit exception: {exception}");
-			GD.Print($"Commit config: {config}");
+			GD.PrintErr($"Commit exception: {exception}");
+			GD.PrintErr($"Commit config: {config}");
 		}
 	}
 
@@ -35,7 +55,7 @@ public class PlayerConfigBusiness
 		}
 		catch (Exception exception)
 		{
-			GD.Print($"Error {exception.Message}");
+			GD.PrintErr($"Error {exception.Message}");
 			result = new PlayerConfigModel();
 		}
 		return result;
@@ -50,7 +70,7 @@ public class PlayerConfigBusiness
 		}
 		catch (Exception exception)
 		{
-			GD.Print($"Commit exception: {exception}");
+			GD.PrintErr($"Commit exception: {exception}");
 		}
 	}
 

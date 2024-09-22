@@ -162,7 +162,7 @@ public partial class GameScene : Node3D
 		}
 		catch (Exception ex)
 		{
-			GD.Print($"exception: {ex.Message}");
+			GD.PrintErr($"exception: {ex.Message}");
 		}
 	}
 
@@ -174,21 +174,19 @@ public partial class GameScene : Node3D
 	private Player CreatePlayer1()
 	{
 		var result = new Player(_serviceCommand, PLAYER1_CONFIG_FILE_NAME);
+		var pcb = new PlayerConfigBusiness(PLAYER1_CONFIG_FILE_NAME);
+		var config = pcb.Load(result.ConfigFileName);
 
 		result.PathFollow = Player1_PathFollow;
 		result.DirectionSign = 1;
 		result.BowlTransform = Player1_BowlTransform;
 		result.Controller = Player1_Controller;
+		result.Controller.Command += result.SetLatestCommand;
 		result.LatestCommand = CommandFactory.CreateTapCommand(result, _serviceCommand);
 
-		var pcb = new PlayerConfigBusiness();
-		var config = pcb.Load(result.ConfigFileName);
 		result.Id = config.CommanderId;
 		result.Name = config.Name;
 		result.SetInputKeys(config);
-
-		// Command func must be set after InputKeys are initialized
-		result.Controller.Command += result.SetLatestCommand;
 
 		return result;
 	}
@@ -196,7 +194,7 @@ public partial class GameScene : Node3D
 	private Player CreatePlayer2()
 	{
 		var result = new Player(_serviceCommand, PLAYER2_CONFIG_FILE_NAME);
-		var pcb = new PlayerConfigBusiness();
+		var pcb = new PlayerConfigBusiness(PLAYER2_CONFIG_FILE_NAME);
 		var config = pcb.Load(result.ConfigFileName);
 
 		result.PathFollow = Player2_PathFollow;
