@@ -6,7 +6,7 @@ public partial class OpenClosePauseMenuListener : Node3D
 	private static readonly StringName _PAUSE_INPUT = new StringName("escape");
 
 	[Export]
-	private Panel[] MenuPanels;
+	private Panel[] BasePanels;
 
 	public override void _Ready()
 	{
@@ -25,7 +25,7 @@ public partial class OpenClosePauseMenuListener : Node3D
 			}
 			else
 			{
-				MenuPanels[0].Show(); // show base panel
+				BasePanels[0].Show(); // show base panel
 				EmitSignal(SignalName.OpenMenu);
 				GetTree().Paused = true;
 			}
@@ -40,7 +40,7 @@ public partial class OpenClosePauseMenuListener : Node3D
 
 	public void HideAll()
 	{
-		foreach (var panel in MenuPanels)
+		foreach (var panel in BasePanels)
 		{
 			panel.Hide();
 		}
