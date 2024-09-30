@@ -90,7 +90,6 @@ public partial class PlayerController : CharacterBody3D
 	// Scene loaded
 	public override void _Ready()
 	{
-		GD.Print("_Ready");
 		try
 		{
 			// Capture mouse on start
