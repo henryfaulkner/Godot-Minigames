@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1no0cy3m81iv"]
+
+[ext_resource type="PackedScene" uid="uid://bkh244ybrnt3j" path="res://src/ObjectLibrary/PlayerCharacter.tscn" id="1_50nno"]
+[ext_resource type="PackedScene" uid="uid://dn16lswpnwnle" path="res://src/ObjectLibrary/Boomerang.tscn" id="2_owedk"]
+[ext_resource type="Script" path="res://src/Core/Projectile.cs" id="3_7iqtk"]
+
+[node name="Main" type="Node3D"]
+
+[node name="PlayerCharacter" parent="." instance=ExtResource("1_50nno")]
+
+[node name="Boomerang" parent="PlayerCharacter" instance=ExtResource("2_owedk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.843175, 0.228178, -0.533185)
+gravity_scale = 0.3
+script = ExtResource("3_7iqtk")

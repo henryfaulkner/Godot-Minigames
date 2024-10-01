@@ -1,0 +1,133 @@
+[gd_scene load_steps=7 format=3 uid="uid://bkh244ybrnt3j"]
+
+[ext_resource type="Script" path="res://src/Core/PlayerController.cs" id="1_yjroq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t7df6"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bs6ld"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ocfa"]
+bg_color = Color(0.133333, 0.133333, 0.133333, 0.392157)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_blomo"]
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_7ocfa")
+
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "CameraNeck", "CameraHead", "PlayerCamera")]
+floor_stop_on_slope = false
+floor_snap_length = 0.5
+script = ExtResource("1_yjroq")
+PlayerCollider = NodePath("PlayerCollision")
+CameraNeck = NodePath("CameraNeck")
+CameraHead = NodePath("CameraNeck/CameraHead")
+PlayerCamera = NodePath("CameraNeck/CameraHead/PlayerCamera")
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_t7df6")
+
+[node name="PlayerMesh" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("CapsuleMesh_bs6ld")
+
+[node name="CameraNeck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="CameraHead" type="Node3D" parent="CameraNeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+top_level = true
+
+[node name="PlayerCamera" type="Camera3D" parent="CameraNeck/CameraHead"]
+cull_mask = 1048573
+current = true
+fov = 90.0
+
+[node name="PlayerHUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CrosshairContainer" type="CenterContainer" parent="PlayerHUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+points = PackedVector2Array(0, -5, 0, -15)
+width = 2.0
+
+[node name="Right" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+points = PackedVector2Array(5, 0, 15, 0)
+width = 2.0
+
+[node name="Bottom" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+points = PackedVector2Array(0, 5, 0, 15)
+width = 2.0
+
+[node name="Left" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+points = PackedVector2Array(-5, 0, -15, 0)
+width = 2.0
+
+[node name="DebugMenu" type="PanelContainer" parent="PlayerHUD"]
+visible = false
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 170.0
+offset_bottom = 170.0
+theme = SubResource("Theme_blomo")
+
+[node name="Margins" type="MarginContainer" parent="PlayerHUD/DebugMenu"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="PlayerHUD/DebugMenu/Margins"]
+layout_mode = 2
+
+[node name="MaxStepUpLabel" type="Label" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP UP = 0.0"
+
+[node name="MaxStepDownLabel" type="Label" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP DOWN = 0.0"
+
+[node name="STEP_0_5" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP to 0.5"
+
+[node name="STEP_1" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP to 1"
+
+[node name="STEP_2" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP to 2"
+
+[node name="STEP_4" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP to 4"
+
+[node name="STEP_100" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+layout_mode = 2
+text = "MAX STEP to 100"

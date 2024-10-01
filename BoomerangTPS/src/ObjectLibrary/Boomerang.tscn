@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dn16lswpnwnle"]
+
+[ext_resource type="ArrayMesh" uid="uid://btn58dvcrb6g0" path="res://src/Assets/Images/Boomerang.obj" id="1_qo58k"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mw2p0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hrnpn"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="Boomerang" type="RigidBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_mw2p0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)
+mesh = ExtResource("1_qo58k")
+surface_material_override/0 = SubResource("StandardMaterial3D_hrnpn")
