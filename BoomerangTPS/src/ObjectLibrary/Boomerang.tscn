@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dn16lswpnwnle"]
+[gd_scene load_steps=6 format=3 uid="uid://dn16lswpnwnle"]
 
 [ext_resource type="Script" path="res://src/Core/Boomerang.cs" id="1_83dah"]
-[ext_resource type="ArrayMesh" uid="uid://btn58dvcrb6g0" path="res://src/Assets/Images/Boomerang.obj" id="1_qo58k"]
+[ext_resource type="ArrayMesh" uid="uid://btn58dvcrb6g0" path="res://src/Assets/Meshes/Boomerang.obj" id="1_qo58k"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hrnpn"]
 albedo_color = Color(1, 0, 0, 1)
@@ -9,10 +9,13 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vqtjn"]
 points = PackedVector3Array(92.7055, 4.34557, 32.6808, -11.5791, -1.44852, -51.3267, -11.5791, 4.34557, -51.3267, -92.7055, -1.44852, 50.0699, 92.7055, -1.44852, 47.1718, -92.7055, 4.34557, 50.0699, 28.9659, -1.44852, -42.6223, -72.3967, -1.44852, 0.810771, 89.8017, 4.34557, 50.0699, 20.2725, 4.34557, -48.4186, -81.1083, 4.34557, 12.4035, 78.2044, -1.44852, 9.50532, 66.6071, 4.34557, -4.95582, -28.9659, 4.34557, -42.6223, -92.7055, -1.44852, 32.6808, 89.8017, -1.44852, 50.0699, -28.9659, -1.44852, -42.6223, 14.483, -1.44852, -51.3267, 92.7055, -1.44852, 32.6808, -72.3967, 4.34557, 0.810771, 28.9659, 4.34557, -42.6223, 66.6071, -1.44852, -4.95582, -92.7055, 4.34557, 41.3754, 14.483, 4.34557, -51.3267, 84.0121, 4.34557, 18.1999, -20.2725, 4.34557, -48.4186, -86.8978, -1.44852, 21.098, 92.7055, 4.34557, 47.1718, -20.2725, -1.44852, -48.4186, 89.8017, -1.44852, 26.8845, 78.2044, 4.34557, 9.50532, -89.8017, 4.34557, 32.6808)
 
-[node name="Boomerang" type="RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000369549, 0.00368522, 0.000434279)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1bkvu"]
+height = 0.07
+
+[node name="Boomerang" type="RigidBody3D" node_paths=PackedStringArray("HitBox")]
 gravity_scale = 0.1
 script = ExtResource("1_83dah")
+HitBox = NodePath("Area3D")
 RotationSpeed = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -21,5 +24,11 @@ mesh = ExtResource("1_qo58k")
 surface_material_override/0 = SubResource("StandardMaterial3D_hrnpn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, -0.0166979, 0.0167627, 0.00185776)
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_vqtjn")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.023538, 0.00491464)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_1bkvu")

@@ -63,6 +63,9 @@ public partial class PlayerController : CharacterBody3D
 	[ExportGroup("Player Object")]
 	[Export]
 	public CollisionShape3D PlayerCollider { get; set; }
+	
+	[Export]
+	public PlayerHud PlayerHud { get; set; }
 
 	[Export]
 	public Node3D Hand { get; set; }
@@ -159,6 +162,7 @@ public partial class PlayerController : CharacterBody3D
 						{
 							GD.Print($"Charging boomerang strength");
 							IsChargingThrow = true;
+							PlayerHud.BeginCharging();
 						}
 						break;
 					case MouseButton.Right:
@@ -179,9 +183,10 @@ public partial class PlayerController : CharacterBody3D
 					IsChargingThrow = false;
 					if (AimCast.IsColliding())
 					{
-						GD.Print("Throw boomerang");
-						Vector3 throwDir = (AimCast.GetCollisionPoint() + new Vector3(0, 0.25f, 0)).Normalized();
-						ThrowBoomerang(throwDir);
+						// Calculate relative direction from player to raycast collision 
+						Vector3 throwDir = (AimCast.GetCollisionPoint() - GlobalTransform.Origin + new Vector3(0, 0.25f, 0)).Normalized();
+						var throwSpeedPercentage = PlayerHud.ReleaseCharge();
+						ThrowBoomerang(throwDir, (float)throwSpeedPercentage);
 					}
 				}
 			}
@@ -265,12 +270,12 @@ public partial class PlayerController : CharacterBody3D
 
 	#region Gameplay
 
-	public void ThrowBoomerang(Vector3 throwDirection)
+	public void ThrowBoomerang(Vector3 throwDirection, float throwSpeedPercentage)
 	{
 		var boomerang = BoomerangScene.Instantiate<Boomerang>();
 		Hand.AddChild(boomerang);
 		//boomerang.LookAt(throwDirection, Vector3.Up);
-		boomerang.Throw(throwDirection);
+		boomerang.Throw(throwDirection, throwSpeedPercentage);
 	}
 
 	// return true if Grappling is complete

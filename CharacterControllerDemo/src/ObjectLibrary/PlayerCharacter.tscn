@@ -56,7 +56,7 @@ cull_mask = 1048573
 current = true
 fov = 90.0
 
-[node name="PlayerHUD" type="Control" parent="."]
+[node name="PlayerHud" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="CrosshairContainer" type="CenterContainer" parent="PlayerHUD"]
+[node name="CrosshairContainer" type="CenterContainer" parent="PlayerHud"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -75,23 +75,23 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Top" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+[node name="Top" type="Line2D" parent="PlayerHud/CrosshairContainer"]
 points = PackedVector2Array(0, -5, 0, -15)
 width = 2.0
 
-[node name="Right" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+[node name="Right" type="Line2D" parent="PlayerHud/CrosshairContainer"]
 points = PackedVector2Array(5, 0, 15, 0)
 width = 2.0
 
-[node name="Bottom" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+[node name="Bottom" type="Line2D" parent="PlayerHud/CrosshairContainer"]
 points = PackedVector2Array(0, 5, 0, 15)
 width = 2.0
 
-[node name="Left" type="Line2D" parent="PlayerHUD/CrosshairContainer"]
+[node name="Left" type="Line2D" parent="PlayerHud/CrosshairContainer"]
 points = PackedVector2Array(-5, 0, -15, 0)
 width = 2.0
 
-[node name="DebugMenu" type="PanelContainer" parent="PlayerHUD"]
+[node name="DebugMenu" type="PanelContainer" parent="PlayerHud"]
 visible = false
 layout_mode = 0
 offset_left = 20.0
@@ -100,36 +100,36 @@ offset_right = 170.0
 offset_bottom = 170.0
 theme = SubResource("Theme_blomo")
 
-[node name="Margins" type="MarginContainer" parent="PlayerHUD/DebugMenu"]
+[node name="Margins" type="MarginContainer" parent="PlayerHud/DebugMenu"]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="PlayerHUD/DebugMenu/Margins"]
+[node name="VBox" type="VBoxContainer" parent="PlayerHud/DebugMenu/Margins"]
 layout_mode = 2
 
-[node name="MaxStepUpLabel" type="Label" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="MaxStepUpLabel" type="Label" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP UP = 0.0"
 
-[node name="MaxStepDownLabel" type="Label" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="MaxStepDownLabel" type="Label" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP DOWN = 0.0"
 
-[node name="STEP_0_5" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="STEP_0_5" type="Button" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 0.5"
 
-[node name="STEP_1" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="STEP_1" type="Button" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 1"
 
-[node name="STEP_2" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="STEP_2" type="Button" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 2"
 
-[node name="STEP_4" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="STEP_4" type="Button" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 4"
 
-[node name="STEP_100" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
+[node name="STEP_100" type="Button" parent="PlayerHud/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 100"

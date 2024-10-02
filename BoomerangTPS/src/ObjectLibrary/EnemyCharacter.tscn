@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://ltvhfvxh2qes"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rbwbn"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sah5y"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3rtfx"]
+material = SubResource("StandardMaterial3D_sah5y")
+
+[node name="EnemyCharacter" type="CharacterBody3D" groups=["Enemy"]]
+
+[node name="EnemyCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_rbwbn")
+
+[node name="EnemyMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_3rtfx")

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://btn58dvcrb6g0"
+path="res://.godot/imported/Boomerang.obj-b515c1bc1dd858ff14fa481733599e7b.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Boomerang.obj-b515c1bc1dd858ff14fa481733599e7b.mesh"]
+
+source_file="res://src/Assets/Meshes/Boomerang.obj"
+dest_files=["res://.godot/imported/Boomerang.obj-b515c1bc1dd858ff14fa481733599e7b.mesh", "res://.godot/imported/Boomerang.obj-b515c1bc1dd858ff14fa481733599e7b.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

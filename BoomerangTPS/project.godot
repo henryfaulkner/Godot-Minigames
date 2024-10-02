@@ -10,9 +10,11 @@ config_version=5
 
 [application]
 
-config/name="BoomerangTPS"
+config/name="BoomerangFPS"
 run/main_scene="res://src/Pages/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/image="res://src/Assets/Images/Logos/company-logo.png"
 config/icon="res://icon.svg"
 
 [dotnet]
@@ -27,6 +29,10 @@ folder_colors={
 "res://src/ObjectLibrary/": "yellow",
 "res://src/Pages/": "green"
 }
+
+[global_group]
+
+Enemy=""
 
 [input]
 
