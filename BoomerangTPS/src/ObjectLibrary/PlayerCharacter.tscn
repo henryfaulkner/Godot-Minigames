@@ -26,14 +26,20 @@ MarginContainer/constants/margin_right = 10
 MarginContainer/constants/margin_top = 10
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_7ocfa")
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "CameraNeck", "CameraHead", "PlayerCamera")]
+[sub_resource type="BoxMesh" id="BoxMesh_hs34a"]
+size = Vector3(0.2, 0.2, 1)
+
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "Hand", "CameraNeck", "CameraHead", "PlayerCamera", "AimCast", "GrappleCast")]
 floor_stop_on_slope = false
 floor_snap_length = 0.5
 script = ExtResource("1_yjroq")
 PlayerCollider = NodePath("PlayerCollision")
+Hand = NodePath("Arm/Hand")
 CameraNeck = NodePath("CameraNeck")
 CameraHead = NodePath("CameraNeck/CameraHead")
 PlayerCamera = NodePath("CameraNeck/CameraHead/PlayerCamera")
+AimCast = NodePath("CameraNeck/CameraHead/PlayerCamera/AimCast")
+GrappleCast = NodePath("CameraNeck/CameraHead/PlayerCamera/GrappleCast")
 
 [node name="PlayerCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_t7df6")
@@ -53,6 +59,19 @@ top_level = true
 cull_mask = 1048573
 current = true
 fov = 90.0
+
+[node name="AimCast" type="RayCast3D" parent="CameraNeck/CameraHead/PlayerCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+target_position = Vector3(0, 0, -5000)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+debug_shape_thickness = 1
+metadata/_edit_lock_ = true
+
+[node name="GrappleCast" type="RayCast3D" parent="CameraNeck/CameraHead/PlayerCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+target_position = Vector3(0, 0, -60)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+metadata/_edit_lock_ = true
 
 [node name="PlayerHUD" type="Control" parent="."]
 layout_mode = 3
@@ -131,3 +150,14 @@ text = "MAX STEP to 4"
 [node name="STEP_100" type="Button" parent="PlayerHUD/DebugMenu/Margins/VBox"]
 layout_mode = 2
 text = "MAX STEP to 100"
+
+[node name="Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.174, -0.84)
+mesh = SubResource("BoxMesh_hs34a")
+
+[node name="Hand" type="Node3D" parent="Arm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0972177, -0.112552, -0.743526)
+
+[node name="HeadBonkCast" type="RayCast3D" parent="."]
+target_position = Vector3(0, 1.5, 0)
+debug_shape_custom_color = Color(0, 0, 1, 1)

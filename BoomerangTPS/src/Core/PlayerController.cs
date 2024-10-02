@@ -27,6 +27,8 @@
 
 using Godot;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 public partial class PlayerController : CharacterBody3D
 {
@@ -38,6 +40,9 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export]
 	public float JumpVelocity { get; set; } = 6.0f;
+
+	[Export]
+	public int MaxJumpNum { get; set; } = 1;
 
 	[Export]
 	public float MaxStepUp { get; set; } = 0.5f;
@@ -59,6 +64,9 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	public CollisionShape3D PlayerCollider { get; set; }
 
+	[Export]
+	public Node3D Hand { get; set; }
+
 	[ExportGroup("Player Camera")]
 	[Export]
 	public Node3D CameraNeck { get; set; }
@@ -68,27 +76,46 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export]
 	public Camera3D PlayerCamera { get; set; }
+	
+	[ExportGroup("RayCasts")]
+	[Export]
+	public RayCast3D AimCast { get; set; }
+
+	[Export]
+	public RayCast3D GrappleCast { get; set; }
+	
+	[Export]
+	public RayCast3D HeadBonkCast { get; set; }
 
 	#endregion
 
 	#region Variables
+	
+	private PackedScene BoomerangScene { get; set; }
 
 	private bool IsGrounded { get; set; } // If player is grounded this frame
 	private bool WasGrounded { get; set; } // If player was grounded last frame
 
 	private bool IsChargingThrow { get; set; }
+	
 	private bool IsGrappling { get; set; }
+	private Vector3 GrappleHookPoint { get; set; }
 
 	private Vector3 WishDir { get; set; } // Player input direction (wasd)
+	private Vector3 ViewDir { get; set; } // Mouse input direction
 
 	private static readonly Vector3 Vertical = new Vector3(0, 1, 0); // Shortcut for converting vectors to vertical
 	private static readonly Vector3 Horizontal = new Vector3(1, 0, 1); // Shortcut for converting vectors to horizontal
 
 	private static readonly float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
 
+	private int CurrJumpNum { get; set; } = 0;
+
 	#endregion
 
 	#region Implementation
+
+	#region Runtime Functions
 
 	// Scene loaded
 	public override void _Ready()
@@ -97,6 +124,7 @@ public partial class PlayerController : CharacterBody3D
 		{
 			// Capture mouse on start
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
+			BoomerangScene = GD.Load<PackedScene>("res://src/ObjectLibrary/Boomerang.tscn");
 		} 
 		catch (Exception ex)
 		{
@@ -114,48 +142,176 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		// Handle Mouse input
-		if (@event is InputEventMouseMotion mouseEvent && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+		if (@event is InputEventMouseMotion mouseMotionEvent && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
 		{
-			ProcessCameraInput((InputEventMouseMotion)@event);
-			
-			// Handle Mouse Button inputs
-			if (mouseEvent.Pressed)
+			ProcessCameraInput(mouseMotionEvent);
+		}
+
+		// Handle Mouse Button inputs
+		if (@event is InputEventMouseButton mouseButtonEvent && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+		{
+			if (mouseButtonEvent.Pressed)
 			{
-				switch (mouseEvent.ButtonIndex)
+				switch (mouseButtonEvent.ButtonIndex)
 				{
 					case MouseButton.Left:
 						if (!IsChargingThrow)
 						{
 							GD.Print($"Charging boomerang strength");
 							IsChargingThrow = true;
-							EmitSignal(SignalName.Throw, false);
 						}
 						break;
 					case MouseButton.Right:
-						if (!IsGrappling)
+						if (!IsGrappling && GrappleCast.IsColliding())
 						{
 							GD.Print("Fire grappling hook");
 							IsGrappling = true;
+							GrappleHookPoint = GrappleCast.GetCollisionPoint() + new Vector3(0, 0.25f, 0);
 						}
 						break;
 				}
 			}
 
-			if (!mouseEvent.Pressed)
+			if (!mouseButtonEvent.Pressed)
 			{
-				IsChargingThrow = false;
-				EmitSignal(SignalName.Throw, true);
+				if (IsChargingThrow)
+				{
+					IsChargingThrow = false;
+					if (AimCast.IsColliding())
+					{
+						GD.Print("Throw boomerang");
+						Vector3 throwDir = (AimCast.GetCollisionPoint() + new Vector3(0, 0.25f, 0)).Normalized();
+						ThrowBoomerang(throwDir);
+					}
+				}
 			}
 		}
 	}
 
-	[Signal]
-	public delegate void ThrowEventHandler(bool release); // charge if false; throw if true;
+	public override void _PhysicsProcess(double delta)
+	{
+		try
+		{
+			// Lock player collider rotations
+			PlayerCollider.GlobalRotation = Vector3.Zero;
 
-	[Signal]
-	public delegate void GrappleEventHandler();
+			// Update player state
+			WasGrounded = IsGrounded;
+			IsGrounded = IsOnFloor();
+			
+			// if in Grapple-state, ignore all other character motion
+			if (IsGrappling)
+			{
+				IsGrappling = !ProcessGrapplingHook(GrappleHookPoint, 0.05f);
+			}
+			else 
+			{
+				// Get player input direction
+				var inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
+				WishDir = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+
+				// Handle gravity
+				if (!IsOnFloor()) 
+				{
+					Velocity = new Vector3(
+									Velocity.X,
+									Velocity.Y - (Gravity * (float)delta),
+									Velocity.Z
+								);
+				} 
+				else 
+				{
+					CurrJumpNum = 0;
+				}
+
+				// Handle jump 
+				if (CurrJumpNum < MaxJumpNum && Input.IsActionJustPressed("move_jump"))
+				{
+					Velocity = new Vector3(
+									Velocity.X,
+									JumpVelocity,
+									Velocity.Z
+								);
+					CurrJumpNum += 1;
+				}
+
+				// Handle WASD movement
+				Velocity = new Vector3(
+								WishDir.X * PlayerSpeed,
+								Velocity.Y,
+								WishDir.Z * PlayerSpeed
+							);
+
+				// Stair Step Up
+				HandleStairStepUp();
+
+				// Stair Step Down
+				HandleStairStepDown();
+			}
+			
+			// Move 
+			MoveAndSlide();
+
+			// Smooth camera
+			SmoothCameraJitter(delta);
+		} 
+		catch (Exception ex)
+		{
+			GD.PrintErr($"Error in _PhysicsProcess {ex.Message}");
+		}
+	}
+	
+	#endregion
+
+	#region Gameplay
+
+	public void ThrowBoomerang(Vector3 throwDirection)
+	{
+		var boomerang = BoomerangScene.Instantiate<Boomerang>();
+		Hand.AddChild(boomerang);
+		//boomerang.LookAt(throwDirection, Vector3.Up);
+		boomerang.Throw(throwDirection);
+	}
+
+	// return true if Grappling is complete
+	public bool ProcessGrapplingHook(Vector3 target, float weight)
+	{
+		// Access the player's current position (Transform.Origin)
+		var currentPosition = Transform.Origin;
+
+		// Check the distance to the target
+		if (target.DistanceTo(currentPosition) > 1)
+		{
+			// Interpolate between current position and the target
+			var newPosition = currentPosition.Lerp(target, weight);
+
+			// Update the entire transform, setting the new origin
+			var newTransform = Transform;
+			newTransform.Origin = newPosition;
+			Transform = newTransform;
+
+			return false;
+		}
+		return true;
+	}
+
+	// return true if head is bonking
+	public bool ProcessHeadBonk()
+	{
+		if (HeadBonkCast.IsColliding())
+		{
+			IsGrappling = false;
+			GrappleHookPoint = Vector3.Zero;
+			GlobalTranslate(new Vector3(0, -1, 0));
+			return true;
+		}
+		return false;
+	}
 
 
+	#endregion
+
+	#region Base Controller
 
 	public void ProcessCameraInput(InputEventMouseMotion @event)
 	{
@@ -179,66 +335,6 @@ public partial class PlayerController : CharacterBody3D
 		else 
 		{
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
-		}
-	}
-
-	public override void _PhysicsProcess(double delta)
-	{
-		try
-		{
-			// Lock player collider rotation
-			PlayerCollider.GlobalRotation = Vector3.Zero;
-
-			// Update player state
-			WasGrounded = IsGrounded;
-			IsGrounded = IsOnFloor();
-			
-			// Get player input direction
-			var inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
-			WishDir = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-
-			// Handle gravity
-			if (!IsOnFloor()) 
-			{
-				Velocity = new Vector3(
-								Velocity.X,
-								Velocity.Y - (Gravity * (float)delta),
-								Velocity.Z
-							);
-			}
-
-			// Handle jump 
-			if (Input.IsActionPressed("move_jump"))
-			{
-				Velocity = new Vector3(
-								Velocity.X,
-								JumpVelocity,
-								Velocity.Z
-							);
-			}
-
-			// Handle WASD movement
-			Velocity = new Vector3(
-							WishDir.X * PlayerSpeed,
-							Velocity.Y,
-							WishDir.Z * PlayerSpeed
-						);
-
-			// Stair Step Up
-			HandleStairStepUp();
-
-			// Move 
-			MoveAndSlide();
-
-			// Stair Step Down
-			HandleStairStepDown();
-
-			// Smooth camera
-			SmoothCameraJitter(delta);
-		} 
-		catch (Exception ex)
-		{
-			GD.PrintErr($"Error in _PhysicsProcess {ex.Message}");
 		}
 	}
 
@@ -374,6 +470,8 @@ public partial class PlayerController : CharacterBody3D
 										CameraHead.GlobalPosition.Z
 									);
 	}
+
+	#endregion
 
 	#endregion
 }
