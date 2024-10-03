@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 
-public static class TimiingFunctions
+public static class TimingFunctions
 {
     public static void SetTimeout(Action action, int delay)
     {

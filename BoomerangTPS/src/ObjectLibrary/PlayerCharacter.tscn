@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bkh244ybrnt3j"]
+[gd_scene load_steps=7 format=3 uid="uid://bkh244ybrnt3j"]
 
 [ext_resource type="Script" path="res://src/Core/PlayerController.cs" id="1_yjroq"]
 [ext_resource type="PackedScene" uid="uid://c11n7ir6nncba" path="res://src/ObjectLibrary/PlayerHud.tscn" id="2_ad3em"]
@@ -8,7 +8,12 @@ size = Vector3(1, 2, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bs6ld"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s3aqx"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 0)
+
 [sub_resource type="BoxMesh" id="BoxMesh_hs34a"]
+material = SubResource("StandardMaterial3D_s3aqx")
 size = Vector3(0.2, 0.2, 1)
 
 [node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "PlayerHud", "Hand", "CameraNeck", "CameraHead", "PlayerCamera", "AimCast", "GrappleCast", "HeadBonkCast")]

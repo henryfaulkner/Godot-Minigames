@@ -14,6 +14,8 @@ public partial class Boomerang : RigidBody3D
 
 	[Export]
 	private float RotationSpeed { get; set; } = 10.0f;
+	
+	private bool ThrowCollided { get; set; } = false;
 
 	public override void _Ready()
 	{
@@ -24,18 +26,29 @@ public partial class Boomerang : RigidBody3D
 
 	public void Throw(Vector3 throwDirection, float throwSpeedPercentage)
 	{
+		ThrowCollided = false;
+		
 		// directional (position) impulse w/o rotation
 		ApplyCentralImpulse(throwDirection * (throwSpeedPercentage * MaxSpeed));
 
 		// rotation impulse w/o position
-		ApplyTorqueImpulse(new Vector3(0, 1 * RotationSpeed, 0));
+		ApplyTorqueImpulse(new Vector3(0, 1 * RotationSpeed * throwSpeedPercentage, 0));
+		
+		TimingFunctions.SetTimeout(() => {
+			if (ThrowCollided) return;
+			ApplyCentralImpulse(throwDirection * (-1.333f * throwSpeedPercentage * MaxSpeed));
+		}, 1000);
 	}
 	
-	public void Hit(Node3D victim)
+	private void Hit(Node3D victim)
 	{
+		ThrowCollided = true;
 		if (victim.IsInGroup("Enemy"))
 		{
 			GD.Print("Enemy was hit!");
-		}
+			ThrowCollided = false;
+		} 
+		
+		
 	}
 }

@@ -13,10 +13,11 @@ points = PackedVector3Array(92.7055, 4.34557, 32.6808, -11.5791, -1.44852, -51.3
 height = 0.07
 
 [node name="Boomerang" type="RigidBody3D" node_paths=PackedStringArray("HitBox")]
-gravity_scale = 0.1
+gravity_scale = 0.07
 script = ExtResource("1_83dah")
 HitBox = NodePath("Area3D")
-RotationSpeed = 2.0
+MaxSpeed = 25.0
+RotationSpeed = 25.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.005, 0, 0, 0, 0.012, 0, 0, 0, 0.005, 0, 0, 0)
