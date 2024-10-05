@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://h6u57m6w63hu"]
 
-[ext_resource type="Script" path="res://src/Core/PowerUpVessel.cs" id="1_hmcb2"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/PowerUpVessel/PowerUpVessel.cs" id="1_hmcb2"]
 [ext_resource type="ArrayMesh" uid="uid://law0eh2wjw2k" path="res://src/Assets/Meshes/PowerUp.obj" id="1_j3f1c"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8okhs"]

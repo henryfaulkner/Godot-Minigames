@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c11n7ir6nncba"]
 
-[ext_resource type="Script" path="res://src/Core/PlayerHud.cs" id="1_vhqi0"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/PlayerHud/PlayerHud.cs" id="1_vhqi0"]
 
 [node name="PlayerHud" type="MarginContainer" node_paths=PackedStringArray("ThrowSpeedBar")]
 anchors_preset = 15

@@ -127,7 +127,7 @@ public partial class PlayerController : CharacterBody3D
 		{
 			// Capture mouse on start
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
-			BoomerangScene = GD.Load<PackedScene>("res://src/ObjectLibrary/Boomerang.tscn");
+			BoomerangScene = GD.Load<PackedScene>("res://src/ObjectLibrary/Boomerang/Boomerang.tscn");
 		} 
 		catch (Exception ex)
 		{

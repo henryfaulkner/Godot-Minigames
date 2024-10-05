@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=3 uid="uid://bokevfwt4yebh"]
 
-[ext_resource type="Script" path="res://src/Core/Explosion.cs" id="1_5dd1r"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/Explosion/Explosion.cs" id="1_37ysy"]
 
 [sub_resource type="Curve" id="Curve_qg3ks"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.673913, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -103,7 +103,7 @@ color = Color(0.273312, 0.206191, 0, 1)
 alpha_curve = SubResource("CurveTexture_ocncf")
 
 [node name="Explosion" type="RigidBody3D" node_paths=PackedStringArray("Debris", "Fire", "Smoke", "ExplosionSound")]
-script = ExtResource("1_5dd1r")
+script = ExtResource("1_37ysy")
 Debris = NodePath("Debris")
 Fire = NodePath("Fire")
 Smoke = NodePath("Smoke")

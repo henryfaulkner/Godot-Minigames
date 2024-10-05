@@ -1,13 +1,13 @@
 [gd_scene load_steps=12 format=3 uid="uid://b1no0cy3m81iv"]
 
-[ext_resource type="PackedScene" uid="uid://bkh244ybrnt3j" path="res://src/ObjectLibrary/PlayerCharacter.tscn" id="1_50nno"]
+[ext_resource type="PackedScene" uid="uid://bkh244ybrnt3j" path="res://src/ObjectLibrary/PlayerCharacter/PlayerCharacter.tscn" id="1_50nno"]
 [ext_resource type="Texture2D" uid="uid://caie6ggq63nnt" path="res://src/Assets/Images/Textures/Grid Dark/texture_09.png" id="4_6kw8r"]
 [ext_resource type="PackedScene" uid="uid://dvqrhka4b6b50" path="res://src/ObjectLibrary/SkyBox.tscn" id="4_tg0va"]
 [ext_resource type="Environment" uid="uid://brkb2jr0wojsy" path="res://src/Assets/SkyEnvironment.tres" id="5_eorrg"]
 [ext_resource type="PackedScene" uid="uid://bea46t3ldwyoa" path="res://src/ObjectLibrary/PlayGround.tscn" id="5_u3a4a"]
-[ext_resource type="PackedScene" uid="uid://ltvhfvxh2qes" path="res://src/ObjectLibrary/EnemyCharacter.tscn" id="6_uywgi"]
-[ext_resource type="Script" path="res://src/ObjectLibrary/EnemyCharacter.cs" id="7_f7ye4"]
-[ext_resource type="PackedScene" uid="uid://h6u57m6w63hu" path="res://src/ObjectLibrary/PowerUpVessel.tscn" id="8_6s3oh"]
+[ext_resource type="PackedScene" uid="uid://ltvhfvxh2qes" path="res://src/ObjectLibrary/EnemyCharacter/EnemyCharacter.tscn" id="6_uywgi"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/EnemyCharacter/EnemyCharacter.cs" id="7_f7ye4"]
+[ext_resource type="PackedScene" uid="uid://h6u57m6w63hu" path="res://src/ObjectLibrary/PowerUpVessel/PowerUpVessel.tscn" id="8_6s3oh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c2py1"]
 albedo_texture = ExtResource("4_6kw8r")
