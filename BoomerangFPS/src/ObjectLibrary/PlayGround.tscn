@@ -123,7 +123,7 @@ size = Vector3(1, 50, 10)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_38j5p"]
 data = PackedVector3Array(-0.5, 25, 5, 0.5, 25, 5, -0.5, -25, 5, 0.5, 25, 5, 0.5, -25, 5, -0.5, -25, 5, 0.5, 25, -5, -0.5, 25, -5, 0.5, -25, -5, -0.5, 25, -5, -0.5, -25, -5, 0.5, -25, -5, 0.5, 25, 5, 0.5, 25, -5, 0.5, -25, 5, 0.5, 25, -5, 0.5, -25, -5, 0.5, -25, 5, -0.5, 25, -5, -0.5, 25, 5, -0.5, -25, -5, -0.5, 25, 5, -0.5, -25, 5, -0.5, -25, -5, 0.5, 25, 5, -0.5, 25, 5, 0.5, 25, -5, -0.5, 25, 5, -0.5, 25, -5, 0.5, 25, -5, -0.5, -25, 5, 0.5, -25, 5, -0.5, -25, -5, 0.5, -25, 5, 0.5, -25, -5, -0.5, -25, -5)
 
-[node name="Objects" type="Node3D"]
+[node name="Objects" type="Node3D" groups=["Structure"]]
 
 [node name="Boxes" type="Node3D" parent="."]
 
@@ -4462,6 +4462,11 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 
 mesh = SubResource("BoxMesh_f707a")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/Wall1"]
+shape = SubResource("ConcavePolygonShape3D_bxyuc")
+
+[node name="Area3D" type="Area3D" parent="Walls/Wall1" groups=["Structure"]]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Walls/Wall1/Area3D"]
 shape = SubResource("ConcavePolygonShape3D_bxyuc")
 
 [node name="Wall2" type="StaticBody3D" parent="Walls"]

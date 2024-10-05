@@ -171,6 +171,8 @@ public partial class PlayerController : CharacterBody3D
 							GD.Print("Fire grappling hook");
 							IsGrappling = true;
 							GrappleHookPoint = GrappleCast.GetCollisionPoint() + new Vector3(0, 0.25f, 0);
+							
+							TimingFunctions.SetTimeout(() => {IsGrappling = false;}, 1500);
 						}
 						break;
 				}

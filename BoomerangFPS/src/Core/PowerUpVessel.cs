@@ -18,7 +18,7 @@ public partial class PowerUpVessel : StaticBody3D
 		SetAxisLock(PhysicsServer3D.BodyAxis.LinearY, true);
 		SetAxisLock(PhysicsServer3D.BodyAxis.LinearZ, true);
 		
-		HitBox.BodyEntered += Hit;
+		HitBox.BodyEntered += OnBodyEntered;
 	}
 	
 	public override void _PhysicsProcess(double _delta)
@@ -26,7 +26,7 @@ public partial class PowerUpVessel : StaticBody3D
 		RotateY(RotationSpeed);
 	}
 	
-	private void Hit(Node3D receiver)
+	private void OnBodyEntered(Node3D receiver)
 	{
 		if (receiver.IsInGroup("Player"))
 		{

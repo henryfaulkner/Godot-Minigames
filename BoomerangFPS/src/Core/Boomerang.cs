@@ -21,7 +21,8 @@ public partial class Boomerang : RigidBody3D
 	{
 		TopLevel = true;
 		
-		HitBox.BodyEntered += Hit;
+		HitBox.BodyEntered += OnBodyEntered;
+		HitBox.AreaEntered += OnAreaEntered;
 	}
 
 	public void Throw(Vector3 throwDirection, float throwSpeedPercentage)
@@ -40,15 +41,22 @@ public partial class Boomerang : RigidBody3D
 		}, 1000);
 	}
 	
-	private void Hit(Node3D victim)
+	private void OnBodyEntered(Node3D victim)
 	{
-		ThrowCollided = true;
+		GD.Print($"Body Victim is {victim.Name}");
 		if (victim.IsInGroup("Enemy"))
 		{
 			GD.Print("Enemy was hit!");
-			ThrowCollided = false;
 		} 
-		
-		
+	}
+	
+	private void OnAreaEntered(Node3D victim)
+	{
+		GD.Print($"Area Victim is {victim.Name}");
+		if (victim.IsInGroup("Structure")) 
+		{
+			GD.Print("Throw collided!");
+			ThrowCollided = true;
+		}
 	}
 }
