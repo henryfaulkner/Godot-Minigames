@@ -5,7 +5,16 @@ public class PowerUpService
 {
 	private const int POWER_UP_LIMIT = 2;
 
-	public Stack<Enumerations.PowerUps> GetPowerUpStack()
+	public Queue<Enumerations.PowerUps> CurrentPowerUps { get; private set; }
+	public Stack<Enumerations.PowerUps> AvailablePowerUps { get; private set; }
+
+	public PowerUpService()
+	{
+		CurrentPowerUps = new Queue<Enumerations.PowerUps>();
+		AvailablePowerUps = new Stack<Enumerations.PowerUps>();
+	}
+
+	public Stack<Enumerations.PowerUps> InitPowerUpStack()
 	{
 		var result = new Stack<Enumerations.PowerUps>();
 		var powerUpList = new List<Enumerations.PowerUps>((Enumerations.PowerUps[])Enum.GetValues(typeof(Enumerations.PowerUps)));
@@ -15,18 +24,19 @@ public class PowerUpService
 		return result;
 	}
 
-	public void AddPowerUp(Queue<Enumerations.PowerUps> PlayersCurrentPowerUps, Stack<Enumerations.PowerUps> PlayersAvailablePowerUps) 
+	public void AddPowerUp() 
 	{
-		if (PlayersCurrentPowerUps.Count == POWER_UP_LIMIT) PlayersCurrentPowerUps.Dequeue();
+		if (CurrentPowerUps.Count == POWER_UP_LIMIT) CurrentPowerUps.Dequeue();
 
 		Enumerations.PowerUps? newPU = null;
 		do 
 		{
-			if (PlayersAvailablePowerUps.Count == 0) PlayersAvailablePowerUps = GetPowerUpStack();
-			var pulledPU = PlayersAvailablePowerUps.Pop();
-			if (!PlayersCurrentPowerUps.Contains(pulledPU)) newPU = pulledPU;
+			if (AvailablePowerUps.Count == 0) AvailablePowerUps = InitPowerUpStack();
+			var pulledPU = AvailablePowerUps.Pop();
+			GD.Print("Pulled power up.");
+			if (!CurrentPowerUps.Contains(pulledPU)) newPU = pulledPU;
 		} while (!newPU.HasValue);
 
-		PlayersCurrentPowerUps.Enqueue(newPU.Value);
+		CurrentPowerUps.Enqueue(newPU.Value);
 	}
 }

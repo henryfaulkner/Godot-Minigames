@@ -3,6 +3,7 @@
 
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Boomerang : RigidBody3D
 {
@@ -16,6 +17,13 @@ public partial class Boomerang : RigidBody3D
 	private float RotationSpeed { get; set; } = 10.0f;
 	
 	private bool ThrowCollided { get; set; } = false;
+
+	private List<ThrowAction> ThrowActionList { get; set; }
+
+	public Boomerang()
+	{
+		ThrowActionList =  new List<ThrowAction>();
+	}
 
 	public override void _Ready()
 	{
@@ -34,11 +42,18 @@ public partial class Boomerang : RigidBody3D
 
 		// rotation impulse w/o position
 		ApplyTorqueImpulse(new Vector3(0, 1 * RotationSpeed * throwSpeedPercentage, 0));
+
+		ThrowActionList.ForEach(throwAction => throwAction.Execute());
 		
 		TimingFunctions.SetTimeout(() => {
 			if (ThrowCollided) return;
 			ApplyCentralImpulse(throwDirection * (-1.333f * throwSpeedPercentage * MaxSpeed));
 		}, 1000);
+	}
+
+	public void AddThrowAction(ThrowAction throwAction) 
+	{
+		ThrowActionList.Add(throwAction);
 	}
 	
 	private void OnBodyEntered(Node3D victim)

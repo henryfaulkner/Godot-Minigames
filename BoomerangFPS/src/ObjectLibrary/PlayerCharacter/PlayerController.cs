@@ -93,8 +93,6 @@ public partial class PlayerController : CharacterBody3D
 	#endregion
 
 	#region Variables
-	
-	private PackedScene BoomerangScene { get; set; }
 
 	private bool IsGrounded { get; set; } // If player is grounded this frame
 	private bool WasGrounded { get; set; } // If player was grounded last frame
@@ -116,6 +114,14 @@ public partial class PlayerController : CharacterBody3D
 
 	#endregion
 
+	#region Services
+
+	private PowerUpService PowerUpService { get; set; }
+
+	private BoomerangBuilder BoomerangBuilder { get; set; }
+
+	#endregion
+
 	#region Implementation
 
 	#region Runtime Functions
@@ -127,7 +133,9 @@ public partial class PlayerController : CharacterBody3D
 		{
 			// Capture mouse on start
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
-			BoomerangScene = GD.Load<PackedScene>("res://src/ObjectLibrary/Boomerang/Boomerang.tscn");
+
+			PowerUpService = new PowerUpService();
+			BoomerangBuilder = new BoomerangBuilder();
 		} 
 		catch (Exception ex)
 		{
@@ -274,7 +282,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void ThrowBoomerang(Vector3 throwDirection, float throwSpeedPercentage)
 	{
-		var boomerang = BoomerangScene.Instantiate<Boomerang>();
+		var boomerang = BoomerangBuilder.GetReadiedBoomerang(PowerUpService.CurrentPowerUps);
 		Hand.AddChild(boomerang);
 		//boomerang.LookAt(throwDirection, Vector3.Up);
 		boomerang.Throw(throwDirection, throwSpeedPercentage);
