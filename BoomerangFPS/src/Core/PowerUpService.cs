@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 public class PowerUpService
 {
@@ -33,10 +34,10 @@ public class PowerUpService
 		{
 			if (AvailablePowerUps.Count == 0) AvailablePowerUps = InitPowerUpStack();
 			var pulledPU = AvailablePowerUps.Pop();
-			GD.Print("Pulled power up.");
 			if (!CurrentPowerUps.Contains(pulledPU)) newPU = pulledPU;
 		} while (!newPU.HasValue);
 
+		GD.Print($"Pulled power up {newPU.ToString()}.");
 		CurrentPowerUps.Enqueue(newPU.Value);
 	}
 }

@@ -30,7 +30,7 @@ public class BoomerangBuilder : IBoomerangBuilder
 			var explosionNode = ExplosionScene.Instantiate<Explosion>();
 			Result.AddChild(explosionNode);
 		};
-		throwAction.Delay = 3000;
+		throwAction.Delay = 0;
 		throwAction.Duration = null;
 		Result.AddThrowAction(throwAction);
 	}

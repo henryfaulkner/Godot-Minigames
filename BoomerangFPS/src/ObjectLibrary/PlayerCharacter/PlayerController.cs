@@ -65,6 +65,9 @@ public partial class PlayerController : CharacterBody3D
 	public CollisionShape3D PlayerCollider { get; set; }
 	
 	[Export]
+	private Area3D HitBox { get; set; }
+	
+	[Export]
 	public PlayerHud PlayerHud { get; set; }
 
 	[Export]
@@ -323,6 +326,11 @@ public partial class PlayerController : CharacterBody3D
 		return false;
 	}
 
+	public void AddPowerUp()
+	{
+		GD.Print("PlayerController: AddPowerUp");
+		PowerUpService.AddPowerUp();
+	} 
 
 	#endregion
 

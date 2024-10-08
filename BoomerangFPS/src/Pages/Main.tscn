@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b1no0cy3m81iv"]
+[gd_scene load_steps=13 format=3 uid="uid://b1no0cy3m81iv"]
 
 [ext_resource type="PackedScene" uid="uid://bkh244ybrnt3j" path="res://src/ObjectLibrary/PlayerCharacter/PlayerCharacter.tscn" id="1_50nno"]
 [ext_resource type="Texture2D" uid="uid://caie6ggq63nnt" path="res://src/Assets/Images/Textures/Grid Dark/texture_09.png" id="4_6kw8r"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ltvhfvxh2qes" path="res://src/ObjectLibrary/EnemyCharacter/EnemyCharacter.tscn" id="6_uywgi"]
 [ext_resource type="Script" path="res://src/ObjectLibrary/EnemyCharacter/EnemyCharacter.cs" id="7_f7ye4"]
 [ext_resource type="PackedScene" uid="uid://h6u57m6w63hu" path="res://src/ObjectLibrary/PowerUpVessel/PowerUpVessel.tscn" id="8_6s3oh"]
+[ext_resource type="PackedScene" uid="uid://bokevfwt4yebh" path="res://src/ObjectLibrary/Explosion/Explosion.tscn" id="9_igfcg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c2py1"]
 albedo_texture = ExtResource("4_6kw8r")
@@ -57,3 +58,6 @@ script = ExtResource("7_f7ye4")
 
 [node name="PowerUp1" parent="." instance=ExtResource("8_6s3oh")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10, 0, -15)
+
+[node name="Explosion" parent="." instance=ExtResource("9_igfcg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.94287, 2.04943, -14.7059)

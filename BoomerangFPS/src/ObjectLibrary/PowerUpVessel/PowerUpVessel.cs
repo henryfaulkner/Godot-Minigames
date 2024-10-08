@@ -30,8 +30,12 @@ public partial class PowerUpVessel : StaticBody3D
 	{
 		if (receiver.IsInGroup("Player"))
 		{
-			GD.Print("Power up received!");
-			QueueFree();
+			GD.Print("PowerUpVessel: Power up received!");
+			if (receiver is PlayerController)
+			{
+				((PlayerController)receiver).AddPowerUp();
+				QueueFree();
+			}
 		}
 	} 
 }

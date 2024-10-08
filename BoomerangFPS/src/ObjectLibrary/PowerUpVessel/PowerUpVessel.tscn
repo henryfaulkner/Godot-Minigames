@@ -9,7 +9,7 @@ points = PackedVector3Array(-7.9375, -7.9375, 29.5447, 7.9355, -7.9375, 29.822, 
 [sub_resource type="BoxShape3D" id="BoxShape3D_16we2"]
 size = Vector3(2, 2, 3.25)
 
-[node name="PowerUpVessel" type="StaticBody3D" node_paths=PackedStringArray("HitBox")]
+[node name="PowerUpVessel" type="StaticBody3D" node_paths=PackedStringArray("HitBox") groups=["PowerUpVessel"]]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_hmcb2")
 HitBox = NodePath("Area3D")

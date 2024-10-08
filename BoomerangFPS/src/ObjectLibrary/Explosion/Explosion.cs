@@ -19,14 +19,30 @@ public partial class Explosion : RigidBody3D
 	[Export]
 	private AudioStreamPlayer3D ExplosionSound { get; set; }
 	
+	[ExportGroup("Timer")]
+	[Export]
+	private Timer Timer { get; set; }
+	
+	public override void _Ready()
+	{
+		Timer.Timeout += Explode;
+	}
+	
 	public void Explode()
 	{
-		Debris.Emitting = true;
-		Debris.Emitting = true;
-		Debris.Emitting = true;
-		ExplosionSound.Play();
-		TimingFunctions.SetTimeout(() => {
-			QueueFree();
-		}, 2000);
+		try
+		{
+			Debris.Emitting = true;
+			Fire.Emitting = true;
+			Smoke.Emitting = true;
+			ExplosionSound.Play();
+			GD.Print("Explode");
+			TimingFunctions.SetTimeout(() => {
+				QueueFree();
+			}, 2000);
+		} catch (Exception ex)
+		{
+			GD.Print($"Explode exception: {ex.Message}");
+		}
 	}
 }

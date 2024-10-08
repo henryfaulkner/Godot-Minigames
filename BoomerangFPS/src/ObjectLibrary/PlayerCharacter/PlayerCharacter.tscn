@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bkh244ybrnt3j"]
+[gd_scene load_steps=8 format=3 uid="uid://bkh244ybrnt3j"]
 
 [ext_resource type="Script" path="res://src/ObjectLibrary/PlayerCharacter/PlayerController.cs" id="1_yjroq"]
 [ext_resource type="PackedScene" uid="uid://c11n7ir6nncba" path="res://src/ObjectLibrary/PlayerHud/PlayerHud.tscn" id="2_ad3em"]
@@ -8,6 +8,9 @@ size = Vector3(1, 2, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bs6ld"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_vurm3"]
+size = Vector3(2, 2, 3.25)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s3aqx"]
 transparency = 1
 albedo_color = Color(0, 0, 0, 0)
@@ -16,11 +19,12 @@ albedo_color = Color(0, 0, 0, 0)
 material = SubResource("StandardMaterial3D_s3aqx")
 size = Vector3(0.2, 0.2, 1)
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "PlayerHud", "Hand", "CameraNeck", "CameraHead", "PlayerCamera", "AimCast", "GrappleCast", "HeadBonkCast")]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCollider", "HitBox", "PlayerHud", "Hand", "CameraNeck", "CameraHead", "PlayerCamera", "AimCast", "GrappleCast", "HeadBonkCast")]
 floor_stop_on_slope = false
 floor_snap_length = 0.5
 script = ExtResource("1_yjroq")
 PlayerCollider = NodePath("PlayerCollision")
+HitBox = NodePath("Area3D")
 PlayerHud = NodePath("PlayerHud")
 Hand = NodePath("Arm/Hand")
 CameraNeck = NodePath("CameraNeck")
@@ -36,6 +40,12 @@ shape = SubResource("BoxShape3D_t7df6")
 [node name="PlayerMesh" type="MeshInstance3D" parent="."]
 layers = 2
 mesh = SubResource("CapsuleMesh_bs6ld")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0230408, -0.00961304, 1.64301)
+shape = SubResource("BoxShape3D_vurm3")
 
 [node name="CameraNeck" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
