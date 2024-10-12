@@ -1,4 +1,4 @@
-// This tutorial about projectiles was helpful when making this
+// This tutorial about projectiles was helpful
 // https://www.youtube.com/watch?v=IDsoEAj5xG0
 
 using Godot;
