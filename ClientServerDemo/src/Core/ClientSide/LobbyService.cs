@@ -10,10 +10,8 @@
 using Godot;
 using System;
 
-public partial class Lobby : Node
+public partial class LobbyService : Node
 {
-	public static Lobby Instance { get; set; }
-	
 	// These signals can be connected to by a UI lobby scene or the game scene.
 	[Signal]
 	public delegate void PlayerConnectedEventHandler(int peerId, Godot.Collections.Dictionary<string, string> playerInfo);
@@ -21,12 +19,8 @@ public partial class Lobby : Node
 	public delegate void PlayerDisconnectedEventHandler(int peerId);
 	[Signal]
 	public delegate void ServerDisconnectedEventHandler();
-	
-	private const string DEFAULT_IP = "127.0.0.1";
-	private const int DEFAULT_PORT = 3234;
-	private const int MaxConnections = 20;
 
-	private readonly ENetMultiplayerPeer Network;
+	private readonly ENetMultiplayerPeer NetworkPeer;
 	private string SelectedIP { get; set; }
 	private int SelectedPort { get; set; }
 	
@@ -42,9 +36,10 @@ public partial class Lobby : Node
 	
 	private int _playersLoaded = 0;
 
-	public Lobby() 
+	public LobbyService() 
 	{
-		Network = new ENetMultiplayerPeer();
+		NetworkPeer = new ENetMultiplayerPeer();
+
 		Players = new Godot.Collections.Dictionary<long, Godot.Collections.Dictionary<string, string>>();
 		PlayerInfo = new Godot.Collections.Dictionary<string, string>()
 		{
@@ -61,6 +56,20 @@ public partial class Lobby : Node
 		Multiplayer.ServerDisconnected += OnServerDisconnection;
 	}
 
+	public Error JoinGame(string address = ServerConstants.DEFAULT_IP)
+	{
+		var peer = new ENetMultiplayerPeer();
+		Error error = peer.CreateClient(address, ServerConstants.DEFAULT_PORT);
+
+		if (error != Error.Ok)
+		{
+			return error;
+		}
+
+		Multiplayer.MultiplayerPeer = peer;
+		return Error.Ok;
+	}
+
 	private void OnPlayerConnection(long id)
 	{
 		GD.Print($"Player {id}: Connected");
@@ -75,9 +84,15 @@ public partial class Lobby : Node
 		GD.Print($"Player {id}: Disconnected");
 	}
 
+	
 	private void OnConnectedOk()
 	{
 		GD.Print("Successfully connected to server");
+	}
+
+	private void OnConnectedAlready()
+	{
+		GD.Print("Already connected to server");
 	}
 
 	private void OnConnectedFail()

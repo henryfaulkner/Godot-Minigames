@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="ClientServerDemo"
+run/main_scene="res://src/Pages/LobbyScene.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/image="res://src/Assets/Images/Logos/company-logo.png"
@@ -18,7 +19,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Server="*res://src/Core/ClientSide/Lobby.cs"
+LobbyService="*res://src/Core/ClientSide/LobbyService.cs"
+ServerService="*res://src/Core/ServerSide/ServerService.cs"
 
 [dotnet]
 
