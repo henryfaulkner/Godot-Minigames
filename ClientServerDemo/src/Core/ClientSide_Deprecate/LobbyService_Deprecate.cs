@@ -10,7 +10,7 @@
 using Godot;
 using System;
 
-public partial class LobbyService : Node
+public partial class LobbyService_Deprecate : Node
 {
 	// These signals can be connected to by a UI lobby scene or the game scene.
 	[Signal]

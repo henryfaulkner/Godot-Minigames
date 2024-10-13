@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class ServerService : Node
+public partial class ServerService_Deprecate : Node
 {
 	public static ServerService Instance { get; set; }
 	

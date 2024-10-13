@@ -3,15 +3,14 @@ using System;
 
 public partial class ServerScene : Node2D
 {
-	private ServerService _serviceServer; 
+	private LobbyService _serviceLobby;
 
 	public override void _Ready()
 	{
 		try
 		{
-			_serviceServer = GetNode<ServerService>("/root/ServerService");
-			GD.Print(_serviceServer == null);
-			_serviceServer.CreateGame();
+			_serviceLobby = GetNode<LobbyService>("/root/LobbyService");
+			_serviceLobby.CreateGame();
 		} 
 		catch (Exception ex)
 		{

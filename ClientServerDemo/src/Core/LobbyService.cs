@@ -1,8 +1,8 @@
 using Godot;
 
-public partial class Lobby : Node
+public partial class LobbyService : Node
 {
-	public static Lobby Instance { get; private set; }
+	public static LobbyService Instance { get; private set; }
 
 	// These signals can be connected to by a UI lobby scene or the game scene.
 	[Signal]
@@ -37,7 +37,7 @@ public partial class Lobby : Node
 		Multiplayer.ServerDisconnected += OnServerDisconnected;
 	}
 
-	private Error JoinGame(string address = "")
+	public Error JoinGame(string address = "")
 	{
 		if (string.IsNullOrEmpty(address))
 		{
@@ -56,7 +56,7 @@ public partial class Lobby : Node
 		return Error.Ok;
 	}
 
-	private Error CreateGame()
+	public Error CreateGame()
 	{
 		var peer = new ENetMultiplayerPeer();
 		Error error = peer.CreateServer(ServerConstants.DEFAULT_PORT, ServerConstants.MAX_CONNECTIONS);
