@@ -18,8 +18,14 @@
 
 [sub_resource type="Theme" id="Theme_whrd5"]
 
-[node name="PauseMenu" type="Node2D"]
+[node name="PauseMenu" type="Node2D" node_paths=PackedStringArray("MainPanel", "AudioSettingsPanel", "GameplaySettingsPanel", "PlayerControlsPanel", "SelectAudio", "SwitchAudio")]
 script = ExtResource("1_u6non")
+MainPanel = NodePath("MarginContainer/MainPanel")
+AudioSettingsPanel = NodePath("MarginContainer/AudioSettingsPanel")
+GameplaySettingsPanel = NodePath("MarginContainer/GameplaySettingsPanel")
+PlayerControlsPanel = NodePath("MarginContainer/PlayerControlsPanel")
+SelectAudio = NodePath("Select_AudioStreamPlayer")
+SwitchAudio = NodePath("Switch_AudioStreamPlayer")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 offset_right = 2048.0
@@ -120,14 +126,14 @@ theme_override_font_sizes/font_size = 40
 text = "Version 0.0.1"
 horizontal_alignment = 1
 
-[node name="AudioSettingsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("FxSoundBtn", "HomeBtn")]
+[node name="AudioSettingsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("FxSoundBtn", "BackBtn")]
 visible = false
 layout_mode = 2
 theme = SubResource("Theme_whrd5")
 theme_override_styles/panel = ExtResource("2_4lxy2")
 script = ExtResource("7_k4pad")
 FxSoundBtn = NodePath("PaddingContainer/VBoxContainer/FxSoundContainer/TextureButton")
-HomeBtn = NodePath("PaddingContainer/VBoxContainer/HomeButton")
+BackBtn = NodePath("PaddingContainer/VBoxContainer/BackButton")
 
 [node name="PaddingContainer" type="MarginContainer" parent="MarginContainer/AudioSettingsPanel"]
 layout_mode = 1
@@ -184,7 +190,7 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="HomeButton" type="Button" parent="MarginContainer/AudioSettingsPanel/PaddingContainer/VBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/AudioSettingsPanel/PaddingContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_n6aq3")
 text = "Back"
@@ -201,14 +207,14 @@ theme_override_font_sizes/font_size = 40
 text = "Version 0.0.1"
 horizontal_alignment = 1
 
-[node name="GameplaySettingsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("PlayerControlsBtn", "HomeBtn")]
+[node name="GameplaySettingsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("PlayerControlsBtn", "BackBtn")]
 visible = false
 layout_mode = 2
 theme = SubResource("Theme_whrd5")
 theme_override_styles/panel = ExtResource("2_4lxy2")
 script = ExtResource("11_ugutx")
 PlayerControlsBtn = NodePath("PaddingContainer/VBoxContainer/PlayerControlsButton")
-HomeBtn = NodePath("PaddingContainer/VBoxContainer/HomeButton")
+BackBtn = NodePath("PaddingContainer/VBoxContainer/BackButton")
 
 [node name="PaddingContainer" type="MarginContainer" parent="MarginContainer/GameplaySettingsPanel"]
 layout_mode = 1
@@ -254,7 +260,7 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="HomeButton" type="Button" parent="MarginContainer/GameplaySettingsPanel/PaddingContainer/VBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/GameplaySettingsPanel/PaddingContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_n6aq3")
 text = "Back"
@@ -271,13 +277,13 @@ theme_override_font_sizes/font_size = 40
 text = "Version 0.0.1"
 horizontal_alignment = 1
 
-[node name="PlayerControlsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("HomeBtn")]
+[node name="PlayerControlsPanel" type="Panel" parent="MarginContainer" node_paths=PackedStringArray("BackBtn")]
 visible = false
 layout_mode = 2
 theme = SubResource("Theme_whrd5")
 theme_override_styles/panel = ExtResource("2_4lxy2")
 script = ExtResource("12_q70cp")
-HomeBtn = NodePath("PaddingContainer/VBoxContainer/HomeButton")
+BackBtn = NodePath("PaddingContainer/VBoxContainer/BackButton")
 
 [node name="PaddingContainer" type="MarginContainer" parent="MarginContainer/PlayerControlsPanel"]
 layout_mode = 1
@@ -323,7 +329,7 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="HomeButton" type="Button" parent="MarginContainer/PlayerControlsPanel/PaddingContainer/VBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/PlayerControlsPanel/PaddingContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_n6aq3")
 text = "Back"
@@ -340,14 +346,13 @@ theme_override_font_sizes/font_size = 40
 text = "Version 0.0.1"
 horizontal_alignment = 1
 
-[node name="OpenClosePauseMenuListener" type="Node" parent="."]
-process_mode = 3
-script = ExtResource("9_tt8pv")
-
 [node name="Select_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_ftffb")
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_xxdxj")
+
+[node name="Node2D" type="Node2D" parent="."]
+script = ExtResource("9_tt8pv")
 
 [connection signal="pressed" from="MarginContainer/AudioSettingsPanel/PaddingContainer/VBoxContainer/FxSoundContainer/TextureButton" to="MarginContainer/AudioSettingsPanel/PaddingContainer/VBoxContainer/FxSoundContainer/TextureButton" method="_on_pressed"]

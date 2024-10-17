@@ -2,10 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class BasePanel : Panel
+public partial class BaseMenuPanel : Panel
 {
+	public Enumerations.PauseMenuPanels Id { get; }
 	public List<BaseButton> Buttons { get; set; }
 	public int FocusIndex { get; set; }
+
+	[Signal]
+	public delegate void OpenEventHandler(int openPanelId);
 
 	public void MoveFocusBackward(AudioStreamPlayer switchAudio)
 	{

@@ -1,12 +1,12 @@
 using Godot;
 using System;
 
-public partial class OpenClosePauseMenuListener : Node3D
+public partial class OpenClosePauseMenuListener : Node2D
 {
 	private static readonly StringName _PAUSE_INPUT = new StringName("escape");
 
 	[Export]
-	private Panel[] BasePanels;
+	private Panel BaseMenuPanels;
 
 	public override void _Ready()
 	{
@@ -25,7 +25,7 @@ public partial class OpenClosePauseMenuListener : Node3D
 			}
 			else
 			{
-				BasePanels[0].Show(); // show base panel
+				//BaseMenuPanels[0].Show(); // show base panel
 				EmitSignal(SignalName.OpenMenu);
 				GetTree().Paused = true;
 			}
@@ -40,9 +40,9 @@ public partial class OpenClosePauseMenuListener : Node3D
 
 	public void HideAll()
 	{
-		foreach (var panel in BasePanels)
-		{
-			panel.Hide();
-		}
+		//foreach (var panel in BaseMenuPanels)
+		//{
+			//panel.Hide();
+		//}
 	}
 }

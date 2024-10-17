@@ -12,4 +12,12 @@ public partial class Enumerations
         Resting,
         Carrying,
     }
+
+    public enum PauseMenuPanels
+    {
+        Main,
+        AudioSettings,
+        GameplaySettings,
+        PlayerControls,
+    }
 }

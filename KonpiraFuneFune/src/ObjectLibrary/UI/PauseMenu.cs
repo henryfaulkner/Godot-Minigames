@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class PauseMenu : Node
 {
@@ -41,41 +42,88 @@ public partial class PauseMenu : Node
 
 	#endregion
 
-	public List<BasePanel> BasePanelList { get; set; }
+	private PauseMenuService PauseMenuService;
+	public List<BaseMenuPanel> PanelList { get; set; }
 
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.WhenPaused;
-		BasePanelList = GetPauseBasePanels();
+		PanelList = GetPauseMenuPanels();
+		PauseMenuService = GetNode<PauseMenuService>("/root/PauseMenuService");
+		PauseMenuService.SetPanelList(GetPauseMenuPanels());
+		SubscribeToPanelEvents();
 	}
 
 	public override void _Process(double delta)
 	{
 		if (Input.IsActionJustPressed(_UP_INPUT))
 		{
-			BasePanelList.ForEach(BasePanel =>
+			PanelList.ForEach(x =>
 			{
-				BasePanel.MoveFocusBackward(SwitchAudio);
+				x.MoveFocusBackward(SwitchAudio);
 			});
 		}
 
 		if (Input.IsActionJustPressed(_TAB_INPUT)
 		|| Input.IsActionJustPressed(_DOWN_INPUT))
 		{
-			BasePanelList.ForEach(BasePanel =>
+			PanelList.ForEach(x =>
 			{
-				BasePanel.MoveFocusForward(SwitchAudio);
+				x.MoveFocusForward(SwitchAudio);
 			});
 		}
 	}
 
-	private List<BasePanel> GetPauseBasePanels()
+	private List<BaseMenuPanel> GetPauseMenuPanels()
 	{
-		var result = new List<BasePanel>();
+		var result = new List<BaseMenuPanel>();
 		result.Add(MainPanel);
 		result.Add(AudioSettingsPanel);
 		result.Add(GameplaySettingsPanel);
 		result.Add(PlayerControlsPanel);
 		return result;
+	}
+
+	private void SubscribeToPanelEvents()
+	{
+		SubscribeToMainPanelEvents();
+		SubscribeToAudioSettingsPanelEvents();
+		SubscribeToGameplaySettingsPanelEvents();
+		SubscribeToPlayerControlsPanelEvents();
+	}
+
+	private void SubscribeToMainPanelEvents()
+	{
+		MainPanel.Open += (int openPanelId) => OpenPanel(openPanelId);
+	}
+
+	private void SubscribeToAudioSettingsPanelEvents()
+	{
+		AudioSettingsPanel.Open += (int openPanelId) => OpenPanel(openPanelId);
+	}
+
+	private void SubscribeToGameplaySettingsPanelEvents()
+	{
+		GameplaySettingsPanel.Open += (int openPanelId) => OpenPanel(openPanelId);
+	}
+
+	private void SubscribeToPlayerControlsPanelEvents()
+	{
+		PlayerControlsPanel.Open += (int openPanelId) => OpenPanel(openPanelId);
+	}
+
+	public void OpenPanel(int openPanelId)
+	{
+		HideAllPanels();
+		var openPanel = PanelList.Where(x => (int)x.Id == openPanelId).First();
+		openPanel.Visible = true;
+	}
+
+	public void HideAllPanels()
+	{
+		PanelList.ForEach(x =>
+		{
+			x.Visible = false;
+		});
 	}
 }
