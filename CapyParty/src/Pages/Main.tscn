@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cumlqoerlc1xy"]
+
+[ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_x3h4i"]
+[ext_resource type="Environment" uid="uid://dpkbefmdxxdpu" path="res://src/Assets/SkyEnvironment.tres" id="2_wxxlc"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_x3h4i")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.35329, 6.02848, 30.7016)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = ExtResource("2_wxxlc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+shadow_enabled = true

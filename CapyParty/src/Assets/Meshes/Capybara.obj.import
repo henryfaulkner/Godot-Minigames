@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bretm6kc8c3wa"
+path="res://.godot/imported/Capybara.obj-253421e69ef75a3d94fd19556af3da54.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Capybara.obj-253421e69ef75a3d94fd19556af3da54.mesh"]
+
+source_file="res://src/Assets/Meshes/Capybara.obj"
+dest_files=["res://.godot/imported/Capybara.obj-253421e69ef75a3d94fd19556af3da54.mesh", "res://.godot/imported/Capybara.obj-253421e69ef75a3d94fd19556af3da54.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
