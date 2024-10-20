@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cumlqoerlc1xy"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_x3h4i"]
-[ext_resource type="PackedScene" uid="uid://drtm0lrhodb2i" path="res://src/ObjectLibrary/PartyLight.tscn" id="2_6npvy"]
+[ext_resource type="PackedScene" uid="uid://drtm0lrhodb2i" path="res://src/ObjectLibrary/PartyLight/PartyLight.tscn" id="2_6npvy"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("TestLight", "TestLight2", "TestLight3")]
 script = ExtResource("1_x3h4i")

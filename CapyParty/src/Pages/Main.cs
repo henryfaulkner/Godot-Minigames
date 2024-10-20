@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public partial class Main : Node3D
 {
-	private static readonly StringName CAPYBARA_SCENE_PATH = new StringName("res://src/ObjectLibrary/Capybara.tscn");
-	private static readonly StringName PARTY_LIGHT_SCENE_PATH = new StringName("res://src/ObjectLibrary/PartyLight.tscn");
+	private static readonly StringName CAPYBARA_SCENE_PATH = new StringName("res://src/ObjectLibrary/Capybara/Capybara.tscn");
+	private static readonly StringName PARTY_LIGHT_SCENE_PATH = new StringName("res://src/ObjectLibrary/PartyLight/PartyLight.tscn");
 	
 	private Queue<Capybara> CapybaraQueue { get; set; } 
 	private List<PartyLight> PartyLightList { get; set; }

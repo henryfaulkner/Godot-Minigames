@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://mflau0r11yct"]
+
+[ext_resource type="PackedScene" uid="uid://bokevfwt4yebh" path="res://src/ObjectLibrary/Explosion/Explosion.tscn" id="1_ibfs8"]
+[ext_resource type="Material" uid="uid://us3ofpej21f7" path="res://src/Assets/TextMeshMaterial.tres" id="2_v1gew"]
+[ext_resource type="PackedScene" uid="uid://ct8odsfbm4ami" path="res://src/ObjectLibrary/RevealCapybara/RevealCapybara.tscn" id="3_ndtvl"]
+
+[sub_resource type="TextMesh" id="TextMesh_0dtnh"]
+material = ExtResource("2_v1gew")
+text = "Happy Birthday Alyson!!!"
+font_size = 48
+uppercase = true
+
+[sub_resource type="TextMesh" id="TextMesh_87y3y"]
+material = ExtResource("2_v1gew")
+text = "A Rare Item Appeared"
+font_size = 48
+uppercase = true
+
+[sub_resource type="Environment" id="Environment_8vgpf"]
+glow_enabled = true
+glow_intensity = 1.17
+glow_bloom = 0.21
+
+[node name="RareItemReveal" type="StaticBody3D"]
+
+[node name="Explosion2" parent="." instance=ExtResource("1_ibfs8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0)
+
+[node name="Explosion" parent="." instance=ExtResource("1_ibfs8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+
+[node name="Header" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("TextMesh_0dtnh")
+
+[node name="RevealCapybara" parent="." instance=ExtResource("3_ndtvl")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+RotationSpeed = 0.02
+
+[node name="Footer" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+mesh = SubResource("TextMesh_87y3y")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+environment = SubResource("Environment_8vgpf")
