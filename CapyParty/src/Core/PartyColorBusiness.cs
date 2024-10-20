@@ -41,7 +41,6 @@ public class PartyColorBusiness
 			b / (float)range,
 			a / (float)range
 		);
-		GD.Print(result.ToString());
 		return result;
 	}
 }

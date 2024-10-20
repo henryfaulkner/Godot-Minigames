@@ -1,13 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://cumlqoerlc1xy"]
+[gd_scene load_steps=2 format=3 uid="uid://cumlqoerlc1xy"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_x3h4i"]
-[ext_resource type="PackedScene" uid="uid://drtm0lrhodb2i" path="res://src/ObjectLibrary/PartyLight/PartyLight.tscn" id="2_6npvy"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("TestLight", "TestLight2", "TestLight3")]
 script = ExtResource("1_x3h4i")
-TestLight = NodePath("PartyLight")
-TestLight2 = NodePath("PartyLight2")
-TestLight3 = NodePath("PartyLight3")
+TestLight = NodePath("")
+TestLight2 = NodePath("")
+TestLight3 = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.35329, 6.02848, 30.7016)
@@ -18,12 +17,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.35329, 6.02848, 30.7016)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 shadow_enabled = true
-
-[node name="PartyLight3" parent="." instance=ExtResource("2_6npvy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.4363, 2.78555, 18.6642)
-
-[node name="PartyLight2" parent="." instance=ExtResource("2_6npvy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.37272, 4.91536, 15.6705)
-
-[node name="PartyLight" parent="." instance=ExtResource("2_6npvy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0882, 9.35602, 10.5152)
