@@ -2,11 +2,8 @@
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_x3h4i"]
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("TestLight", "TestLight2", "TestLight3")]
+[node name="Main" type="Node3D"]
 script = ExtResource("1_x3h4i")
-TestLight = NodePath("")
-TestLight2 = NodePath("")
-TestLight3 = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.35329, 6.02848, 30.7016)

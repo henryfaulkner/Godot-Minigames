@@ -12,6 +12,9 @@ public partial class LobbyService : Node
 	[Signal]
 	public delegate void ServerDisconnectedEventHandler();
 
+	public string SelectedIP { get; set; } = ServerConstants.DEFAULT_IP;
+	public int SelectedPort { get; set; } = ServerConstants.DEFAULT_PORT;
+
 	// This will contain player info for every player,
 	// with the keys being each player's unique IDs.
 	private Godot.Collections.Dictionary<long, Godot.Collections.Dictionary<string, string>> _players = new Godot.Collections.Dictionary<long, Godot.Collections.Dictionary<string, string>>();
@@ -41,11 +44,11 @@ public partial class LobbyService : Node
 	{
 		if (string.IsNullOrEmpty(address))
 		{
-			address = ServerConstants.DEFAULT_IP;
+			address = SelectedIP;
 		}
 
 		var peer = new ENetMultiplayerPeer();
-		Error error = peer.CreateClient(address, ServerConstants.DEFAULT_PORT);
+		Error error = peer.CreateClient(address, SelectedPort);
 
 		if (error != Error.Ok)
 		{
@@ -59,7 +62,7 @@ public partial class LobbyService : Node
 	public Error CreateGame()
 	{
 		var peer = new ENetMultiplayerPeer();
-		Error error = peer.CreateServer(ServerConstants.DEFAULT_PORT, ServerConstants.MAX_CONNECTIONS);
+		Error error = peer.CreateServer(SelectedPort, ServerConstants.MAX_CONNECTIONS);
 
 		if (error != Error.Ok)
 		{
@@ -95,7 +98,7 @@ public partial class LobbyService : Node
 			_playersLoaded += 1;
 			if (_playersLoaded == _players.Count)
 			{
-				//GetNode<Game>("/root/Game").StartGame();
+				GetNode<GameService>("/root/GameService").StartGame();
 				_playersLoaded = 0;
 			}
 		}
