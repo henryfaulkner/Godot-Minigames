@@ -17,11 +17,15 @@ public partial class LobbyScene : Control
 	private Button JoinGameButton { get; set; }
 	
 	private LobbyService _serviceLobby;
+	private LoggerService _serviceLogger;
 	
 	public override void _Ready()
 	{
 		_serviceLobby = GetNode<LobbyService>("/root/LobbyService");
 		JoinGameButton.Pressed += OnJoinGamePressed;
+		
+		_serviceLogger = GetNode<LoggerService>("/root/LoggerService");
+		_serviceLogger.LogError("Log error");
 	}
 
 	private void OnJoinGamePressed()

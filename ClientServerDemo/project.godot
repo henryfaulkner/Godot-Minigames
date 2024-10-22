@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 
 LobbyService="*res://src/Core/LobbyService.cs"
 GameService="*res://src/Core/GameService.cs"
+LoggerService="*res://src/Core/Logging/LoggerService.cs"
 
 [dotnet]
 
