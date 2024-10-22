@@ -9,8 +9,8 @@ public partial class LoggingService : Node
 	public LoggingService()
 	{
 		Loggers = new List<ILogger>();
-		Loggers.Add(new FileLogger("res://Core/LoggerService/logs/log.txt", Enumerations.LogLevels.Debug));
-		Loggers.Add(new FileLogger("res://Core/LoggerService/logs/error-log.txt", Enumerations.LogLevels.Error));
+		Loggers.Add(new FileLogger("res://Core/LoggerService/logs/log.txt", Enumerations.LogLevels.Error));
+        Loggers.Add(new DatabaseLogger(Enumerations.Debug));
 	}
 
 	public void LogDebug(string message)

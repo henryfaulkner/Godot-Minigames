@@ -20,7 +20,7 @@ public class FileLogger : ILogger
 		}
 	}
 
-	public void PublishLog(string message)
+	private void PublishLog(string message)
 	{
 		try
 		{

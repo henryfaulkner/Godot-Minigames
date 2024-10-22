@@ -20,8 +20,6 @@ public partial class LobbyScene : Control
 	
 	public override void _Ready()
 	{
-		using (var context = new AppDbContext()) {}
-
 		_serviceLobby = GetNode<LobbyService>("/root/LobbyService");
 		JoinGameButton.Pressed += OnJoinGamePressed;
 	}
