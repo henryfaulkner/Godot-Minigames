@@ -13,7 +13,14 @@ public partial class Main : Node3D
 	private List<Capybara> CapybaraList { get; set; }
 	private List<PartyLight> PartyLightList { get; set; }
 
+	private float CubeScale = 30.0f; 
+	private double CubeCapyUnitRatio = 0.175; 
+
 	private double LightColorIndex { get; set; }
+	private float time; // Track elapsed time to animate capycube
+	private bool MoveXFlag { get; set; }
+	private bool MoveYFlag { get; set; }
+	private bool MoveZFlag { get; set; }
 
 	private CapyCubeBusiness CapyCubeBusiness { get; set; }
 	private PartyColorBusiness PartyColorBusiness { get; set; }
@@ -23,7 +30,7 @@ public partial class Main : Node3D
 		CapybaraList = new List<Capybara>();
 		PartyLightList = new List<PartyLight>();
 
-		CapyCubeBusiness = new CapyCubeBusiness(0.175);
+		CapyCubeBusiness = new CapyCubeBusiness(CubeCapyUnitRatio);
 		PartyColorBusiness = new PartyColorBusiness();
 	}
 
@@ -31,8 +38,8 @@ public partial class Main : Node3D
 	{
 		foreach (var coord in CapyCubeBusiness.Coords)
 		{
-			CapybaraList.Add(SpawnCapybara(coord * 30));
-			PartyLightList.Add(SpawnPartyLight(coord * 30));
+			CapybaraList.Add(SpawnCapybara(coord * CubeScale));
+			PartyLightList.Add(SpawnPartyLight(coord * CubeScale));
 		}
 	}
 	
@@ -42,25 +49,35 @@ public partial class Main : Node3D
 		{
 			TimingFunctions.SetTimeout(GetSwitchAction(), 50);	
 		}
+
+		if (@event.IsActionPressed("q")) 
+		{
+			MoveXFlag = true;
+			MoveYFlag = false;
+			MoveZFlag = false;
+		}
+
+		if (@event.IsActionPressed("w")) 
+		{
+			MoveXFlag = false;
+			MoveYFlag = true;
+			MoveZFlag = false;
+		}
+
+		if (@event.IsActionPressed("e")) 
+		{
+			MoveXFlag = false;
+			MoveYFlag = false;
+			MoveZFlag = true;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		// Increment color index
-		LightColorIndex = (LightColorIndex + delta * 40) % 256; // Keep it within bounds of 0-255
-		int pos = (int)Math.Floor(LightColorIndex);
-		
-		// Use a normal for-loop for better performance than ForEach
-		for (int i = 0; i < PartyLightList.Count; i++)
-		{
-			PartyLightList[i].SetColor(PartyColorBusiness.GetWheelColor(pos));
-		}
-
-		// Use Parallel.ForEach to update lights in parallel
-		// Parallel.ForEach(PartyLightList, light =>
-		// {
-		// 	light.SetColor(PartyColorBusiness.GetWheelColor(pos));
-		// });
+		ApplyPartyLightColors(delta);
+		if (MoveXFlag) ApplySineWaveToXAxis(delta);
+		if (MoveYFlag) ApplySineWaveToYAxis(delta);
+		if (MoveZFlag) ApplySineWaveToZAxis(delta);
 	}
 
 	private Capybara SpawnCapybara(Vector3 coord)
@@ -95,5 +112,102 @@ public partial class Main : Node3D
 				GD.PrintErr($"Switch error: {e.Message}");
 			}
 		};
+	}
+
+	private void ApplyPartyLightColors(double delta)
+	{
+		// Increment color index
+		LightColorIndex = (LightColorIndex + delta * 40) % 256; // Keep it within bounds of 0-255
+		int pos = (int)Math.Floor(LightColorIndex);
+		
+		// Use a normal for-loop for better performance than ForEach
+		for (int i = 0; i < PartyLightList.Count; i++)
+		{
+			PartyLightList[i].SetColor(PartyColorBusiness.GetWheelColor(pos));
+		}
+		
+		// Use Parallel.ForEach to update lights in parallel
+		// Parallel.ForEach(PartyLightList, light =>
+		// {
+		// 	light.SetColor(PartyColorBusiness.GetWheelColor(pos));
+		// });
+	}
+	
+	private void ApplySineWaveToXAxis(double delta)
+	{
+		time += (float)delta;
+		// Update positions with a sine wave on the y-axis
+		for (int i = 0; i < CapyCubeBusiness.Coords.Count; i++)
+		{
+			// Get the original coordinate
+			var coord = CapyCubeBusiness.Coords[i];
+
+			// Apply a sine wave to the x position, using time for dynamic movement
+			float sineWaveXOffset = (float)Math.Sin(coord.X * 3.0f + time) * 5.0f;  // Frequency: 3.0, Amplitude: 15.0
+
+			// Update the capybara position (correctly applying transform)
+			CapybaraList[i].GlobalTransform = new Transform3D(
+				CapybaraList[i].GlobalTransform.Basis, // Keep the current Basis (orientation/scale)
+				new Vector3(coord.X * CubeScale + sineWaveXOffset, coord.Y * CubeScale, coord.Z * CubeScale) // Update the position
+			);
+
+			// Update the party light position (ensure correct Basis usage)
+			PartyLightList[i].GlobalTransform = new Transform3D(
+				PartyLightList[i].GlobalTransform.Basis, // Use the PartyLight's current Basis, not Capybara's
+				new Vector3(coord.X * CubeScale + sineWaveXOffset, coord.Y * CubeScale, coord.Z * CubeScale) // Update the position
+			);
+		}
+	}
+
+	private void ApplySineWaveToYAxis(double delta)
+	{
+		time += (float)delta;
+		// Update positions with a sine wave on the y-axis
+		for (int i = 0; i < CapyCubeBusiness.Coords.Count; i++)
+		{
+			// Get the original coordinate
+			var coord = CapyCubeBusiness.Coords[i];
+
+			// Apply a sine wave to the y position, using time for dynamic movement
+			float sineWaveYOffset = (float)Math.Sin(coord.Y * 3.0f + time) * 15.0f;  // Frequency: 3.0, Amplitude: 15.0
+
+			// Update the capybara position (correctly applying transform)
+			CapybaraList[i].GlobalTransform = new Transform3D(
+				CapybaraList[i].GlobalTransform.Basis, // Keep the current Basis (orientation/scale)
+				new Vector3(coord.X * CubeScale, coord.Y * CubeScale + sineWaveYOffset, coord.Z * CubeScale) // Update the position
+			);
+
+			// Update the party light position (ensure correct Basis usage)
+			PartyLightList[i].GlobalTransform = new Transform3D(
+				PartyLightList[i].GlobalTransform.Basis, // Use the PartyLight's current Basis, not Capybara's
+				new Vector3(coord.X * CubeScale, coord.Y * CubeScale + sineWaveYOffset, coord.Z * CubeScale) // Update the position
+			);
+		}
+	}
+
+	private void ApplySineWaveToZAxis(double delta)
+	{
+		time += (float)delta;
+		// Update positions with a sine wave on the y-axis
+		for (int i = 0; i < CapyCubeBusiness.Coords.Count; i++)
+		{
+			// Get the original coordinate
+			var coord = CapyCubeBusiness.Coords[i];
+
+			// Apply a sine wave to the z position, using time for dynamic movement
+			float sineWaveZOffset = (float)Math.Sin(coord.Z * 3.0f + time) * 15.0f;  // Frequency: 3.0, Amplitude: 15.0
+
+			// Update the capybara position (correctly applying transform)
+			CapybaraList[i].GlobalTransform = new Transform3D(
+				CapybaraList[i].GlobalTransform.Basis, // Keep the current Basis (orientation/scale)
+				new Vector3(coord.X * CubeScale, coord.Y * CubeScale, coord.Z * CubeScale + sineWaveZOffset) // Update the position
+			);
+
+			// Update the party light position (ensure correct Basis usage)
+			PartyLightList[i].GlobalTransform = new Transform3D(
+				PartyLightList[i].GlobalTransform.Basis, // Use the PartyLight's current Basis, not Capybara's
+				new Vector3(coord.X * CubeScale, coord.Y * CubeScale, coord.Z * CubeScale + sineWaveZOffset) // Update the position
+			);
+		}
 	}
 }

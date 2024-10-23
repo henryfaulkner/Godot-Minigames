@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://mflau0r11yct"]
+[gd_scene load_steps=9 format=3 uid="uid://mflau0r11yct"]
 
 [ext_resource type="PackedScene" uid="uid://bokevfwt4yebh" path="res://src/ObjectLibrary/Explosion/Explosion.tscn" id="1_ibfs8"]
 [ext_resource type="Script" path="res://src/Pages/RareItemReveal.cs" id="1_jc5jg"]
 [ext_resource type="Material" uid="uid://us3ofpej21f7" path="res://src/Assets/TextMeshMaterial.tres" id="2_v1gew"]
 [ext_resource type="PackedScene" uid="uid://ct8odsfbm4ami" path="res://src/ObjectLibrary/RevealCapybara/RevealCapybara.tscn" id="3_ndtvl"]
+[ext_resource type="Environment" uid="uid://bioda8n28p55n" path="res://src/Assets/Environment.tres" id="5_uag70"]
 
 [sub_resource type="TextMesh" id="TextMesh_0dtnh"]
 material = ExtResource("2_v1gew")
@@ -46,6 +47,7 @@ mesh = SubResource("TextMesh_87y3y")
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = ExtResource("5_uag70")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 shadow_enabled = true

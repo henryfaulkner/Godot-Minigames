@@ -46,13 +46,26 @@ public class CapyCubeBusiness
 					double y = possibleValues[j];
 					double z = possibleValues[k];
 
-					// Print the coordinate (x, y, z)
-					Console.WriteLine($"({x}, {y}, {z})");
 					result.Add(new Vector3((float)x, (float)y, (float)z));
 				}
 			}
 		}
 
 		return result;
+	}
+
+	// Method to adjust the coordinates based on a sine wave along the y-axis
+	public void ApplySineWaveToYAxis(float frequency = 1.0f, float amplitude = 1.0f)
+	{
+		for (int i = 0; i < Coords.Count; i++)
+		{
+			var coord = Coords[i];
+			// Apply sine wave to the y-coordinate. You can adjust which axis affects the sine wave (x or z)
+			// Here, we use the x-coordinate to control the sine wave
+			float sineWaveY = (float)Math.Sin(coord.X * frequency) * amplitude;
+
+			// Create a new Vector3 with the modified y coordinate
+			Coords[i] = new Vector3(coord.X, sineWaveY, coord.Z);
+		}
 	}
 }
