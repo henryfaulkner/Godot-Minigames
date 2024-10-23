@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class Main : Node3D
 {
@@ -22,7 +23,7 @@ public partial class Main : Node3D
 		CapybaraList = new List<Capybara>();
 		PartyLightList = new List<PartyLight>();
 
-		CapyCubeBusiness = new CapyCubeBusiness(0.125);
+		CapyCubeBusiness = new CapyCubeBusiness(0.175);
 		PartyColorBusiness = new PartyColorBusiness();
 	}
 
@@ -30,8 +31,8 @@ public partial class Main : Node3D
 	{
 		foreach (var coord in CapyCubeBusiness.Coords)
 		{
-			CapybaraList.Add(SpawnCapybara(coord * 50));
-			PartyLightList.Add(SpawnPartyLight(coord * 50));
+			CapybaraList.Add(SpawnCapybara(coord * 30));
+			PartyLightList.Add(SpawnPartyLight(coord * 30));
 		}
 	}
 	
@@ -45,10 +46,21 @@ public partial class Main : Node3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		// this is for testing and is very crude
-		 LightColorIndex += delta * 40;
-		 int pos = (int)Math.Floor(LightColorIndex);
-		 PartyLightList.ForEach(x => x.SetColor(PartyColorBusiness.GetWheelColor(pos)));
+		// Increment color index
+		LightColorIndex = (LightColorIndex + delta * 40) % 256; // Keep it within bounds of 0-255
+		int pos = (int)Math.Floor(LightColorIndex);
+		
+		// Use a normal for-loop for better performance than ForEach
+		for (int i = 0; i < PartyLightList.Count; i++)
+		{
+			PartyLightList[i].SetColor(PartyColorBusiness.GetWheelColor(pos));
+		}
+
+		// Use Parallel.ForEach to update lights in parallel
+		// Parallel.ForEach(PartyLightList, light =>
+		// {
+		// 	light.SetColor(PartyColorBusiness.GetWheelColor(pos));
+		// });
 	}
 
 	private Capybara SpawnCapybara(Vector3 coord)

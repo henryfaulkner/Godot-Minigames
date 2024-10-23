@@ -9,7 +9,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.281888)
 script = ExtResource("1_x3h4i")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.02105, 6.89013, 29.2283)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5758, 7.25778, 26.4525)
 
 [node name="Capybara" parent="Camera3D" instance=ExtResource("2_pd1fi")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, -3)

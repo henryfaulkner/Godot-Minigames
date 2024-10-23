@@ -3,13 +3,28 @@ using System;
 
 public class PartyColorBusiness
 {
-	// Input value between 0 and 255 to get a color value.
+	private readonly Color[] _colorCache = new Color[256];
+	private const int Range = 255;
+
+	public PartyColorBusiness()
+	{
+		// Precompute the color wheel once during initialization
+		for (int i = 0; i <= Range; i++)
+		{
+			_colorCache[i] = CalculateWheelColor(i);
+		}
+	}
+
 	public Color GetWheelColor(int pos)
 	{
-		int r = 0, g = 0, b = 0, a = 0, range = 255;
+		// Modulo to ensure pos is between 0 and 255
+		pos = pos % (Range + 1);
+		return _colorCache[pos];
+	}
 
-		// Adjust position with wheel range
-		pos = pos % (range + 1);
+	private Color CalculateWheelColor(int pos)
+	{
+		int r = 0, g = 0, b = 0, a = 0, range = 255;
 
 		// Get rgb values
 		if (pos < 0) { }
