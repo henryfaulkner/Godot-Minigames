@@ -144,4 +144,5 @@ draw_pass_1 = SubResource("SphereMesh_ul4uy")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
+one_shot = true
 autostart = true

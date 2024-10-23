@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public partial class Main : Node3D
 {
-	private static readonly StringName CAPYBARA_SCENE_PATH = new StringName("res://src/ObjectLibrary/Capybara/Capybara.tscn");
+	public static StringName RARE_ITEM_REVEAL_SCENE_PATH = new StringName("res://src/Pages/RareItemReveal.tscn");
+	
+	private static readonly StringName CAPYBARA_SCENE_PATH = new StringName("res://src/ObjectLibrary/Capybara/LowPolyCapybara.tscn");
 	private static readonly StringName PARTY_LIGHT_SCENE_PATH = new StringName("res://src/ObjectLibrary/PartyLight/PartyLight.tscn");
 
 	private List<Capybara> CapybaraList { get; set; }
@@ -20,7 +22,7 @@ public partial class Main : Node3D
 		CapybaraList = new List<Capybara>();
 		PartyLightList = new List<PartyLight>();
 
-		CapyCubeBusiness = new CapyCubeBusiness(0.25);
+		CapyCubeBusiness = new CapyCubeBusiness(0.125);
 		PartyColorBusiness = new PartyColorBusiness();
 	}
 
@@ -28,17 +30,25 @@ public partial class Main : Node3D
 	{
 		foreach (var coord in CapyCubeBusiness.Coords)
 		{
-			CapybaraList.Add(SpawnCapybara(coord * 20));
-			PartyLightList.Add(SpawnPartyLight(coord * 20));
+			CapybaraList.Add(SpawnCapybara(coord * 50));
+			PartyLightList.Add(SpawnPartyLight(coord * 50));
+		}
+	}
+	
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("interact")) 
+		{
+			TimingFunctions.SetTimeout(GetSwitchAction(), 50);	
 		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		// this is for testing and is very crude
-		LightColorIndex += delta * 40;
-		int pos = (int)Math.Floor(LightColorIndex);
-		PartyLightList.ForEach(x => x.SetColor(PartyColorBusiness.GetWheelColor(pos)));
+		 LightColorIndex += delta * 40;
+		 int pos = (int)Math.Floor(LightColorIndex);
+		 PartyLightList.ForEach(x => x.SetColor(PartyColorBusiness.GetWheelColor(pos)));
 	}
 
 	private Capybara SpawnCapybara(Vector3 coord)
@@ -57,5 +67,21 @@ public partial class Main : Node3D
 		result.Position = coord;
 		AddChild(result);
 		return result;
+	}
+	
+	private Action GetSwitchAction()
+	{
+		return () =>
+		{
+			try
+			{
+				var scene = GD.Load<PackedScene>(RARE_ITEM_REVEAL_SCENE_PATH);
+				GetTree().ChangeSceneToPacked(scene);
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Switch error: {e.Message}");
+			}
+		};
 	}
 }

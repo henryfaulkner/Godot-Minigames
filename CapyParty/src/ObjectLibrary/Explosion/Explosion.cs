@@ -40,7 +40,8 @@ public partial class Explosion : RigidBody3D
 			TimingFunctions.SetTimeout(() => {
 				QueueFree();
 			}, 2000);
-		} catch (Exception ex)
+		} 
+		catch (Exception ex)
 		{
 			GD.Print($"Explode exception: {ex.Message}");
 		}

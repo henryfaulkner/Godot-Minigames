@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://src/ObjectLibrary/PartyLight/PartyLight.cs" id="1_cxunr"]
 
 [node name="PartyLight" type="OmniLight3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0882, 9.35602, 0.112776)
 light_color = Color(1, 0.32549, 1, 1)
 light_energy = 10.0
 light_indirect_energy = 10.0

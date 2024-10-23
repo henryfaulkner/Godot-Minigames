@@ -6,21 +6,7 @@ public class CapyCubeBusiness
 {
 	public List<Vector3> Coords { get; private set; }
 
-	public CapyCubeBusiness()
-	{
-		// Set the increment for values between 0.0 and 1.0
-		double increment = 0.1;
-
-		// Calculate M, N, P based on increment (for a cube)
-		int M = (int)(1.0 / increment) + 1;  // Number of rows
-		int N = (int)(1.0 / increment) + 1;  // Number of columns
-		int P = (int)(1.0 / increment) + 1;  // Depth
-
-		// Generate all permutations for the given 3D cube
-		Coords = GenerateCoordPermutations(M, N, P, increment);
-	}
-
-	public CapyCubeBusiness(double increment)
+	public CapyCubeBusiness(double increment = 0.1)
 	{
 		// Calculate M, N, P based on increment (for a cube)
 		int M = (int)(1.0 / increment) + 1;  // Number of rows
