@@ -13,7 +13,6 @@ public class AppDbContext : DbContext
 	public virtual DbSet<Player> Players { get; set; }
 	public virtual DbSet<Log> Logs { get; set; }
 
-	// this does not seem to fire on Godot
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<Player>()
@@ -23,7 +22,7 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Log>()
 			.Property(g => g.Id)
 			.ValueGeneratedOnAdd();
-	} 
+	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
