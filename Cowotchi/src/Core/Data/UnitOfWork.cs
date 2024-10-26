@@ -5,12 +5,23 @@ public class UnitOfWork : IUnitOfWork
 {
 	private readonly AppDbContext _context;
 
+	public IRepository<AnimalEventType> AnimalEventTypeRepository { get; }
+	public IRepository<AnimalType> AnimalTypeRepository { get; }
+	public IRepository<HatchRequirementType> HatchRequirementTypeRepository { get; }
+
+	public IRepository<Log> LogRepository { get; }
+
 	public UnitOfWork(AppDbContext context)
 	{
 		_context = context;
+
+		AnimalEventTypeRepository = new Repository<AnimalEventType>(_context);
+		AnimalTypeRepository = new Repository<AnimalType>(_context);
+		HatchRequirementTypeRepository = new Repository<HatchRequirementType>(_context);
+		LogRepository = new Repository<Log>(_context);
 	}
 
-	public async Task<bool> SaveChanges()
+	public async Task<bool> SaveChangesAsync()
 	{
 		var numberOfEntries = await _context.SaveChangesAsync();
 		return numberOfEntries > 0;

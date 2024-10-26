@@ -2,14 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class LoggerService : Node
+public partial class LoggerService : Node, ILoggerService
 {
 	private List<ILogger> Loggers { get; set; }
 
 	public LoggerService()
 	{
 		Loggers = new List<ILogger>();
-		Loggers.Add(new FileLogger("res://Core/LoggerService/logs/log.txt", Enumerations.LogLevels.Error));
+		Loggers.Add(new FileLogger("res://error-log.txt", Enumerations.LogLevels.Error));
 		Loggers.Add(new DatabaseLogger(Enumerations.LogLevels.Debug));
 	}
 

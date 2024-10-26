@@ -1,6 +1,8 @@
+using System;
+
 public interface ILoggerService
 {
-    public void LogDebug(string message);
-    public void LogInfo(string message);
-    public void LogError(string message);
+    public void LogDebug(string message, Exception? exception = null);
+    public void LogInfo(string message, Exception? exception = null);
+    public void LogError(string message, Exception? exception = null);
 }

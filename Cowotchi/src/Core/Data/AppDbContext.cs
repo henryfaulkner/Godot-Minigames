@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var connectionString = "Data Source=app_database.db;";
+		var connectionString = Constants.ConnectionString;
 		optionsBuilder.UseSqlite(connectionString);
 	}
 }

@@ -3,5 +3,10 @@ using System.Threading.Tasks;
 
 public interface IUnitOfWork : IDisposable
 {
-	Task<bool> SaveChanges();
+	IRepository<AnimalEventType> AnimalEventTypeRepository { get; }
+	IRepository<AnimalType> AnimalTypeRepository { get; }
+	IRepository<HatchRequirementType> HatchRequirementTypeRepository { get; }
+	IRepository<Log> LogRepository { get; }
+
+	Task<bool> SaveChangesAsync();
 }

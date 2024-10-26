@@ -11,12 +11,22 @@ config_version=5
 [application]
 
 config/name="Cowotchi"
-config/features=PackedStringArray("4.3", "Mobile")
+run/main_scene="res://src/Pages/Main.tscn"
+config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
 
 [dotnet]
 
 project/assembly_name="Cowotchi"
+
+[file_customization]
+
+folder_colors={
+"res://src/Assets/": "red",
+"res://src/Core/": "blue",
+"res://src/ObjectLibrary/": "yellow",
+"res://src/Pages/": "green"
+}
 
 [rendering]
 

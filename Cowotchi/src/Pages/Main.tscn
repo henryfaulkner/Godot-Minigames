@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmsrhcdpl7cal"]
+
+[ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_bw4bp")

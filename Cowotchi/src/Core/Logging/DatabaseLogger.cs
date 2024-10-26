@@ -2,14 +2,12 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public class DatabaseLogger : ILogger 
+public class DatabaseLogger : ILogger
 {
-	private readonly AppDbContext _context;
 	private Enumerations.LogLevels LogLevel { get; set; }
 
 	public DatabaseLogger(Enumerations.LogLevels logLevel)
 	{
-		_context = new AppDbContext();
 		LogLevel = logLevel;
 	}
 
@@ -25,14 +23,16 @@ public class DatabaseLogger : ILogger
 	{
 		try
 		{
-			GD.Print("Database PublishLog");
-			var log = new Log();
-			log.Level = EnumHelper.GetEnumDescription(logLevel);
-			log.Message = message;
-			log.StackTrace = exception?.StackTrace;
-			_context.Logs.AddAsync(log);
-			_context.SaveChangesAsync();
-		} 
+			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
+			{
+				var log = new Log();
+				log.Level = EnumHelper.GetEnumDescription(logLevel);
+				log.Message = message;
+				log.StackTrace = exception?.StackTrace;
+				await unitOfWork.LogRepository.AddAsync(log);
+				await unitOfWork.SaveChangesAsync();
+			}
+		}
 		catch (Exception ex)
 		{
 			GD.PrintErr($"DatabaseLogger PublishLog Failed: {ex.Message}");
