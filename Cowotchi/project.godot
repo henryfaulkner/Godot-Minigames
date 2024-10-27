@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Cowotchi"
-run/main_scene="res://src/Pages/Main.tscn"
+run/main_scene="res://src/ObjectLibrary/Menu/ActionButton.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
 

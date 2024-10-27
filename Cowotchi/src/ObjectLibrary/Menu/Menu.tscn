@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cil33363eqyqa"]
+
+[ext_resource type="StyleBox" uid="uid://6ncfjc3ywwad" path="res://src/ObjectLibrary/Menu/PageStyles/BiggieCombatStyleBox.tres" id="1_77cs8"]
+[ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/BasePage/BasePagePanel.tscn" id="2_d1od1"]
+[ext_resource type="AudioStream" uid="uid://bjnpm13fp0joi" path="res://src/Assets/Audio/13. Menu Scroll copy.wav" id="3_iwf10"]
+[ext_resource type="AudioStream" uid="uid://ls5cexjnk20h" path="res://src/Assets/Audio/2. Menu Select copy.wav" id="4_aop3a"]
+
+[node name="Menu" type="CanvasLayer"]
+
+[node name="TextBoxContainer" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -600.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 384
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 32
+
+[node name="Panel" type="Panel" parent="TextBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_77cs8")
+
+[node name="TextureRect" type="TextureRect" parent="TextBoxContainer"]
+visible = false
+layout_mode = 2
+expand_mode = 1
+
+[node name="BasePagePanel" parent="TextBoxContainer" instance=ExtResource("2_d1od1")]
+layout_mode = 2
+
+[node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="TextBoxContainer"]
+stream = ExtResource("3_iwf10")
+
+[node name="Select_AudioStreamPlayer" type="AudioStreamPlayer" parent="TextBoxContainer"]
+stream = ExtResource("4_aop3a")
