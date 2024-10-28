@@ -15,7 +15,7 @@ public class DatabaseLogger : ILogger
 	{
 		if ((int)LogLevel <= (int)logLevel)
 		{
-			PublishLog(logLevel, message, exception);
+			await PublishLog(logLevel, message, exception);
 		}
 	}
 

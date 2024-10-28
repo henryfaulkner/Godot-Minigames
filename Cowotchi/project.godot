@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="Cowotchi"
-run/main_scene="res://src/ObjectLibrary/Menu/ActionButton.tscn"
+run/main_scene="res://src/Pages/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+LoggerService="*res://src/Core/Logging/LoggerService.cs"
+CommonInteractor="*res://src/Core/Interactors/CommonInteractor.cs"
 
 [dotnet]
 

@@ -10,7 +10,8 @@ public partial class LoggerService : Node, ILoggerService
 	{
 		Loggers = new List<ILogger>();
 		Loggers.Add(new FileLogger("res://error-log.txt", Enumerations.LogLevels.Error));
-		Loggers.Add(new DatabaseLogger(Enumerations.LogLevels.Debug));
+		Loggers.Add(new DatabaseLogger(Enumerations.LogLevels.Error));
+		Loggers.Add(new LocalLogger(Enumerations.LogLevels.Debug));
 	}
 
 	public void LogDebug(string message, Exception? exception = null)

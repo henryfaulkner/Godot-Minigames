@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+app_database.db
+app_database.db-shm
+app_database.db-wal

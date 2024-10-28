@@ -16,7 +16,7 @@ offset_top = -600.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 384
+theme_override_constants/margin_top = 448
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 32
 
@@ -24,12 +24,15 @@ theme_override_constants/margin_bottom = 32
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_77cs8")
 
-[node name="TextureRect" type="TextureRect" parent="TextBoxContainer"]
-visible = false
-layout_mode = 2
-expand_mode = 1
+[node name="CenterContainer" type="CenterContainer" parent="TextBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="BasePagePanel" parent="TextBoxContainer" instance=ExtResource("2_d1od1")]
+[node name="BasePagePanel" parent="TextBoxContainer/Panel/CenterContainer" instance=ExtResource("2_d1od1")]
 layout_mode = 2
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="TextBoxContainer"]

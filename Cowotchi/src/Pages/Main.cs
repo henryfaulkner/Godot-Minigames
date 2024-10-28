@@ -3,10 +3,12 @@ using System;
 
 public partial class Main : Node3D
 {
-	public Main()
+	private ICommonInteractor _commonInteractor { get; set; } 
+
+	public override void _Ready()
 	{
-		using (var context = new AppDbContext())
-		{
-		}
+		_commonInteractor = GetNode<ICommonInteractor>("/root/CommonInteractor");
+
+		_commonInteractor.InitDatabaseIfRequired();
 	}
 }
