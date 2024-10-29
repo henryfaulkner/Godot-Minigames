@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://enqmh7rfleb0"]
+
+[ext_resource type="Script" path="res://src/Core/CharacterControllers/CowController.cs" id="1_xadu6"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_jsl18"]
+
+[node name="Cow" type="CharacterBody3D"]
+script = ExtResource("1_xadu6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_jsl18")
