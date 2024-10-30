@@ -1,21 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=7 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/Egg.tscn" id="2_5onax"]
 [ext_resource type="PackedScene" uid="uid://cil33363eqyqa" path="res://src/ObjectLibrary/Menu/Menu.tscn" id="2_sae3e"]
 [ext_resource type="PackedScene" uid="uid://enqmh7rfleb0" path="res://src/ObjectLibrary/Characters/Cow.tscn" id="3_e1l4f"]
 [ext_resource type="Environment" uid="uid://bnooamsd7654a" path="res://src/Assets/SkyEnvironment.tres" id="5_wqfev"]
+[ext_resource type="PackedScene" uid="uid://clnvsbxj5pkk7" path="res://src/ObjectLibrary/Grass.tscn" id="6_5pt56"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_bw4bp")
 
 [node name="Egg" parent="." node_paths=PackedStringArray("InnerAnimal") instance=ExtResource("2_5onax")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 0.704582)
 InnerAnimal = NodePath("Cow")
 
 [node name="Cow" parent="Egg" instance=ExtResource("3_e1l4f")]
 visible = false
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="Egg"]
 transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 0, 0.957, 3.266)
 
 [node name="Menu" parent="." instance=ExtResource("2_sae3e")]
@@ -24,3 +26,5 @@ transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = ExtResource("5_wqfev")
+
+[node name="Grass" parent="." instance=ExtResource("6_5pt56")]
