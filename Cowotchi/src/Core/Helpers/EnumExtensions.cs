@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-public static class EnumHelper
+public static class EnumExtensions
 {
-    public static string GetEnumDescription(Enum value)
+    public static string GetDescription(this Enum value)
     {
         // Get the type of the enum
         Type type = value.GetType();
@@ -26,4 +26,9 @@ public static class EnumHelper
         // Return the enum name if no description is found
         return value.ToString();
     }
+
+    public static int GetMemberCount<T>() where T : Enum
+    {
+        return Enum.GetNames(typeof(T)).Length;
+    } 
 }

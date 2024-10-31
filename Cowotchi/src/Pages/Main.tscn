@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=8 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/Egg.tscn" id="2_5onax"]
@@ -6,12 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://enqmh7rfleb0" path="res://src/ObjectLibrary/Characters/Cow.tscn" id="3_e1l4f"]
 [ext_resource type="Environment" uid="uid://bnooamsd7654a" path="res://src/Assets/SkyEnvironment.tres" id="5_wqfev"]
 [ext_resource type="PackedScene" uid="uid://clnvsbxj5pkk7" path="res://src/ObjectLibrary/Grass.tscn" id="6_5pt56"]
+[ext_resource type="PackedScene" uid="uid://dfbol2cb2rl73" path="res://src/ObjectLibrary/Characters/BgCow.tscn" id="7_3n2o0"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_bw4bp")
 
 [node name="Egg" parent="." node_paths=PackedStringArray("InnerAnimal") instance=ExtResource("2_5onax")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 0.704582)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 3.44791)
 InnerAnimal = NodePath("Cow")
 
 [node name="Cow" parent="Egg" instance=ExtResource("3_e1l4f")]
@@ -27,4 +28,16 @@ transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = ExtResource("5_wqfev")
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 5, 0)
+shadow_enabled = true
+
 [node name="Grass" parent="." instance=ExtResource("6_5pt56")]
+
+[node name="FarmWanderers" type="Node3D" parent="."]
+
+[node name="BgCow" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.31161, 1.5, -0.743503)
+
+[node name="BgCow2" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16111, 1.5, -0.836737)

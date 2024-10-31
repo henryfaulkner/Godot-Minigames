@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfbol2cb2rl73"]
+
+[ext_resource type="Script" path="res://src/Core/CharacterControllers/FarmWandererController.cs" id="1_51epw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hjbf0"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_lqe3w"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[node name="BgCow" type="CharacterBody3D" node_paths=PackedStringArray("Collider", "Timer")]
+script = ExtResource("1_51epw")
+Collider = NodePath("CollisionShape3D")
+Timer = NodePath("Timer")
+WanderSpeed = 1.0
+JumpVelocity = 2.0
+RotationSpeed = 0.1
+RotationCloseEnough = 0.02
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_hjbf0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_lqe3w")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true

@@ -27,7 +27,7 @@ public class DatabaseLogger : ILogger
 		{
 			GD.Print("Database PublishLog");
 			var log = new Log();
-			log.Level = EnumHelper.GetEnumDescription(logLevel);
+			log.Level = logLevel.GetDescription();
 			log.Message = message;
 			log.StackTrace = exception?.StackTrace;
 			_context.Logs.AddAsync(log);

@@ -26,7 +26,7 @@ public class DatabaseLogger : ILogger
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var log = new Log();
-				log.Level = EnumHelper.GetEnumDescription(logLevel);
+				log.Level = logLevel.GetDescription();
 				log.Message = message;
 				log.StackTrace = exception?.StackTrace;
 				await unitOfWork.LogRepository.AddAsync(log);
