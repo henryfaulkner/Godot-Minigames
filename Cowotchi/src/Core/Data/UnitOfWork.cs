@@ -13,7 +13,6 @@ public class UnitOfWork : IUnitOfWork
 	public IRepository<Egg> EggRepository { get; }
 	public IRepository<HatchRequirement> HatchRequirementRepository { get; }
 	public IRepository<HatchRequirementType> HatchRequirementTypeRepository { get; }
-	public IRepository<NameOption> NameOptionRepository { get; }
 
 	public IRepository<Log> LogRepository { get; }
 

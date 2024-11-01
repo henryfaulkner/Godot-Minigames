@@ -11,7 +11,6 @@ public interface IUnitOfWork : IDisposable
 	IRepository<Egg> EggRepository { get; }
 	IRepository<HatchRequirement> HatchRequirementRepository { get; }
 	IRepository<HatchRequirementType> HatchRequirementTypeRepository { get; }
-	IRepository<NameOption> NameOptionRepository { get; }
 
 	IRepository<Log> LogRepository { get; }
 

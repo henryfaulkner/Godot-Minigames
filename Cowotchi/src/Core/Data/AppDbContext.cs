@@ -34,7 +34,6 @@ public class AppDbContext : DbContext
 	public virtual DbSet<Egg> Eggs { get; set; }
 	public virtual DbSet<HatchRequirement> HatchRequirements { get; set; }
 	public virtual DbSet<HatchRequirementType> HatchRequirementTypes { get; set; }
-	public virtual DbSet<NameOption> NameOptions { get; set; }
 
 	public virtual DbSet<Log> Logs { get; set; }
 
@@ -55,10 +54,7 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<HatchRequirement>()
 			.Property(g => g.Id)
 			.ValueGeneratedOnAdd();
-		modelBuilder.Entity<NameOption>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
-
+		
 		modelBuilder.Entity<Log>()
 			.Property(g => g.Id)
 			.ValueGeneratedOnAdd();
