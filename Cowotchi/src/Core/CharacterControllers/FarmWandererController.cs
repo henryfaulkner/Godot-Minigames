@@ -116,6 +116,7 @@ public partial class FarmWandererController : CharacterBody3D
 				break;
 			default:
 				_loggerService.LogError($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
+				throw new Exception($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
 				break;
 		}
 	}

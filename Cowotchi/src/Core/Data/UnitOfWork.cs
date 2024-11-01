@@ -5,9 +5,15 @@ public class UnitOfWork : IUnitOfWork
 {
 	private readonly AppDbContext _context;
 
+	public IRepository<Animal> AnimalRepository { get; }
+	public IRepository<AnimalEvent> AnimalEventRepository { get; }
 	public IRepository<AnimalEventType> AnimalEventTypeRepository { get; }
 	public IRepository<AnimalType> AnimalTypeRepository { get; }
+
+	public IRepository<Egg> EggRepository { get; }
+	public IRepository<HatchRequirement> HatchRequirementRepository { get; }
 	public IRepository<HatchRequirementType> HatchRequirementTypeRepository { get; }
+	public IRepository<NameOption> NameOptionRepository { get; }
 
 	public IRepository<Log> LogRepository { get; }
 

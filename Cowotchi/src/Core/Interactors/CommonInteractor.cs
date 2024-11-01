@@ -17,7 +17,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start InitDatabaseIfRequired");
+			_loggerService.LogDebug("Start CommonInteractor InitDatabaseIfRequired");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				if(!(await unitOfWork.AnimalEventTypeRepository.AnyAsync())) await InitAnimalEventTypes(unitOfWork.AnimalEventTypeRepository);
@@ -25,7 +25,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 				if(!(await unitOfWork.HatchRequirementTypeRepository.AnyAsync())) await InitHatchRequirementTypes(unitOfWork.HatchRequirementTypeRepository);
 				_ = await unitOfWork.SaveChangesAsync();
 			}
-			_loggerService.LogDebug("End InitDatabaseIfRequired");
+			_loggerService.LogDebug("End CommonInteractor InitDatabaseIfRequired");
 		}
 		catch (Exception ex)
 		{
@@ -38,12 +38,12 @@ public partial class CommonInteractor : Node, ICommonInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start GetAnimalEventTypes");
+			_loggerService.LogDebug("Start CommonInteractor GetAnimalEventTypes");
 			using (var animalEventTypeRepository = new Repository<AnimalEventType>(new AppDbContext()))
 			{
 				return (await animalEventTypeRepository.GetAllAsync()).ToList();
 			}
-			_loggerService.LogDebug("End GetAnimalEventTypes");
+			_loggerService.LogDebug("End CommonInteractor GetAnimalEventTypes");
 		}
 		catch (Exception ex)
 		{
@@ -56,12 +56,12 @@ public partial class CommonInteractor : Node, ICommonInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start GetAnimalTypes");
+			_loggerService.LogDebug("Start CommonInteractor GetAnimalTypes");
 			using (var animalTypeRepository = new Repository<AnimalType>(new AppDbContext()))
 			{
 				return (await animalTypeRepository.GetAllAsync()).ToList();
 			}
-			_loggerService.LogDebug("End GetAnimalTypes");
+			_loggerService.LogDebug("End CommonInteractor GetAnimalTypes");
 		}
 		catch (Exception ex)
 		{
@@ -74,12 +74,12 @@ public partial class CommonInteractor : Node, ICommonInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start GetHatchRequirementTypes");
+			_loggerService.LogDebug("Start CommonInteractor GetHatchRequirementTypes");
 			using (var hatchRequirementTypeRepository = new Repository<HatchRequirementType>(new AppDbContext()))
 			{
 				return (await hatchRequirementTypeRepository.GetAllAsync()).ToList();
 			}
-			_loggerService.LogDebug("End GetHatchRequirementTypes");
+			_loggerService.LogDebug("End CommonInteractor GetHatchRequirementTypes");
 		}
 		catch (Exception ex)
 		{
@@ -96,13 +96,15 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			aetList.Add(
 				new AnimalEventType()
 				{
-					Name = "Nuture",
+					Id = (int)Enumerations.AnimalEventTypes.Nuture,
+					Name = Enumerations.AnimalEventTypes.Nuture.GetDescription(),
 				}
 			);
 			aetList.Add(
 				new AnimalEventType()
 				{
-					Name = "Feed",
+					Id = (int)Enumerations.AnimalEventTypes.Feed,
+					Name = Enumerations.AnimalEventTypes.Feed.GetDescription(),
 				}
 			);
 			await animalEventTypeRepository.AddRangeAsync(aetList);
@@ -122,13 +124,15 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			atList.Add(
 				new AnimalType()
 				{
-					Name = "Cow",
+					Id = (int)Enumerations.AnimalTypes.Cow,
+					Name = Enumerations.AnimalTypes.Cow.GetDescription(),
 				}
 			);
 			atList.Add(
 				new AnimalType()
 				{
-					Name = "Chicken",
+					Id = (int)Enumerations.AnimalTypes.Chicken,
+					Name = Enumerations.AnimalTypes.Chicken.GetDescription(),
 				}
 			);
 			await animalTypeRepository.AddRangeAsync(atList);
@@ -148,7 +152,8 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			hrtList.Add(
 				new HatchRequirementType()
 				{
-					Name = "Time",
+					Id = (int)Enumerations.HatchRequirementTypes.Time,
+					Name = Enumerations.HatchRequirementTypes.Time.GetDescription(),
 				}
 			);
 			await hatchRequirementRepository.AddRangeAsync(hrtList);

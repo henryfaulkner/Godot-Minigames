@@ -12,4 +12,26 @@ public partial class Enumerations
 		[Description("Error")]
 		Error = 2,
 	}
+
+	public enum HatchRequirementTypes
+	{
+		[Description("Time")]
+		Time,
+	}
+
+	public enum AnimalTypes
+	{
+		[Description("Cow")]
+		Cow,
+		[Description("Chicken")]
+		Chicken, 
+	}
+
+	public enum AnimalEventTypes
+	{
+		[Description("Nuture")]
+		Nuture,
+		[Description("Chicken")]
+		Feed, 
+	}
 }
