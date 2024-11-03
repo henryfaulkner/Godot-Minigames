@@ -21,12 +21,10 @@ public partial class EggInteractor : Node, IEggInteractor
 	};
 
 	private ILoggerService _loggerService { get; set; }
-	private IAnimalInteractor _animalInteractor { get; set; }
 
 	public override void _Ready() 
 	{
 		_loggerService = GetNode<ILoggerService>("/root/LoggerService");
-		_animalInteractor = GetNode<IAnimalInteractor>("/root/AnimalInteractor");
 	}
 
 	public async Task<Egg> CreateEgg()

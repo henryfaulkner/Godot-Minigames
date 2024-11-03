@@ -29,9 +29,9 @@ public partial class Enumerations
 
 	public enum AnimalEventTypes
 	{
-		[Description("Nuture")]
-		Nuture,
-		[Description("Chicken")]
+		[Description("Nurture")]
+		Nurture,
+		[Description("Feed")]
 		Feed, 
 	}
 }

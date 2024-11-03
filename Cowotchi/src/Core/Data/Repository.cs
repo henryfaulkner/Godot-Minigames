@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,6 +54,12 @@ public class Repository<T> : IRepository<T>, IDisposable where T : class
 	public async Task<bool> AnyAsync()
 	{
 		return await _context.Set<T>().AnyAsync();
+	}
+
+	public async Task<List<T>> QueryAsync(Func<IQueryable<T>, IQueryable<T>> queryFunc)
+	{
+		var query = queryFunc(_context.Set<T>());
+		return await query.ToListAsync();
 	}
 	
 	// Implementation of Dispose pattern

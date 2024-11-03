@@ -20,8 +20,12 @@ public class UnitOfWork : IUnitOfWork
 	{
 		_context = context;
 
+		AnimalRepository = new Repository<Animal>(_context);
+		AnimalEventRepository = new Repository<AnimalEvent>(_context);
 		AnimalEventTypeRepository = new Repository<AnimalEventType>(_context);
 		AnimalTypeRepository = new Repository<AnimalType>(_context);
+		EggRepository = new Repository<Egg>(_context);
+		HatchRequirementRepository = new Repository<HatchRequirement>(_context);
 		HatchRequirementTypeRepository = new Repository<HatchRequirementType>(_context);
 		LogRepository = new Repository<Log>(_context);
 	}

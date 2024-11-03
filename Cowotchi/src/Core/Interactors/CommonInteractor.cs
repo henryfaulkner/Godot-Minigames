@@ -96,8 +96,8 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			aetList.Add(
 				new AnimalEventType()
 				{
-					Id = (int)Enumerations.AnimalEventTypes.Nuture,
-					Name = Enumerations.AnimalEventTypes.Nuture.GetDescription(),
+					Id = (int)Enumerations.AnimalEventTypes.Nurture,
+					Name = Enumerations.AnimalEventTypes.Nurture.GetDescription(),
 				}
 			);
 			aetList.Add(

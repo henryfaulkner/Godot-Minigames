@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,4 +14,5 @@ public interface IRepository<T> where T : class
 	void RemoveRange(IEnumerable<T> entities);
 	Task<bool> SaveRepositoryAsync();
 	Task<bool> AnyAsync();
+	Task<List<T>> QueryAsync(Func<IQueryable<T>, IQueryable<T>> queryFunc);
 }
