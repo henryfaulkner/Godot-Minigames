@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 public partial class AnimalInteractor : Node, IAnimalInteractor 
 {
-	private ILoggerService _loggerService { get; set; }
+	private ILoggerService _logger { get; set; }
 
 	public override void _Ready() 
 	{
-		_loggerService = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
 	public async Task<Animal> GetAnimal(int id)
@@ -18,16 +18,16 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		Animal result;
 		try
 		{
-			_loggerService.LogDebug("Start AnimalInteractor GetAnimal");
+			_logger.LogDebug("Start AnimalInteractor GetAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				result = await unitOfWork.AnimalRepository.GetByIdAsync(id);
 			}
-			_loggerService.LogDebug("End AnimalInteractor GetAnimal");
+			_logger.LogDebug("End AnimalInteractor GetAnimal");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"AnimalInteractor GetAnimal Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor GetAnimal Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;
@@ -38,7 +38,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		AnimalEventData result = new AnimalEventData();
 		try
 		{
-			_loggerService.LogDebug("Start AnimalInteractor GetAnimal_RecentEventData");
+			_logger.LogDebug("Start AnimalInteractor GetAnimal_RecentEventData");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var aeNutureEntityList = 
@@ -59,11 +59,11 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 						);
 				result.FeedCount = aeFeedEntityList.Count;		
 			}
-			_loggerService.LogDebug("End AnimalInteractor GetAnimal_RecentEventData");
+			_logger.LogDebug("End AnimalInteractor GetAnimal_RecentEventData");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"AnimalInteractor GetAnimal_RecentEventData Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor GetAnimal_RecentEventData Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;
@@ -73,18 +73,18 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start AnimalInteractor RenameAnimal");
+			_logger.LogDebug("Start AnimalInteractor RenameAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var aEntity = await unitOfWork.AnimalRepository.GetByIdAsync(id);
 				aEntity.Name = name;
 				_ = await unitOfWork.SaveChangesAsync();
 			}
-			_loggerService.LogDebug("End AnimalInteractor RenameAnimal");
+			_logger.LogDebug("End AnimalInteractor RenameAnimal");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"AnimalInteractor RenameAnimal Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor RenameAnimal Error: {ex.Message}", ex);
 			throw;
 		}
 	}
@@ -93,7 +93,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start AnimalInteractor FeedAnimal");
+			_logger.LogDebug("Start AnimalInteractor FeedAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var aeEntity = new AnimalEvent();
@@ -102,11 +102,11 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 				await unitOfWork.AnimalEventRepository.AddAsync(aeEntity);
 				_ = await unitOfWork.SaveChangesAsync();
 			}
-			_loggerService.LogDebug("End AnimalInteractor FeedAnimal");
+			_logger.LogDebug("End AnimalInteractor FeedAnimal");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"AnimalInteractor FeedAnimal Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor FeedAnimal Error: {ex.Message}", ex);
 			throw;
 		}
 	}
@@ -115,7 +115,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start AnimalInteractor LoveAnimal");
+			_logger.LogDebug("Start AnimalInteractor LoveAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var aeEntity = new AnimalEvent();
@@ -124,11 +124,11 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 				await unitOfWork.AnimalEventRepository.AddAsync(aeEntity);
 				_ = await unitOfWork.SaveChangesAsync();
 			}
-			_loggerService.LogDebug("End AnimalInteractor LoveAnimal");
+			_logger.LogDebug("End AnimalInteractor LoveAnimal");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"AnimalInteractor LoveAnimal Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor LoveAnimal Error: {ex.Message}", ex);
 			throw;
 		}
 	}

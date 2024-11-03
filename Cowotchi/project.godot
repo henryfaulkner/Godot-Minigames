@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Farmodatchi"
+config/name="Cowotchi"
 run/main_scene="res://src/Pages/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 LoggerService="*res://src/Core/Logging/LoggerService.cs"
 CommonInteractor="*res://src/Core/Interactors/CommonInteractor.cs"
+EggInteractor="*res://src/Core/Interactors/EggInteractor.cs"
+AnimalInteractor="*res://src/Core/Interactors/AnimalInteractor.cs"
 
 [dotnet]
 

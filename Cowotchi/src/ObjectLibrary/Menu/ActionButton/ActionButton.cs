@@ -7,13 +7,20 @@ public partial class ActionButton : Control
 	public delegate void PressedEventHandler();
 	
 	private static readonly StringName PANEL_STYLEBOX_NAME = new StringName("panel");
-	private static readonly StringName INACTIVE_PANEL_STYLE = new StringName("res://src/ObjectLibrary/Menu/PageStyles/Disabled_PagePanelOption.tres");
-	private static readonly StringName ACTIVE_PANEL_STYLE = new StringName("res://src/ObjectLibrary/Menu/PageStyles/Active_PagePanelOption.tres");
+	private static readonly StringName NORMAL_PANEL_STYLE = new StringName("res://src/ObjectLibrary/Menu/PageStyles/Disabled_PagePanelOption.tres");
+	private static readonly StringName HOVER_PANEL_STYLE = new StringName("res://src/ObjectLibrary/Menu/PageStyles/Active_PagePanelOption.tres");
 
+	[ExportGroup("Nodes")]
 	[Export]
 	private Panel Panel { get; set; }
 	[Export]
 	private TextureButton TextureButton { get; set; }
+
+	[ExportGroup("Textures")]
+	[Export]
+	private Texture2D NormalTexture { get; set; }
+	[Export]
+	private Texture2D HoverTexture { get; set; }
 	
 	private StyleBoxFlat ActivePagePanelOptionStyle { get; set; }
 	private StyleBoxFlat InactivePagePanelOptionStyle { get; set; }
@@ -22,12 +29,15 @@ public partial class ActionButton : Control
 
 	public ActionButton() 
 	{
-		ActivePagePanelOptionStyle = GD.Load<StyleBoxFlat>(ACTIVE_PANEL_STYLE);
-		InactivePagePanelOptionStyle = GD.Load<StyleBoxFlat>(INACTIVE_PANEL_STYLE);
+		ActivePagePanelOptionStyle = GD.Load<StyleBoxFlat>(HOVER_PANEL_STYLE);
+		InactivePagePanelOptionStyle = GD.Load<StyleBoxFlat>(NORMAL_PANEL_STYLE);
 	}
 
 	public override void _Ready()
 	{
+		if (NormalTexture != null) TextureButton.TextureNormal = NormalTexture;
+		if (HoverTexture != null) TextureButton.TextureHover = HoverTexture;
+		
 		TextureButton.MouseEntered += HandleMouseEntered;
 		TextureButton.MouseExited += HandleMouseExited;
 		TextureButton.Pressed += HandlePressed;

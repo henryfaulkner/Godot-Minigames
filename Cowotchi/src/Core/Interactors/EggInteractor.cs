@@ -20,11 +20,11 @@ public partial class EggInteractor : Node, IEggInteractor
 		"Beatrice", "Petunia", "Chester", "Duchess", "Toby"
 	};
 
-	private ILoggerService _loggerService { get; set; }
+	private ILoggerService _logger { get; set; }
 
 	public override void _Ready() 
 	{
-		_loggerService = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
 	public async Task<Egg> CreateEgg()
@@ -32,7 +32,7 @@ public partial class EggInteractor : Node, IEggInteractor
 		Egg result;
 		try
 		{
-			_loggerService.LogDebug("Start EggInteractor CreateEgg");
+			_logger.LogDebug("Start EggInteractor CreateEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var eEntity = new Egg();
@@ -51,11 +51,11 @@ public partial class EggInteractor : Node, IEggInteractor
 				_ = await unitOfWork.SaveChangesAsync();
 				result = eEntity;
 			}
-			_loggerService.LogDebug("End EggInteractor CreateEgg");
+			_logger.LogDebug("End EggInteractor CreateEgg");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"EggInteractor CreateEgg Error: {ex.Message}", ex);
+			_logger.LogError($"EggInteractor CreateEgg Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;
@@ -66,16 +66,16 @@ public partial class EggInteractor : Node, IEggInteractor
 		Egg result;
 		try
 		{
-			_loggerService.LogDebug("Start EggInteractor GetEgg");
+			_logger.LogDebug("Start EggInteractor GetEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				result = await unitOfWork.EggRepository.GetByIdAsync(id);
 			}
-			_loggerService.LogDebug("End EggInteractor GetEgg");
+			_logger.LogDebug("End EggInteractor GetEgg");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"EggInteractor GetEgg Error: {ex.Message}", ex);
+			_logger.LogError($"EggInteractor GetEgg Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;
@@ -85,18 +85,18 @@ public partial class EggInteractor : Node, IEggInteractor
 	{
 		try
 		{
-			_loggerService.LogDebug("Start EggInteractor RenameEgg");
+			_logger.LogDebug("Start EggInteractor RenameEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var eEntity = await unitOfWork.EggRepository.GetByIdAsync(id);
 				eEntity.Name = name;
 				await unitOfWork.SaveChangesAsync();
 			}
-			_loggerService.LogDebug("End EggInteractor RenameEgg");
+			_logger.LogDebug("End EggInteractor RenameEgg");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"EggInteractor RenameEgg Error: {ex.Message}", ex);
+			_logger.LogError($"EggInteractor RenameEgg Error: {ex.Message}", ex);
 			throw;
 		}
 	}
@@ -106,7 +106,7 @@ public partial class EggInteractor : Node, IEggInteractor
 		Animal result;
 		try
 		{
-			_loggerService.LogDebug("Start EggInteractor HatchEgg");
+			_logger.LogDebug("Start EggInteractor HatchEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var eEntity = await unitOfWork.EggRepository.GetByIdAsync(id);
@@ -121,11 +121,11 @@ public partial class EggInteractor : Node, IEggInteractor
 				_ = await unitOfWork.SaveChangesAsync();
 				result = aEntity;
 			}
-			_loggerService.LogDebug("End EggInteractor HatchEgg");
+			_logger.LogDebug("End EggInteractor HatchEgg");
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"EggInteractor HatchEgg Error: {ex.Message}", ex);
+			_logger.LogError($"EggInteractor HatchEgg Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;
@@ -178,7 +178,7 @@ public partial class EggInteractor : Node, IEggInteractor
 				result = CreateTimeHatchRequirement(egg);
 				break;
 			default:
-				_loggerService.LogError($"EggInteractor GetHatchRequirementTypes failed to map state. Egg name: {egg.Name}.");
+				_logger.LogError($"EggInteractor GetHatchRequirementTypes failed to map state. Egg name: {egg.Name}.");
 				throw new Exception($"EggInteractor GetHatchRequirementTypes failed to map state. Egg name: {egg.Name}.");
 				break;
 		}

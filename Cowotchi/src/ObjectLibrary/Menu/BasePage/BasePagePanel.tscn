@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://clph2g6ck8ex3"]
+[gd_scene load_steps=5 format=3 uid="uid://clph2g6ck8ex3"]
 
 [ext_resource type="PackedScene" uid="uid://du8u63yyytnm5" path="res://src/ObjectLibrary/Menu/ActionButton/ActionButton.tscn" id="2_bas3v"]
+[ext_resource type="Texture2D" uid="uid://d14iuqnebb4wd" path="res://src/Assets/Icons/StatsIcon.png" id="2_nqv5n"]
+[ext_resource type="Texture2D" uid="uid://beyfr3yopikal" path="res://src/Assets/Icons/GrabIcon.png" id="2_v3stw"]
+[ext_resource type="Texture2D" uid="uid://b0l8lava0pdl7" path="res://src/Assets/Icons/FeedIcon.png" id="4_jikum"]
 
 [node name="BasePanel" type="Control"]
 layout_mode = 3
@@ -21,14 +24,23 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 180
 
-[node name="ActionButton" parent="OptionContainer" instance=ExtResource("2_bas3v")]
+[node name="Stats" parent="OptionContainer" instance=ExtResource("2_bas3v")]
+layout_mode = 2
+NormalTexture = ExtResource("2_nqv5n")
+HoverTexture = ExtResource("2_nqv5n")
+
+[node name="Swap" parent="OptionContainer" instance=ExtResource("2_bas3v")]
 layout_mode = 2
 
-[node name="ActionButton2" parent="OptionContainer" instance=ExtResource("2_bas3v")]
+[node name="Grab" parent="OptionContainer" instance=ExtResource("2_bas3v")]
+layout_mode = 2
+NormalTexture = ExtResource("2_v3stw")
+HoverTexture = ExtResource("2_v3stw")
+
+[node name="Nurture" parent="OptionContainer" instance=ExtResource("2_bas3v")]
 layout_mode = 2
 
-[node name="ActionButton3" parent="OptionContainer" instance=ExtResource("2_bas3v")]
+[node name="Feed" parent="OptionContainer" instance=ExtResource("2_bas3v")]
 layout_mode = 2
-
-[node name="ActionButton4" parent="OptionContainer" instance=ExtResource("2_bas3v")]
-layout_mode = 2
+NormalTexture = ExtResource("4_jikum")
+HoverTexture = ExtResource("4_jikum")

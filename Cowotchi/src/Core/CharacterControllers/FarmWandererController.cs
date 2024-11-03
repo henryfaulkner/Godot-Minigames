@@ -33,7 +33,7 @@ public partial class FarmWandererController : CharacterBody3D
 
 	#region Instance Variables
 
-	private ILoggerService _loggerService { get; set; }
+	private ILoggerService _logger { get; set; }
 
 	private bool IsGrounded { get; set; } // If entity is grounded this frame
 	private bool WasGrounded { get; set; } // If entity was grounded last frame
@@ -65,7 +65,7 @@ public partial class FarmWandererController : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_loggerService = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>("/root/LoggerService");
 
 		Timer.Timeout += HandleTimerTimeout;
 	}
@@ -97,7 +97,7 @@ public partial class FarmWandererController : CharacterBody3D
 		}
 		catch (Exception ex)
 		{
-			_loggerService.LogError($"Error in _PhysicsProcess {ex.Message}", ex);
+			_logger.LogError($"Error in _PhysicsProcess {ex.Message}", ex);
 		}
 	}
 
@@ -115,7 +115,7 @@ public partial class FarmWandererController : CharacterBody3D
 				HandleWalkingState();
 				break;
 			default:
-				_loggerService.LogError($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
+				_logger.LogError($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
 				throw new Exception($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
 				break;
 		}
@@ -144,7 +144,7 @@ public partial class FarmWandererController : CharacterBody3D
 		// check is rotation is "close enough"
 		if (GlobalRotation.AngleTo(targetRotation) < RotationCloseEnough)
 		{
-			_loggerService.LogDebug("Change state to walking.");
+			_logger.LogDebug("Change state to walking.");
 			CurrentState = States.Walking;
 			Timer.Start();
 		}
@@ -199,12 +199,12 @@ public partial class FarmWandererController : CharacterBody3D
 		//var dirVector = GetInputDir();
 		var dirVector = GetRandomDir();
 		WishDir = (Transform.Basis * new Vector3(dirVector.X, 0, dirVector.Y)).Normalized();
-		_loggerService.LogDebug($"WishDir {WishDir.ToString()}");
+		_logger.LogDebug($"WishDir {WishDir.ToString()}");
 		Vector3 direction = (WishDir - Vector3.Zero).Normalized();
-		_loggerService.LogDebug($"direction {direction.ToString()}");
+		_logger.LogDebug($"direction {direction.ToString()}");
 
 		// Get new state (standing or turning)
 		CurrentState = (States)rand.Next(2);
-		_loggerService.LogDebug($"Change state to {CurrentState.GetDescription()}.");
+		_logger.LogDebug($"Change state to {CurrentState.GetDescription()}.");
 	}
 }
