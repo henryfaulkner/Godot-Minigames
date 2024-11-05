@@ -34,4 +34,17 @@ public partial class Enumerations
 		[Description("Feed")]
 		Feed, 
 	}
+
+
+	public enum ForegroundActions
+	{
+		[Description("Stats")]
+		Stats,
+		[Description("Swap")]
+		Swap,
+		[Description("Nurture")]
+		Nurture,
+		[Description("Feed")]
+		Feed,
+	}
 }

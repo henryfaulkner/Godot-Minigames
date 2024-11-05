@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cil33363eqyqa"]
+[gd_scene load_steps=6 format=3 uid="uid://cil33363eqyqa"]
 
 [ext_resource type="StyleBox" uid="uid://6ncfjc3ywwad" path="res://src/ObjectLibrary/Menu/PageStyles/BiggieCombatStyleBox.tres" id="1_77cs8"]
-[ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/BasePage/BasePagePanel.tscn" id="2_d1od1"]
+[ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/AnimalPage/AnimalPage.tscn" id="2_d1od1"]
 [ext_resource type="AudioStream" uid="uid://bjnpm13fp0joi" path="res://src/Assets/Audio/13. Menu Scroll copy.wav" id="3_iwf10"]
+[ext_resource type="PackedScene" uid="uid://ddxwlgk2wjt6l" path="res://src/ObjectLibrary/Menu/EggPage/EggPage.tscn" id="3_l8bet"]
 [ext_resource type="AudioStream" uid="uid://ls5cexjnk20h" path="res://src/Assets/Audio/2. Menu Select copy.wav" id="4_aop3a"]
 
 [node name="Menu" type="CanvasLayer"]
@@ -32,7 +33,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BasePagePanel" parent="TextBoxContainer/Panel/CenterContainer" instance=ExtResource("2_d1od1")]
+[node name="AnimalPage" parent="TextBoxContainer/Panel/CenterContainer" instance=ExtResource("2_d1od1")]
+layout_mode = 2
+
+[node name="EggPage" parent="TextBoxContainer/Panel/CenterContainer" instance=ExtResource("3_l8bet")]
+visible = false
 layout_mode = 2
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="TextBoxContainer"]
