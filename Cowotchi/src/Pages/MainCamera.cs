@@ -13,12 +13,17 @@ public partial class MainCamera : Camera3D
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 	
-	public override void _Input(InputEvent @event)
+	//public override void _Input(InputEvent @event)
+	//{
+		//if(@event.IsActionPressed("click"))
+		//{
+			//ShootRay();
+		//}
+	//}
+	
+	public override void _PhysicsProcess(double _delta)
 	{
-		if(@event.IsActionPressed("click"))
-		{
-			ShootRay();
-		}
+		ShootRay();
 	}
 	
 	public void ShootRay()
@@ -32,6 +37,13 @@ public partial class MainCamera : Camera3D
 		rayQuery.From = from;
 		rayQuery.To = to;
 		var result = space.IntersectRay(rayQuery);
-		_logger.LogError($"Raycast result: {result.ToString()}");
+		//_logger.LogError($"Raycast result: {result.ToString()}");
+		
+		if (result.ContainsKey("collider"))
+		{
+			//Type type = result["collider"].GetType();
+			var node = (Node3D)result["collider"];
+			_logger.LogError($"The type of the object is: {node.Name}");
+		}
 	}
 }

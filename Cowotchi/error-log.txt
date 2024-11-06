@@ -1,1 +1,1 @@
-Raycast result: { "position": (4.222991, 0, -28.85083), "normal": (0, 1, 0), "face_index": -1, "collider_id": 32514245962, "collider": Grass:<StaticBody3D#32514245962>, "shape": 0, "rid": RID(718) }
+The type of the object is: Grass
