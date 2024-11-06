@@ -3,11 +3,6 @@ using System;
 
 public partial class EggPage : Control
 {
-	[Signal]
-	private delegate void StatsPressedEventHandler();
-	[Signal]
-	private delegate void SwapPressedEventHandler();
-
 	[ExportGroup("Action Buttons")]
 	[Export]
 	public ActionButton Stats { get; set; }
@@ -15,22 +10,24 @@ public partial class EggPage : Control
 	public ActionButton Swap { get; set; }
 	
 	private ILoggerService _logger { get; set; }
+	private ForegroundActionObservable _foregroundActionObservable { get; set; }
 	
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
-
+		_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
+		
 		Stats.Pressed += HandleStatsPressed;
 		Swap.Pressed += HandleSwapPressed;
 	}
 
 	private void HandleStatsPressed()
 	{
-		EmitSignal(SignalName.StatsPressed);
+		_foregroundActionObservable.EmitStatsPressed();
 	}
 
 	private void HandleSwapPressed()
 	{
-		EmitSignal(SignalName.SwapPressed);
+		_foregroundActionObservable.EmitSwapPressed();
 	}
 }

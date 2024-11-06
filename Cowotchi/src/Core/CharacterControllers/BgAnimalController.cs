@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class FarmWandererController : CharacterBody3D
+public partial class BgAnimalController : CharacterBody3D
 {
 	#region Exports
 
@@ -38,7 +38,6 @@ public partial class FarmWandererController : CharacterBody3D
 	private bool IsGrounded { get; set; } // If entity is grounded this frame
 	private bool WasGrounded { get; set; } // If entity was grounded last frame
 
-	// TODO: Use this for movement testing, then move to AI
 	private Vector3 WishDir { get; set; } // Player input direction (wasd)
 
 	private static readonly float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
@@ -97,7 +96,7 @@ public partial class FarmWandererController : CharacterBody3D
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError($"Error in _PhysicsProcess {ex.Message}", ex);
+			_logger.LogError($"Error in FarmWandererController _PhysicsProcess {ex.Message}", ex);
 		}
 	}
 

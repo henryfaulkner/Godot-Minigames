@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://ddxwlgk2wjt6l"]
 
-[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/AnimalPage/AnimalPage.cs" id="1_vdl4w"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/EggPage/EggPage.cs" id="1_jnh5u"]
 [ext_resource type="PackedScene" uid="uid://du8u63yyytnm5" path="res://src/ObjectLibrary/Menu/ActionButton/ActionButton.tscn" id="2_hd573"]
 [ext_resource type="Texture2D" uid="uid://d14iuqnebb4wd" path="res://src/Assets/Icons/StatsIcon.png" id="3_5dnuq"]
 
-[node name="EggPage" type="Control"]
+[node name="EggPage" type="Control" node_paths=PackedStringArray("Stats", "Swap")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -13,7 +13,9 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_vdl4w")
+script = ExtResource("1_jnh5u")
+Stats = NodePath("OptionContainer/Stats")
+Swap = NodePath("OptionContainer/Swap")
 
 [node name="OptionContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

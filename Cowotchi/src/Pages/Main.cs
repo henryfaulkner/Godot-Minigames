@@ -3,26 +3,26 @@ using System;
 
 public partial class Main : Node3D
 {
-	[Export]
-	private Menu Menu { get; set; }
-
-	public IExecuter ForegroundAnimal { get; set; }
+	public IExecuter ForegroundExecuter { get; set; }
 
 	private ILoggerService _logger { get; set; }
 	private ICommonInteractor _commonInteractor { get; set; } 
+	private ForegroundActionObservable _foregroundActionObservable { get; set; }
 
 	public override void _Ready()
 	{
-		GD.Print($"Call Main _Ready");
 		try
 		{
+			_logger = GetNode<ILoggerService>("/root/LoggerService");
+			
 			_commonInteractor = GetNode<ICommonInteractor>("/root/CommonInteractor");
 			_commonInteractor.InitDatabaseIfRequired();
 
-			Menu.StatsPressed += HandleStatsPressed;
-			Menu.SwapPressed += HandleSwapPressed;
-			Menu.NurturePressed += HandleNurturePressed;
-			Menu.FeedPressed += HandleFeedPressed;
+			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
+			_foregroundActionObservable.StatsPressed += HandleStatsPressed;
+			_foregroundActionObservable.SwapPressed += HandleSwapPressed;
+			_foregroundActionObservable.NurturePressed += HandleNurturePressed;
+			_foregroundActionObservable.FeedPressed += HandleFeedPressed;
 		}
 		catch (Exception ex)
 		{
@@ -33,21 +33,25 @@ public partial class Main : Node3D
 
 	private void HandleStatsPressed()
 	{
-		ForegroundAnimal.ExecuteAction(Enumerations.ForegroundActions.Stats);
+		_logger.LogDebug("Call Menu HandleStatsPressed");
+		ForegroundExecuter.ExecuteAction(Enumerations.ForegroundActions.Stats);
 	}
 
 	private void HandleSwapPressed()
 	{
-		ForegroundAnimal.ExecuteAction(Enumerations.ForegroundActions.Swap);
+		_logger.LogDebug("Call Menu HandleSwapPressed");
+		ForegroundExecuter.ExecuteAction(Enumerations.ForegroundActions.Swap);
 	}
 
 	private void HandleNurturePressed()
 	{
-		ForegroundAnimal.ExecuteAction(Enumerations.ForegroundActions.Nurture);
+		_logger.LogDebug("Call Menu HandleNurturePressed");
+		ForegroundExecuter.ExecuteAction(Enumerations.ForegroundActions.Nurture);
 	}
 
 	private void HandleFeedPressed()
 	{
-		ForegroundAnimal.ExecuteAction(Enumerations.ForegroundActions.Feed);
+		_logger.LogDebug("Call Menu HandleFeedPressed");
+		ForegroundExecuter.ExecuteAction(Enumerations.ForegroundActions.Feed);
 	}
 }

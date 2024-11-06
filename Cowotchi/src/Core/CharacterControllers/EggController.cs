@@ -1,38 +1,43 @@
 using Godot;
+using System;
 using System.Threading.Tasks;
 
 public partial class EggController : CharacterBody3D, IEggController, IExecuter
 {
-	[Export]
-	public AnimalController InnerAnimal { get; set; }
-
 	public Egg Modal { get; set; } 
 
 	private ILoggerService _logger { get; set; }
 
-    public override void _Ready()
+	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
-	public async Task Bounce() {}
+	public async Task Bounce() 
+	{
+		throw new NotImplementedException();
+	}
 
 	public async Task Hatch() 
 	{
-		InnerAnimal.Hatch();
+		throw new NotImplementedException();
 	}  
 
-	Task ExecuteAction(Enumerations.ForegroundActions menuAction)
+	public Task ExecuteAction(Enumerations.ForegroundActions menuAction)
 	{
 		switch(menuAction)
 		{
-			case Enumeration.ForegroundActions.Stats:
+			case Enumerations.ForegroundActions.Stats:
+				throw new NotImplementedException();	
 				break;
-			case Enumeration.ForegroundActions.Swap:
+			case Enumerations.ForegroundActions.Swap:
+				throw new NotImplementedException();	
 				break;
-			case Enumeration.ForegroundActions.Nurture:
+			case Enumerations.ForegroundActions.Nurture:
+				throw new NotImplementedException();	
 				break;
-			case Enumeration.ForegroundActions.Feed:
+			case Enumerations.ForegroundActions.Feed:
+				throw new NotImplementedException();
 				break;
 			default:
 				_logger.LogError($"EggController ExecuteAction failed to map state. Egg name: {Modal.Name}.");

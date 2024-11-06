@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dfbol2cb2rl73"]
 
-[ext_resource type="Script" path="res://src/Core/CharacterControllers/FarmWandererController.cs" id="1_51epw"]
+[ext_resource type="Script" path="res://src/Core/CharacterControllers/BgAnimalController.cs" id="1_51epw"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_hjbf0"]
 

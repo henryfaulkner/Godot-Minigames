@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d14iuqnebb4wd" path="res://src/Assets/Icons/StatsIcon.png" id="3_11kmb"]
 [ext_resource type="Texture2D" uid="uid://b0l8lava0pdl7" path="res://src/Assets/Icons/FeedIcon.png" id="4_8ywap"]
 
-[node name="AnimalPage" type="Control"]
+[node name="AnimalPage" type="Control" node_paths=PackedStringArray("Stats", "Swap", "Nurture", "Feed")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -15,6 +15,10 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rj4q3")
+Stats = NodePath("OptionContainer/Stats")
+Swap = NodePath("OptionContainer/Swap")
+Nurture = NodePath("OptionContainer/Nurture")
+Feed = NodePath("OptionContainer/Feed")
 
 [node name="OptionContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

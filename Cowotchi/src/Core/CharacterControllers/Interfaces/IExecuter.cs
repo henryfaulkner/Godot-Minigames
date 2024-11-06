@@ -1,4 +1,6 @@
-public interface IExecuter() 
+using System.Threading.Tasks;
+
+public interface IExecuter 
 {
-    Task ExecuteAction(Enumerations.ForegroundActions menuAction);
+	Task ExecuteAction(Enumerations.ForegroundActions menuAction);
 }

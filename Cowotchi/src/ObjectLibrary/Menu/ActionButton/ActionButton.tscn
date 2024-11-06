@@ -13,6 +13,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_default_cursor_shape = 2
 script = ExtResource("2_w4x4u")
 Panel = NodePath("Panel")
 TextureButton = NodePath("Panel/TextureButton")
