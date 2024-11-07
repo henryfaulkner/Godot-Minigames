@@ -43,7 +43,7 @@ public partial class MainCamera : Camera3D
 		{
 			//Type type = result["collider"].GetType();
 			var node = (Node3D)result["collider"];
-			_logger.LogError($"The type of the object is: {node.Name}");
+			//_logger.LogError($"The type of the object is: {node.Name}");
 		}
 	}
 }

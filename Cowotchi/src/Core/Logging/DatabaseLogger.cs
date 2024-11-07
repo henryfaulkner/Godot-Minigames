@@ -35,7 +35,7 @@ public class DatabaseLogger : ILogger
 		}
 		catch (Exception ex)
 		{
-			GD.PrintErr($"DatabaseLogger PublishLog Failed: {ex.Message}");
+			GD.PrintErr($"DatabaseLogger PublishLog Failed: {ex.Message}.");
 		}
 	}
 }

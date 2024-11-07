@@ -25,8 +25,12 @@ public class FileLogger : ILogger
 	{
 		try
 		{
+			string str;
+			if (exception != null) str = $"{message}. Exception: {exception.Message} {exception.InnerException.Message}";
+			else str = message;
+
 			using var file = FileAccess.Open(FilePath, FileAccess.ModeFlags.Write);
-			file.StoreString(message);
+			file.StoreString(str);
 		}
 		catch (Exception ex)
 		{

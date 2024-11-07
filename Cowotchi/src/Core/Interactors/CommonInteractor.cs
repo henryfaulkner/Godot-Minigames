@@ -90,6 +90,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 
 	private async Task InitAnimalEventTypes(IRepository<AnimalEventType> animalEventTypeRepository)
 	{
+		_logger.LogInfo("Call InitAnimalEventTypes");
 		try
 		{
 			var aetList = new List<AnimalEventType>();
@@ -118,6 +119,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 
 	private async Task InitAnimalTypes(IRepository<AnimalType> animalTypeRepository)
 	{
+		_logger.LogInfo("Call InitAnimalTypes");
 		try
 		{
 			var atList = new List<AnimalType>();
@@ -146,6 +148,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 
 	private async Task InitHatchRequirementTypes(IRepository<HatchRequirementType> hatchRequirementRepository)
 	{
+		_logger.LogInfo("Call InitHatchRequirementTypes");
 		try
 		{
 			var hrtList = new List<HatchRequirementType>();

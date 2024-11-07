@@ -24,7 +24,7 @@ public class LocalLogger : ILogger
 		try
 		{
 			string str;
-			if (exception != null) str = $"{message}. Exception: {exception.Message}";
+			if (exception != null) str = $"{message}. Exception: {exception.Message} {exception.InnerException.Message}";
 			else str = message;
 
 			switch(logLevel)

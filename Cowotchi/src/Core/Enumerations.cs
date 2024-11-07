@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 public partial class Enumerations
 {
-    public enum LogLevels
+	public enum LogLevels
 	{
 		[Description("Debug")]
 		Debug = 0,
@@ -16,23 +16,23 @@ public partial class Enumerations
 	public enum HatchRequirementTypes
 	{
 		[Description("Time")]
-		Time,
+		Time = 1,
 	}
 
 	public enum AnimalTypes
 	{
 		[Description("Cow")]
-		Cow,
+		Cow = 1,
 		[Description("Chicken")]
-		Chicken, 
+		Chicken = 2, 
 	}
 
 	public enum AnimalEventTypes
 	{
 		[Description("Nurture")]
-		Nurture,
+		Nurture = 1,
 		[Description("Feed")]
-		Feed, 
+		Feed = 2, 
 	}
 
 
