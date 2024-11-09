@@ -2,27 +2,29 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EggCharacter : ForegroundModel
+public partial class EggCharacter : ForegroundSubject
 {
-	private Egg Egg { get; set; }
+	private EggModel Model { get; set; }
 	
-	private ILoggerService _logger { get; set; }
-
 	public IExecuter Executer { get; set; } 
 
-	public override void _Ready()
+	public void ReadyInstance(EggModel model)
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
-	}
+		_logger.LogDebug("Start EggCharacter ReadyInstance");
+		try
+		{
+			Model = model;
 
-	public void InitEgg(Egg egg)
-	{
-		Egg = egg;
-
-		Executer = new EggExecuter(
-			egg,
-			_logger
-		);
+			Executer = new EggExecuter(
+				model,
+				_logger
+			);
+		} 
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggCharacter ReadyInstance Error: {ex.Message}", ex);
+		}
+		_logger.LogDebug("End EggCharacter ReadyInstance");
 	}
 
 	public async Task Hatch() 

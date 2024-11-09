@@ -13,15 +13,16 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
-	public async Task<Animal> GetAnimal(int id)
+	public async Task<AnimalModel> GetAnimal(int id)
 	{
-		Animal result;
+		AnimalModel result;
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor GetAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				result = await unitOfWork.AnimalRepository.GetByIdAsync(id);
+				var entity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
+				result = entity.MapToModel();
 			}
 			_logger.LogDebug("End AnimalInteractor GetAnimal");
 		}
@@ -33,18 +34,23 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		return result;
 	}
 
-	public async Task<List<Animal>> GetAllAnimals()
+	public async Task<List<AnimalModel>> GetAllAnimals()
 	{
-		var result = new List<Animal>();
+		var result = new List<AnimalModel>();
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor GetAllAnimals");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				result = 
-					(await unitOfWork.AnimalRepository.GetAllAsync())
+				var entityList = 
+					(await unitOfWork.AnimalRepository.GetAllIncludesAsync(IncludesHelper.GetAnimalIncludes()))
 						.Where(x => !x.IsDeleted)
 						.ToList();
+				
+				foreach (var entity in entityList)
+				{
+					result.Add(entity.MapToModel());
+				}
 			}
 			_logger.LogDebug("End AnimalInteractor GetAllAnimals");
 		}
@@ -99,7 +105,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 			_logger.LogDebug("Start AnimalInteractor RenameAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				var aEntity = await unitOfWork.AnimalRepository.GetByIdAsync(id);
+				var aEntity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
 				aEntity.Name = name;
 				_ = await unitOfWork.SaveChangesAsync();
 			}

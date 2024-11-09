@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class EggExecuter : IExecuter
 {
-	private Egg Egg { get; set; }
+	private EggModel Model { get; set; }
 	private ILoggerService _logger { get; set; }
 
 	private Action? StatsCallback { get; set; }
@@ -12,14 +12,14 @@ public class EggExecuter : IExecuter
 	private Action? FeedCallback { get; set; }
 
 	public EggExecuter(
-		Egg egg, 
+		EggModel model, 
 		ILoggerService logger,
 		Action? statsCallback = null, 
 		Action? swapCallback = null,
 		Action? nurtureCallback = null,
 		Action? feedCallback = null)
 	{
-		Egg = egg;
+		Model = model;
 		_logger = logger;
 		StatsCallback = statsCallback;
 		SwapCallback = swapCallback;
@@ -44,8 +44,8 @@ public class EggExecuter : IExecuter
 				if (FeedCallback != null) FeedCallback();
 				break;
 			default:
-				_logger.LogError($"EggController ExecuteAction failed to map state. Egg name: {Egg.Name}.");
-				throw new Exception($"EggInteractor ExecuteAction failed to map state. Egg name: {Egg.Name}.");
+				_logger.LogError($"EggController ExecuteAction failed to map state. Egg name: {Model.Name}.");
+				throw new Exception($"EggInteractor ExecuteAction failed to map state. Egg name: {Model.Name}.");
 				break;
 				break;
 		}

@@ -30,9 +30,35 @@ public class Repository<T> : IRepository<T>, IDisposable where T : class
 		return await _context.Set<T>().ToListAsync();
 	}
 
+	public async Task<IEnumerable<T>> GetAllIncludesAsync(params Func<IQueryable<T>, IQueryable<T>>[] includes)
+	{
+		IQueryable<T> query = _context.Set<T>();
+
+		// Apply each include function to the query
+		foreach (var include in includes)
+		{
+			query = include(query);
+		}
+
+		return await query.ToListAsync();
+	}
+
 	public async Task<T> GetByIdAsync(int id)
 	{
 		return await _context.Set<T>().FindAsync(id);
+	}
+
+	public async Task<T> GetByIdIncludesAsync(int id, params Func<IQueryable<T>, IQueryable<T>>[] includes)
+	{
+		IQueryable<T> query = _context.Set<T>();
+
+		// Apply each include function to the query
+		foreach (var include in includes)
+		{
+			query = include(query);
+		}
+
+		return await query.FirstOrDefaultAsync(x => EF.Property<int>(x, "Id") == id);
 	}
 
 	public void Remove(T entity)

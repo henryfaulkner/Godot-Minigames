@@ -35,6 +35,17 @@ public partial class Enumerations
 		Feed = 2, 
 	}
 
+	public enum CreatureTypes
+	{
+		[Description("Egg")]
+		Egg = 0,
+		[Description("Cow")]
+		Cow = 1,
+		[Description("Chicken")]
+		Chicken = 2, 
+	}
+
+
 
 	public enum ForegroundActions
 	{

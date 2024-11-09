@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class AnimalExecuter : IExecuter
 {
-	private Animal Animal { get; set; }
+	private AnimalModel Model { get; set; }
 	private ILoggerService _logger { get; set; }
 
 	private Action? StatsCallback { get; set; }
@@ -12,14 +12,14 @@ public class AnimalExecuter : IExecuter
 	private Action? FeedCallback { get; set; }
 
 	public AnimalExecuter(
-		Animal animal, 
+		AnimalModel model, 
 		ILoggerService logger,
 		Action? statsCallback = null, 
 		Action? swapCallback = null,
 		Action? nurtureCallback = null,
 		Action? feedCallback = null)
 	{
-		Animal = animal;
+		Model = model;
 		_logger = logger;
 		StatsCallback = statsCallback;
 		SwapCallback = swapCallback;
@@ -44,8 +44,8 @@ public class AnimalExecuter : IExecuter
 				if (FeedCallback != null) FeedCallback();
 				break;
 			default:
-				_logger.LogError($"AnimalController ExecuteAction failed to map state. Animal name: {Animal.Name}.");
-				throw new Exception($"AnimalInteractor ExecuteAction failed to map state. Animal name: {Animal.Name}.");
+				_logger.LogError($"AnimalController ExecuteAction failed to map state. Animal name: {Model.Name}.");
+				throw new Exception($"AnimalInteractor ExecuteAction failed to map state. Animal name: {Model.Name}.");
 				break;
 				break;
 		}

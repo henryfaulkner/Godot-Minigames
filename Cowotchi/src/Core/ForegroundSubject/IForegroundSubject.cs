@@ -1,4 +1,4 @@
-public interface IForegroundModel
+public interface IForegroundSubject
 {
 	IExecuter Executer { get; set; }
 }

@@ -6,11 +6,11 @@ using System.Linq;
 
 public partial class Main : Node3D
 {
-	private readonly StringName FOREGROUND_PLACEHOLDER_PATH = new StringName("./Placeholder");
+	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
-	public List<ForegroundModel> Gallery { get; set; }
+	public List<CreatureModel> Gallery { get; set; }
 
-	public ForegroundModel ForegroundModel { get; set; }
+	public ForegroundSubject ForegroundSubject { get; set; }
 	public int ForegroundIndex { get; set; }
 
 	private ILoggerService _logger { get; set; }
@@ -18,6 +18,7 @@ public partial class Main : Node3D
 	private IEggInteractor _eggInteractor { get; set; } 
 	private IAnimalInteractor _animalInteractor { get; set; } 
 	private ForegroundActionObservable _foregroundActionObservable { get; set; }
+	private ForegroundSubjectFactory _fgFactory { get; set; }
 
 	public override async void _Ready()
 	{
@@ -27,10 +28,11 @@ public partial class Main : Node3D
 			_commonInteractor = GetNode<ICommonInteractor>("/root/CommonInteractor");
 			_eggInteractor = GetNode<IEggInteractor>("/root/EggInteractor");
 			_animalInteractor = GetNode<IAnimalInteractor>("/root/AnimalInteractor");
+			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
+			_fgFactory = GetNode<ForegroundSubjectFactory>("/root/ForegroundSubjectFactory");
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
-			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
 			_foregroundActionObservable.StatsPressed += HandleStatsPressed;
 			_foregroundActionObservable.SwapPressed += HandleSwapPressed;
 			_foregroundActionObservable.NurturePressed += HandleNurturePressed;
@@ -38,7 +40,8 @@ public partial class Main : Node3D
 
 			Gallery = await GetGalleryFromDatabase();
 			ForegroundIndex = -1;
-			RotateForegroundModels();
+			ForegroundSubject = GetNode<ForegroundSubject>(FOREGROUND_PLACEHOLDER_PATH);
+			RotateForegroundSubjects();
 		}
 		catch (Exception ex)
 		{
@@ -50,57 +53,82 @@ public partial class Main : Node3D
 	private void HandleStatsPressed()
 	{
 		_logger.LogDebug("Call Menu HandleStatsPressed");
-		ForegroundModel.Executer.ExecuteAction(Enumerations.ForegroundActions.Stats);
+		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Stats);
 	}
 
 	private void HandleSwapPressed()
 	{
 		_logger.LogDebug("Call Menu HandleSwapPressed");
-		ForegroundModel.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
-		RotateForegroundModels(); 
+		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
+		RotateForegroundSubjects(); 
 	}
 
 	private void HandleNurturePressed()
 	{
 		_logger.LogDebug("Call Menu HandleNurturePressed");
-		ForegroundModel.Executer.ExecuteAction(Enumerations.ForegroundActions.Nurture);
+		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Nurture);
 	}
 
 	private void HandleFeedPressed()
 	{
 		_logger.LogDebug("Call Menu HandleFeedPressed");
-		ForegroundModel.Executer.ExecuteAction(Enumerations.ForegroundActions.Feed);
+		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Feed);
 	}
 
-	private void RotateForegroundModels()
+	private void RotateForegroundSubjects()
 	{
-		if (!Gallery.Any())
+		try
 		{
-			_logger.LogInfo("The Gallery is empty.");
-			return;
+			if (!Gallery.Any())
+			{
+				_logger.LogInfo("The Gallery is empty.");
+				return;
+			}
+			_logger.LogInfo("The Gallery is NOT empty.");
+			ForegroundIndex += 1;
+			if (ForegroundIndex == Gallery.Count) ForegroundIndex = 0;
+
+			var fgPos = ForegroundSubject.GlobalPosition;
+			ForegroundSubject.QueueFree();
+
+			var nextModel = Gallery[ForegroundIndex];
+			switch (nextModel.CreatureType)
+			{
+				case Enumerations.CreatureTypes.Egg:
+					ForegroundSubject = _fgFactory.SpawnEgg((EggModel)nextModel, fgPos);
+					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
+					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
+					break;
+				case Enumerations.CreatureTypes.Cow:
+					ForegroundSubject = _fgFactory.SpawnCow((AnimalModel)nextModel, fgPos);
+					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
+					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
+					break;
+				default:
+					_logger.LogInfo("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
+					break;
+			}
+		} 
+		catch (Exception ex)
+		{
+			_logger.LogError($"Main RotateForegroundSubjects Error: {ex.Message}", ex);
+			throw;
 		}
-		ForegroundIndex += 1;
-		if (ForegroundIndex == Gallery.Count) ForegroundIndex = 0;
-
-		var currPos = ForegroundModel.GlobalPosition;
-		ForegroundModel.QueueFree();
-
-		//KINDA STUCK WITH THE XCharacter, ForegroundModel, and CharacterBody3D Hierarchy 	
-		var next = Gallery[ForegroundIndex];
-
-		ForegroundModel = Gallery[ForegroundIndex].SpawnMesh();
-		ForegroundModel.GlobalPosition = currPos;
-		GetNode(".").AddChild(ForegroundModel);
 	}
 
-	private async Task<List<ForegroundModel>> GetGalleryFromDatabase()
+	private async Task<List<CreatureModel>> GetGalleryFromDatabase()
 	{
-		var result = new List<ForegroundModel>();
+		var result = new List<CreatureModel>();
 
 		try
 		{
-			result.AddRange(await _animalInteractor.GetAllAnimals());
-			result.AddRange(await _eggInteractor.GetAllEggs());
+			var animals = await _animalInteractor.GetAllAnimals();
+			var eggs = await _eggInteractor.GetAllEggs();
+
+			result = animals.Cast<CreatureModel>()
+						.Concat(eggs.Cast<CreatureModel>())
+						.OrderBy(x => x.BirthDate)
+						.ToList();
 		} 
 		catch (Exception ex)
 		{

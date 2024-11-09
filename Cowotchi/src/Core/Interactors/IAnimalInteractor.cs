@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public interface IAnimalInteractor
 {
-    Task<Animal> GetAnimal(int id);
-    Task<List<Animal>> GetAllAnimals();
+    Task<AnimalModel> GetAnimal(int id);
+    Task<List<AnimalModel>> GetAllAnimals();
     Task<AnimalEventData> GetAnimal_RecentEventData(int id, TimeSpan timeSpan);
     Task RenameAnimal(int id, string name);
     Task FeedAnimal(int id);

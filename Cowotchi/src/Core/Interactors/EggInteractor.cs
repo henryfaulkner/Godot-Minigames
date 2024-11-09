@@ -27,9 +27,9 @@ public partial class EggInteractor : Node, IEggInteractor
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
-	public async Task<Egg> CreateEgg()
+	public async Task<EggModel> CreateEgg()
 	{
-		Egg result;
+		EggModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor CreateEgg");
@@ -49,7 +49,7 @@ public partial class EggInteractor : Node, IEggInteractor
 				}
 
 				_ = await unitOfWork.SaveChangesAsync();
-				result = eEntity;
+				result = eEntity.MapToModel();
 			}
 			_logger.LogDebug("End EggInteractor CreateEgg");
 		}
@@ -61,15 +61,16 @@ public partial class EggInteractor : Node, IEggInteractor
 		return result;
 	}
 
-	public async Task<Egg> GetEgg(int id)
+	public async Task<EggModel> GetEgg(int id)
 	{
-		Egg result;
+		EggModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor GetEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				result = await unitOfWork.EggRepository.GetByIdAsync(id);
+				var entity = await unitOfWork.EggRepository.GetByIdIncludesAsync(id, IncludesHelper.GetEggIncludes());
+				result = entity.MapToModel();
 			}
 			_logger.LogDebug("End EggInteractor GetEgg");
 		}
@@ -81,19 +82,24 @@ public partial class EggInteractor : Node, IEggInteractor
 		return result;
 	}
 	
-	public async Task<List<Egg>> GetAllEggs()
+	public async Task<List<EggModel>> GetAllEggs()
 	{
-		var result = new List<Egg>();
+		var result = new List<EggModel>();
 		try
 		{
 			_logger.LogDebug("Start EggInteractor GetAllEggs");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				result = 
-					(await unitOfWork.EggRepository.GetAllAsync())
+				var entityList = 
+					(await unitOfWork.EggRepository.GetAllIncludesAsync(IncludesHelper.GetEggIncludes()))
 						.Where(x => !x.IsHatched)
 						.Where(x => !x.IsDeleted)
 						.ToList();
+
+				foreach (var entity in entityList)
+				{
+					result.Add(entity.MapToModel());
+				}
 			}
 			_logger.LogDebug("End EggInteractor GetAllEggs");
 		}
@@ -112,7 +118,7 @@ public partial class EggInteractor : Node, IEggInteractor
 			_logger.LogDebug("Start EggInteractor RenameEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				var eEntity = await unitOfWork.EggRepository.GetByIdAsync(id);
+				var eEntity = await unitOfWork.EggRepository.GetByIdIncludesAsync(id, IncludesHelper.GetEggIncludes());
 				eEntity.Name = name;
 				await unitOfWork.SaveChangesAsync();
 			}
@@ -125,15 +131,15 @@ public partial class EggInteractor : Node, IEggInteractor
 		}
 	}
 
-	public async Task<Animal> HatchEgg(int id)
+	public async Task<AnimalModel> HatchEgg(int id)
 	{
-		Animal result;
+		AnimalModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor HatchEgg");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
-				var eEntity = await unitOfWork.EggRepository.GetByIdAsync(id);
+				var eEntity = await unitOfWork.EggRepository.GetByIdIncludesAsync(id, IncludesHelper.GetEggIncludes());
 				eEntity.IsHatched = true;
 
 				var aEntity = new Animal();
@@ -143,7 +149,7 @@ public partial class EggInteractor : Node, IEggInteractor
 				await unitOfWork.AnimalRepository.AddAsync(aEntity);
 
 				_ = await unitOfWork.SaveChangesAsync();
-				result = aEntity;
+				result = aEntity.MapToModel();
 			}
 			_logger.LogDebug("End EggInteractor HatchEgg");
 		}

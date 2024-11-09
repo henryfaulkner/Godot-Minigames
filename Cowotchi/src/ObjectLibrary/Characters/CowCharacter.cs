@@ -2,29 +2,31 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class CowCharacter : ForegroundModel
+public partial class CowCharacter : ForegroundSubject
 {
-	private Animal Animal { get; set; }
-	
-	private ILoggerService _logger { get; set; }
+	private AnimalModel Model { get; set; }
 
 	public IExecuter Executer { get; set; }
 
-	public override void _Ready()
+	public void ReadyInstance(AnimalModel model)
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
-	}
+		_logger.LogDebug("Start CowCharacter ReadyInstance");
+		try
+		{
+			Model = model;
 
-	public void InitAnimal(Animal animal)
-	{
-		Animal = animal;
-
-		Executer = new AnimalExecuter(
-			animal,
-			_logger,
-			nurtureCallback: () => ReceiveLove(),
-			feedCallback: () => Eat()
-		);
+			Executer = new AnimalExecuter(
+				model,
+				_logger,
+				nurtureCallback: () => ReceiveLove(),
+				feedCallback: () => Eat()
+			);
+		} 
+		catch (Exception ex)
+		{
+			_logger.LogError($"CowCharacter ReadyInstance Error: {ex.Message}", ex);
+		}
+		_logger.LogDebug("End CowCharacter ReadyInstance");
 	}
 
 	public async Task Hatch() 
