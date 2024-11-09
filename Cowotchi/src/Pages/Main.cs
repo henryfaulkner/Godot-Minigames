@@ -84,7 +84,11 @@ public partial class Main : Node3D
 
 		var currPos = ForegroundModel.GlobalPosition;
 		ForegroundModel.QueueFree();
-		ForegroundModel = Gallery[ForegroundIndex].Instantiate<ForegroundModel>();
+
+		//KINDA STUCK WITH THE XCharacter, ForegroundModel, and CharacterBody3D Hierarchy 	
+		var next = Gallery[ForegroundIndex];
+
+		ForegroundModel = Gallery[ForegroundIndex].SpawnMesh();
 		ForegroundModel.GlobalPosition = currPos;
 		GetNode(".").AddChild(ForegroundModel);
 	}
