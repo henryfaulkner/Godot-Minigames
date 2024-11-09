@@ -80,6 +80,30 @@ public partial class EggInteractor : Node, IEggInteractor
 		}
 		return result;
 	}
+	
+	public async Task<List<Egg>> GetAllEggs()
+	{
+		var result = new List<Egg>();
+		try
+		{
+			_logger.LogDebug("Start EggInteractor GetAllEggs");
+			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
+			{
+				result = 
+					(await unitOfWork.EggRepository.GetAllAsync())
+						.Where(x => !x.IsHatched)
+						.Where(x => !x.IsDeleted)
+						.ToList();
+			}
+			_logger.LogDebug("End EggInteractor GetAllEggs");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggInteractor GetAllEggs Error: {ex.Message}", ex);
+			throw;
+		}
+		return result;
+	}
 
 	public async Task RenameEgg(int id, string name)
 	{

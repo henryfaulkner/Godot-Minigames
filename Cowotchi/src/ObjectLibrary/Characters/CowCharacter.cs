@@ -2,40 +2,30 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class CowCharacter : CharacterBody3D, IExecuter
+public partial class CowCharacter : ForegroundModel
 {
-	public Animal Animal { get; set; }
+	private Animal Animal { get; set; }
 	
 	private ILoggerService _logger { get; set; }
+
+	public IExecuter Executer { get; set; }
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
-	public async Task ExecuteAction(Enumerations.ForegroundActions menuAction)
+	public void InitAnimal(Animal animal)
 	{
-		switch(menuAction)
-		{
-			case Enumerations.ForegroundActions.Stats:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Swap:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Nurture:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Feed:
-				throw new NotImplementedException();	
-				break;
-			default:
-				_logger.LogError($"CowController ExecuteAction failed to map state. Cow name: {Animal.Name}.");
-				throw new Exception($"CowInteractor ExecuteAction failed to map state. Cow name: {Animal.Name}.");
-				break;
-				break;
-		}
-	}  
+		Animal = animal;
+
+		Executer = new AnimalExecuter(
+			animal,
+			_logger,
+			nurtureCallback: () => ReceiveLove(),
+			feedCallback: () => Eat()
+		);
+	}
 
 	public async Task Hatch() 
 	{

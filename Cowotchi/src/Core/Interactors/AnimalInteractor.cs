@@ -33,6 +33,29 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		return result;
 	}
 
+	public async Task<List<Animal>> GetAllAnimals()
+	{
+		var result = new List<Animal>();
+		try
+		{
+			_logger.LogDebug("Start AnimalInteractor GetAllAnimals");
+			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
+			{
+				result = 
+					(await unitOfWork.AnimalRepository.GetAllAsync())
+						.Where(x => !x.IsDeleted)
+						.ToList();
+			}
+			_logger.LogDebug("End AnimalInteractor GetAllAnimals");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"AnimalInteractor GetAllAnimals Error: {ex.Message}", ex);
+			throw;
+		}
+		return result;
+	}
+
 	public async Task<AnimalEventData> GetAnimal_RecentEventData(int id, TimeSpan timeSpan)
 	{
 		AnimalEventData result = new AnimalEventData();

@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=9 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/EggCharacter.tscn" id="2_5onax"]
 [ext_resource type="PackedScene" uid="uid://cil33363eqyqa" path="res://src/ObjectLibrary/Menu/Menu.tscn" id="2_sae3e"]
-[ext_resource type="PackedScene" uid="uid://enqmh7rfleb0" path="res://src/ObjectLibrary/Characters/CowCharacter.tscn" id="3_e1l4f"]
 [ext_resource type="Environment" uid="uid://bnooamsd7654a" path="res://src/Assets/SkyEnvironment.tres" id="5_wqfev"]
 [ext_resource type="PackedScene" uid="uid://clnvsbxj5pkk7" path="res://src/ObjectLibrary/Grass.tscn" id="6_5pt56"]
 [ext_resource type="PackedScene" uid="uid://dfbol2cb2rl73" path="res://src/ObjectLibrary/Characters/BgCowCharacter.tscn" id="7_3n2o0"]
@@ -13,11 +12,8 @@
 [node name="Main" type="Node3D"]
 script = ExtResource("1_bw4bp")
 
-[node name="Egg" parent="." instance=ExtResource("2_5onax")]
+[node name="Placeholder" parent="." instance=ExtResource("2_5onax")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 3.44791)
-
-[node name="Cow" parent="Egg" instance=ExtResource("3_e1l4f")]
-visible = false
 
 [node name="Environment" type="Node3D" parent="."]
 

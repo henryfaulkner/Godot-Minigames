@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class AppDbContext : DbContext
 {
@@ -41,23 +42,55 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<Animal>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
-		modelBuilder.Entity<AnimalEvent>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
+		modelBuilder.Entity<Animal>(entity =>
+		{
+			entity.Property(e => e.Id)
+				.ValueGeneratedOnAdd();
+			ConfigureAuditEntityFields(entity);
+		});
 
-		modelBuilder.Entity<Egg>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
-		modelBuilder.Entity<HatchRequirement>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
-		
-		modelBuilder.Entity<Log>()
-			.Property(g => g.Id)
-			.ValueGeneratedOnAdd();
+		modelBuilder.Entity<AnimalEvent>(entity =>
+		{
+			entity.Property(e => e.Id)
+				.ValueGeneratedOnAdd();
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<AnimalEventType>(entity =>
+		{
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<AnimalType>(entity =>
+		{
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<Egg>(entity =>
+		{
+			entity.Property(e => e.Id)
+				.ValueGeneratedOnAdd();
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<HatchRequirement>(entity =>
+		{
+			entity.Property(e => e.Id)
+				.ValueGeneratedOnAdd();
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<HatchRequirementType>(entity =>
+		{
+			ConfigureAuditEntityFields(entity);
+		});
+
+		modelBuilder.Entity<Log>(entity =>
+		{
+			entity.Property(e => e.Id)
+				.ValueGeneratedOnAdd();
+			ConfigureAuditEntityFields(entity);
+		});
 	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -84,5 +117,17 @@ public class AppDbContext : DbContext
 				entity.Entity.ModifiedDate = utcNow;
 			}
 		}
+	}
+
+	private void ConfigureAuditEntityFields<TEntity>(EntityTypeBuilder<TEntity> entity) where TEntity : class
+	{
+		entity.Property<DateTime>("CreatedDate")
+			.HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+		entity.Property<DateTime>("ModifiedDate")
+			.HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+		entity.Property<bool>("IsDeleted")
+			.HasDefaultValue(false);
 	}
 }

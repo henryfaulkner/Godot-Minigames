@@ -2,40 +2,28 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EggCharacter : CharacterBody3D, IExecuter
+public partial class EggCharacter : ForegroundModel
 {
-	public Egg Egg { get; set; }
+	private Egg Egg { get; set; }
 	
 	private ILoggerService _logger { get; set; }
+
+	public IExecuter Executer { get; set; } 
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>("/root/LoggerService");
 	}
 
-	public async Task ExecuteAction(Enumerations.ForegroundActions menuAction)
+	public void InitEgg(Egg egg)
 	{
-		switch(menuAction)
-		{
-			case Enumerations.ForegroundActions.Stats:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Swap:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Nurture:
-				throw new NotImplementedException();	
-				break;
-			case Enumerations.ForegroundActions.Feed:
-				throw new NotImplementedException();
-				break;
-			default:
-				_logger.LogError($"EggController ExecuteAction failed to map state. Egg name: {Egg.Name}.");
-				throw new Exception($"EggInteractor ExecuteAction failed to map state. Egg name: {Egg.Name}.");
-				break;
-				break;
-		}
-	}  
+		Egg = egg;
+
+		Executer = new EggExecuter(
+			egg,
+			_logger
+		);
+	}
 
 	public async Task Hatch() 
 	{

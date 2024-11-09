@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class UnitOfWork : IUnitOfWork
 {
-	public readonly AppDbContext _context;
+	private readonly AppDbContext _context;
 
 	public IRepository<Animal> AnimalRepository { get; }
 	public IRepository<AnimalEvent> AnimalEventRepository { get; }
