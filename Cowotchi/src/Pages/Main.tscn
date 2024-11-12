@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=10 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/EggCharacter.tscn" id="2_5onax"]
@@ -7,10 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://clnvsbxj5pkk7" path="res://src/ObjectLibrary/Grass.tscn" id="6_5pt56"]
 [ext_resource type="PackedScene" uid="uid://dfbol2cb2rl73" path="res://src/ObjectLibrary/Characters/BgCowCharacter.tscn" id="7_3n2o0"]
 [ext_resource type="PackedScene" uid="uid://bfr7trnw28fod" path="res://src/ObjectLibrary/Characters/BgEggCharacter.tscn" id="7_a0ut1"]
+[ext_resource type="FontFile" uid="uid://tx3hb6cxwd6i" path="res://src/Assets/Fonts/Kenney Future Narrow.ttf" id="8_nwoen"]
 [ext_resource type="Script" path="res://src/Pages/MainCamera.cs" id="9_gywr0"]
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" node_paths=PackedStringArray("SubjectNameLabel")]
 script = ExtResource("1_bw4bp")
+SubjectNameLabel = NodePath("HUD/SubjectNameLabel")
 
 [node name="Placeholder" parent="." instance=ExtResource("2_5onax")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 3.44791)
@@ -40,8 +42,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76193, 1.46735, -4.03216)
 [node name="BgEgg2" parent="FarmWanderers" instance=ExtResource("7_a0ut1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27305, 0.86119, -2.33604)
 
-[node name="Menu" parent="." instance=ExtResource("2_sae3e")]
-
 [node name="MainCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 0, 1.55099, 6.71391)
 script = ExtResource("9_gywr0")
+
+[node name="HUD" type="Node2D" parent="."]
+
+[node name="SubjectNameLabel" type="RichTextLabel" parent="HUD"]
+offset_left = 54.0
+offset_top = 45.0
+offset_right = 567.0
+offset_bottom = 252.0
+theme_override_fonts/normal_font = ExtResource("8_nwoen")
+theme_override_font_sizes/normal_font_size = 56
+bbcode_enabled = true
+
+[node name="Menu" parent="HUD" instance=ExtResource("2_sae3e")]

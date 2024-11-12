@@ -6,7 +6,7 @@ public partial class EggCharacter : ForegroundSubject
 {
 	private EggModel Model { get; set; }
 	
-	public IExecuter Executer { get; set; } 
+	public override IExecuter Executer { get; set; } 
 
 	public void ReadyInstance(EggModel model)
 	{

@@ -6,6 +6,9 @@ using System.Linq;
 
 public partial class Main : Node3D
 {
+	[Export]
+	private RichTextLabel SubjectNameLabel { get; set; }
+	
 	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
 	public List<CreatureModel> Gallery { get; set; }
@@ -108,6 +111,8 @@ public partial class Main : Node3D
 					_logger.LogInfo("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
 					break;
 			}
+			
+			SubjectNameLabel.Text = nextModel.Name;
 		} 
 		catch (Exception ex)
 		{

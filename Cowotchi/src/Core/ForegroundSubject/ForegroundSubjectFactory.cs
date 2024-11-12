@@ -17,8 +17,8 @@ public partial class ForegroundSubjectFactory : Node
 	public EggCharacter SpawnEgg(EggModel model, Vector3 position)
 	{
 		var result = _eggScene.Instantiate<EggCharacter>();
-		result.GlobalPosition = position;
 		GetNode(".").AddChild(result);
+		result.GlobalPosition = position;
 		result.ReadyInstance(model);
 		return result;
 	}
@@ -26,8 +26,8 @@ public partial class ForegroundSubjectFactory : Node
 	public CowCharacter SpawnCow(AnimalModel model, Vector3 position)
 	{
 		var result = _cowScene.Instantiate<CowCharacter>();
-		result.GlobalPosition = position;
 		GetNode(".").AddChild(result);
+		result.GlobalPosition = position;
 		result.ReadyInstance(model);
 		return result;
 	}

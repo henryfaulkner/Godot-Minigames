@@ -6,7 +6,7 @@ public partial class CowCharacter : ForegroundSubject
 {
 	private AnimalModel Model { get; set; }
 
-	public IExecuter Executer { get; set; }
+	public override IExecuter Executer { get; set; }
 
 	public void ReadyInstance(AnimalModel model)
 	{
@@ -21,6 +21,7 @@ public partial class CowCharacter : ForegroundSubject
 				nurtureCallback: () => ReceiveLove(),
 				feedCallback: () => Eat()
 			);
+			_logger.LogDebug($"Executer == null {Executer == null}");
 		} 
 		catch (Exception ex)
 		{

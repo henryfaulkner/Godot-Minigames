@@ -2,7 +2,7 @@ using Godot;
 
 public partial class ForegroundSubject : CharacterBody3D, IForegroundSubject
 {
-	public IExecuter Executer { get; set; }
+	public virtual IExecuter Executer { get; set; }
 
 	protected ILoggerService _logger { get; set; }
 
