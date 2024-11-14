@@ -1,13 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://cil33363eqyqa"]
+[gd_scene load_steps=8 format=3 uid="uid://cil33363eqyqa"]
 
+[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Menu.cs" id="1_6ijgr"]
 [ext_resource type="StyleBox" uid="uid://6ncfjc3ywwad" path="res://src/ObjectLibrary/Menu/PageStyles/BiggieCombatStyleBox.tres" id="1_77cs8"]
 [ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/AnimalPage/AnimalPage.tscn" id="2_d1od1"]
-[ext_resource type="Texture2D" uid="uid://cjd4rqo5mb8mh" path="res://src/Assets/Icons/HeartMeterIcon.png" id="3_hqupw"]
 [ext_resource type="AudioStream" uid="uid://bjnpm13fp0joi" path="res://src/Assets/Audio/13. Menu Scroll copy.wav" id="3_iwf10"]
 [ext_resource type="PackedScene" uid="uid://ddxwlgk2wjt6l" path="res://src/ObjectLibrary/Menu/EggPage/EggPage.tscn" id="3_l8bet"]
 [ext_resource type="AudioStream" uid="uid://ls5cexjnk20h" path="res://src/Assets/Audio/2. Menu Select copy.wav" id="4_aop3a"]
+[ext_resource type="PackedScene" uid="uid://v5sccupxhj7q" path="res://src/ObjectLibrary/Menu/Meter/Meter.tscn" id="5_gsw0f"]
 
 [node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_6ijgr")
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_iwf10")
@@ -52,60 +54,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="HeartContainer" type="MarginContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters"]
+[node name="HeartMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters" instance=ExtResource("5_gsw0f")]
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="HBoxContainer" type="GridContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartContainer"]
+[node name="HungerMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters" instance=ExtResource("5_gsw0f")]
 layout_mode = 2
-columns = 3
-
-[node name="TextureRect" type="TextureRect" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartContainer/HBoxContainer"]
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 4.87
-tooltip_text = "Love Level"
-texture = ExtResource("3_hqupw")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="ProgressBar" type="ProgressBar" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-value = 33.0
-show_percentage = false
-
-[node name="Value" type="Label" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartContainer/HBoxContainer"]
-layout_mode = 2
-text = "9/9"
-
-[node name="HungerContainer" type="MarginContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="GridContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerContainer"]
-layout_mode = 2
-columns = 3
-
-[node name="TextureRect" type="TextureRect" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerContainer/HBoxContainer"]
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-tooltip_text = "Love Level"
-texture = ExtResource("3_hqupw")
-expand_mode = 4
-
-[node name="ProgressBar" type="ProgressBar" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-value = 33.0
-show_percentage = false
-
-[node name="Value" type="Label" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerContainer/HBoxContainer"]
-layout_mode = 2
-text = "9/9"
 
 [node name="Control" type="Control" parent="GridContainer/VBoxContainer/AboveMenu"]
 layout_mode = 2

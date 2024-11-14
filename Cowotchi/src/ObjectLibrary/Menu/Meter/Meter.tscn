@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://v5sccupxhj7q"]
+
+[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Meter/Meter.cs" id="1_eudks"]
+[ext_resource type="Texture2D" uid="uid://cjd4rqo5mb8mh" path="res://src/Assets/Icons/HeartMeterIcon.png" id="1_ew308"]
+
+[node name="MeterContainer" type="MarginContainer"]
+size_flags_vertical = 3
+script = ExtResource("1_eudks")
+
+[node name="HBoxContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.87
+tooltip_text = "Love Level"
+texture = ExtResource("1_ew308")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+value = 33.0
+show_percentage = false
+
+[node name="Value" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "9/9"
