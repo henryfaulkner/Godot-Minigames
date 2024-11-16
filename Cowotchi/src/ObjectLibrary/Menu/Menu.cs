@@ -3,8 +3,9 @@ using System;
 
 public partial class Menu : CanvasLayer
 {
-    [Export]
-    public Meter HeartMeter { get; set; }
+	[ExportGroup("Meters")]
 	[Export]
-    public Meter HealthMeter { get; set; }
+	public Meter HeartMeter { get; set; }
+	[Export]
+	public Meter HealthMeter { get; set; }
 }
