@@ -22,6 +22,7 @@ public partial class Main : Node3D
 	private IAnimalInteractor _animalInteractor { get; set; } 
 	private ForegroundActionObservable _foregroundActionObservable { get; set; }
 	private ForegroundSubjectFactory _fgFactory { get; set; }
+	private MeterObservable _meterObservable { get; set; }
 
 	public override async void _Ready()
 	{
@@ -33,6 +34,7 @@ public partial class Main : Node3D
 			_animalInteractor = GetNode<IAnimalInteractor>("/root/AnimalInteractor");
 			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
 			_fgFactory = GetNode<ForegroundSubjectFactory>("/root/ForegroundSubjectFactory");
+			_meterObservable = GetNode<MeterObservable>("/root/MeterObservable");
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
@@ -98,12 +100,13 @@ public partial class Main : Node3D
 			switch (nextModel.CreatureType)
 			{
 				case Enumerations.CreatureTypes.Egg:
-					ForegroundSubject = _fgFactory.SpawnEgg((EggModel)nextModel, fgPos);
+					ForegroundSubject = _fgFactory.SpawnEgg(GetNode("."), (EggModel)nextModel, fgPos);
 					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
 					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
 					break;
 				case Enumerations.CreatureTypes.Cow:
-					ForegroundSubject = _fgFactory.SpawnCow((AnimalModel)nextModel, fgPos);
+					ForegroundSubject = _fgFactory.SpawnCow(GetNode("."), (AnimalModel)nextModel, fgPos);
+					UpdateMetersForAnimal((AnimalModel)nextModel);
 					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
 					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
 					break;
@@ -119,6 +122,25 @@ public partial class Main : Node3D
 			_logger.LogError($"Main RotateForegroundSubjects Error: {ex.Message}", ex);
 			throw;
 		}
+	}
+
+	private void UpdateMetersForEgg(EggModel model)
+	{
+		_meterObservable.EmitUpdateHeartMeterMax(-1);
+		_meterObservable.EmitUpdateHeartMeterValue(-1);
+
+		_meterObservable.EmitUpdateHungerMeterMax(-1);
+		_meterObservable.EmitUpdateHungerMeterValue(-1);
+	}
+
+	private void UpdateMetersForAnimal(AnimalModel model)
+	{
+		
+		_meterObservable.EmitUpdateHeartMeterMax(model.LoveMax);
+		_meterObservable.EmitUpdateHeartMeterValue(model.LoveLevel);
+
+		_meterObservable.EmitUpdateHungerMeterMax(model.StomachMax);
+		_meterObservable.EmitUpdateHungerMeterValue(model.StomachLevel);
 	}
 
 	private async Task<List<CreatureModel>> GetGalleryFromDatabase()

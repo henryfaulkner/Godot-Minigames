@@ -9,7 +9,7 @@ public class ProgressBarBusiness
 	public Label ValueLabel { get; set; }
 	public ProgressBar ProgressBar { get; set; }
 
-	public ProgressBarHelper(
+	public ProgressBarBusiness(
 		float currentLevel,
 		float maxLevel,
 		Label valueLabel,

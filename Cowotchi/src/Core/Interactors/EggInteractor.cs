@@ -149,8 +149,15 @@ public partial class EggInteractor : Node, IEggInteractor
 				await unitOfWork.AnimalRepository.AddAsync(aEntity);
 
 				_ = await unitOfWork.SaveChangesAsync();
-				result = aEntity.MapToModel();
+				
+				var eventSummary = new AnimalEventSummary()
+				{
+					NurtureCount = 0,
+					FeedCount = 0,
+				}; 
+				result = aEntity.MapToModel(eventSummary);
 			}
+			
 			_logger.LogDebug("End EggInteractor HatchEgg");
 		}
 		catch (Exception ex)

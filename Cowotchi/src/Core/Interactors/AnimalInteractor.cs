@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public partial class AnimalInteractor : Node, IAnimalInteractor 
 {
+	private TimeSpan EVENT_CAPTURE_SPAN = new TimeSpan(1, 0, 0, 0);
+
 	private ILoggerService _logger { get; set; }
 
 	public override void _Ready() 
@@ -22,7 +24,8 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var entity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
-				result = entity.MapToModel();
+				var eventSummary = await GetAnimal_RecentEventData(entity.Id);
+				result = entity.MapToModel(eventSummary);
 			}
 			_logger.LogDebug("End AnimalInteractor GetAnimal");
 		}
@@ -49,7 +52,8 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 				
 				foreach (var entity in entityList)
 				{
-					result.Add(entity.MapToModel());
+					var eventSummary = await GetAnimal_RecentEventData(entity.Id);
+					result.Add(entity.MapToModel(eventSummary));
 				}
 			}
 			_logger.LogDebug("End AnimalInteractor GetAllAnimals");
@@ -62,30 +66,34 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		return result;
 	}
 
-	public async Task<AnimalEventData> GetAnimal_RecentEventData(int id, TimeSpan timeSpan)
+	public async Task<AnimalEventSummary> GetAnimal_RecentEventData(int id, TimeSpan? timeSpan = null)
 	{
-		AnimalEventData result = new AnimalEventData();
+		if (timeSpan == null) timeSpan = EVENT_CAPTURE_SPAN;
+		
+		AnimalEventSummary result = new AnimalEventSummary();
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor GetAnimal_RecentEventData");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
+				DateTime thresholdDate = DateTime.Now - timeSpan.Value;
+
 				var aeNutureEntityList = 
-					await unitOfWork.AnimalEventRepository
+					(await unitOfWork.AnimalEventRepository
 						.QueryAsync(
 							q => q.Where(x => x.AnimalId == id)
 								.Where(x => x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Nurture)
-								.Where(x => timeSpan > (DateTime.Now - x.CreatedDate))
-						);
+								.Where(x => x.CreatedDate >= thresholdDate)
+						)).ToList();
 				result.NurtureCount = aeNutureEntityList.Count;
 
 				var aeFeedEntityList = 
-					await unitOfWork.AnimalEventRepository
+					(await unitOfWork.AnimalEventRepository
 						.QueryAsync(
 							q => q.Where(x => x.AnimalId == id)
 								.Where(x => x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Feed)
-								.Where(x => timeSpan > (DateTime.Now - x.CreatedDate))
-						);
+								.Where(x => x.CreatedDate >= thresholdDate)
+						)).ToList();
 				result.FeedCount = aeFeedEntityList.Count;		
 			}
 			_logger.LogDebug("End AnimalInteractor GetAnimal_RecentEventData");
@@ -151,6 +159,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 				aeEntity.AnimalId = id;
 				aeEntity.AnimalEventTypeId = (int)Enumerations.AnimalEventTypes.Nurture;
 				await unitOfWork.AnimalEventRepository.AddAsync(aeEntity);
+
 				_ = await unitOfWork.SaveChangesAsync();
 			}
 			_logger.LogDebug("End AnimalInteractor LoveAnimal");
