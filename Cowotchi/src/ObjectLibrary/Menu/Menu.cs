@@ -9,16 +9,16 @@ public partial class Menu : CanvasLayer
 	[Export]
 	public Meter StomachMeter { get; set; }
 
-	private MeterObservable _meterObservable;
+	private Observables _observables;
 
 	public override void _Ready()
 	{
-		_meterObservable = GetNode<MeterObservable>(Constants.SingletonNodes.MeterObservable);
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 
-		_meterObservable.UpdateHeartMeterValue += LoveMeter.UpdateValue;
-		_meterObservable.UpdateHeartMeterMax += LoveMeter.UpdateMax;
+		_observables.UpdateHeartMeterValue += LoveMeter.UpdateValue;
+		_observables.UpdateHeartMeterMax += LoveMeter.UpdateMax;
 
-		_meterObservable.UpdateHungerMeterValue += StomachMeter.UpdateValue;
-		_meterObservable.UpdateHungerMeterMax += StomachMeter.UpdateMax;
+		_observables.UpdateHungerMeterValue += StomachMeter.UpdateValue;
+		_observables.UpdateHungerMeterMax += StomachMeter.UpdateMax;
 	}
 }

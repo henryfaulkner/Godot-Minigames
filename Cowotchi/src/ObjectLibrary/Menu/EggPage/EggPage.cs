@@ -10,12 +10,12 @@ public partial class EggPage : Control
 	public ActionButton Swap { get; set; }
 	
 	private ILoggerService _logger { get; set; }
-	private ForegroundActionObservable _foregroundActionObservable { get; set; }
+	private Observables _observables { get; set; }
 	
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-		_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		
 		Stats.Pressed += HandleStatsPressed;
 		Swap.Pressed += HandleSwapPressed;
@@ -23,11 +23,11 @@ public partial class EggPage : Control
 
 	private void HandleStatsPressed()
 	{
-		_foregroundActionObservable.EmitStatsPressed();
+		_observables.EmitStatsPressed();
 	}
 
 	private void HandleSwapPressed()
 	{
-		_foregroundActionObservable.EmitSwapPressed();
+		_observables.EmitSwapPressed();
 	}
 }

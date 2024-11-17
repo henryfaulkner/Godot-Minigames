@@ -20,7 +20,7 @@ public partial class PlayerHud : Control
 			else if (ChargeValue + PercentIncrementPerFrame > ThrowSpeedBar.MaxValue) ChargeValue = ThrowSpeedBar.MaxValue;
 			else ChargeValue += PercentIncrementPerFrame;
 			
-			TweenVisualLevelTowardCurrentLevel();
+			TweenCurrentValue();
 		}
 	}
 	
@@ -35,7 +35,7 @@ public partial class PlayerHud : Control
 		var result = ChargeValue / ThrowSpeedBar.MaxValue;
 		ChargeValue = 0.0;
 		IsCharging = false;
-		TweenVisualLevelTowardCurrentLevel();
+		TweenCurrentValue();
 		return result;
 	}
 	
@@ -43,11 +43,11 @@ public partial class PlayerHud : Control
 	{
 		ChargeValue = 0.0;
 		IsCharging = false;
-		TweenVisualLevelTowardCurrentLevel();
+		TweenCurrentValue();
 	}
 	
 	// https://www.youtube.com/watch?v=fpBOEJXZeYs&t=5s
-	private void TweenVisualLevelTowardCurrentLevel()
+	private void TweenCurrentValue()
 	{
 		var tween = ThrowSpeedBar.GetTree().CreateTween();
 		tween.TweenProperty(ThrowSpeedBar, "value", ChargeValue / ThrowSpeedBar.MaxValue * 100, 1).SetTrans(Tween.TransitionType.Linear);

@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://v5sccupxhj7q"]
+[gd_scene load_steps=5 format=3 uid="uid://v5sccupxhj7q"]
 
 [ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Meter/Meter.cs" id="1_eudks"]
 [ext_resource type="Texture2D" uid="uid://cjd4rqo5mb8mh" path="res://src/Assets/Icons/HeartMeterIcon.png" id="1_ew308"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ksxls"]
+bg_color = Color(1, 0.347681, 0.232992, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vaiu7"]
+bg_color = Color(0.174171, 0.721662, 1.92523e-07, 1)
+
 [node name="MeterContainer" type="MarginContainer" node_paths=PackedStringArray("Icon", "ProgressBar", "ValueLabel")]
+offset_right = 795.0
+offset_bottom = 25.0
 size_flags_vertical = 3
 script = ExtResource("1_eudks")
 Icon = NodePath("HBoxContainer/TextureRect")
@@ -28,9 +36,10 @@ stretch_mode = 4
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_ksxls")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vaiu7")
 max_value = 5.0
-value = 5.0
-show_percentage = false
+value = 1.0
 
 [node name="Value" type="Label" parent="HBoxContainer"]
 layout_mode = 2

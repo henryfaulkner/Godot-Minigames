@@ -3,47 +3,60 @@ using Godot;
 
 public class ProgressBarBusiness
 {
-	public float MaxLevel { get; set; }
-	public float CurrentLevel { get; set; }
 	public ProgressBar ProgressBar { get; set; }
 
 	public ProgressBarBusiness(
-		float currentLevel,
-		float maxLevel,
+		float value,
+		float maxValue,
 		ProgressBar progressBar)
 	{
-		CurrentLevel = currentLevel;
-		MaxLevel = maxLevel;
 		ProgressBar = progressBar;
+		ProgressBar.MaxValue = maxValue;
+		ProgressBar.Value = value;
 	}
 
 	public bool IsAtMax()
 	{
-		return CurrentLevel >= MaxLevel;
+		return ProgressBar.Value >= ProgressBar.MaxValue;
 	}
 
 	public void AddToMeter(float amount)
 	{
-		if (CurrentLevel + amount < 0)
+		if (ProgressBar.Value + amount < 0)
 		{
-			CurrentLevel = 0;
+			ProgressBar.Value = 0;
 		}
-		else if (CurrentLevel + amount < MaxLevel)
+		else if (ProgressBar.Value + amount < ProgressBar.MaxValue)
 		{
-			CurrentLevel += amount;
+			ProgressBar.Value += amount;
 		}
 		else
 		{
-			CurrentLevel = MaxLevel;
+			ProgressBar.Value = ProgressBar.MaxValue;
 		}
-		TweenVisualLevelTowardCurrentLevel();
+		TweenCurrentValue();
+	}
+
+	public void UpdateValue(float value)
+	{
+		ProgressBar.Value = value;
+		TweenCurrentValue();
+	}
+
+	public void UpdateMax(float max)
+	{
+		ProgressBar.MaxValue = max;
 	}
 
 	// https://www.youtube.com/watch?v=fpBOEJXZeYs&t=5s
-	public void TweenVisualLevelTowardCurrentLevel()
+	private void TweenCurrentValue()
 	{
-		//if (CurrentLevel == VisualLevel) return;
 		var tween = ProgressBar.GetTree().CreateTween();
-		tween.TweenProperty(ProgressBar, "value", CurrentLevel / MaxLevel * 100, 1).SetTrans(Tween.TransitionType.Linear);
+		tween.TweenProperty(ProgressBar, "value", ProgressBar.Value, 1).SetTrans(Tween.TransitionType.Linear);
+	}
+
+	public string ToString()
+	{
+		return $"{ProgressBar.Value}/{ProgressBar.MaxValue}";
 	}
 }

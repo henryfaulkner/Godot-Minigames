@@ -21,9 +21,8 @@ LoggerService="*res://src/Core/Logging/LoggerService.cs"
 CommonInteractor="*res://src/Core/Interactors/CommonInteractor.cs"
 EggInteractor="*res://src/Core/Interactors/EggInteractor.cs"
 AnimalInteractor="*res://src/Core/Interactors/AnimalInteractor.cs"
-ForegroundActionObservable="*res://src/Core/Services/ForegroundActionObservable.cs"
 ForegroundSubjectFactory="*res://src/Core/ForegroundSubject/ForegroundSubjectFactory.cs"
-MeterObservable="*res://src/Core/Meters/MeterObservable.cs"
+Observables="*res://src/Core/Observables.cs"
 
 [display]
 

@@ -20,9 +20,8 @@ public partial class Main : Node3D
 	private ICommonInteractor _commonInteractor { get; set; } 
 	private IEggInteractor _eggInteractor { get; set; } 
 	private IAnimalInteractor _animalInteractor { get; set; } 
-	private ForegroundActionObservable _foregroundActionObservable { get; set; }
 	private ForegroundSubjectFactory _fgFactory { get; set; }
-	private MeterObservable _meterObservable { get; set; }
+	private Observables _observables { get; set; }
 
 	public override async void _Ready()
 	{
@@ -32,16 +31,15 @@ public partial class Main : Node3D
 			_commonInteractor = GetNode<ICommonInteractor>(Constants.SingletonNodes.CommonInteractor);
 			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
-			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
 			_fgFactory = GetNode<ForegroundSubjectFactory>(Constants.SingletonNodes.ForegroundSubjectFactory);
-			_meterObservable = GetNode<MeterObservable>(Constants.SingletonNodes.MeterObservable);
+			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
-			_foregroundActionObservable.StatsPressed += HandleStatsPressed;
-			_foregroundActionObservable.SwapPressed += HandleSwapPressed;
-			_foregroundActionObservable.NurturePressed += HandleNurturePressed;
-			_foregroundActionObservable.FeedPressed += HandleFeedPressed;
+			_observables.StatsPressed += HandleStatsPressed;
+			_observables.SwapPressed += HandleSwapPressed;
+			_observables.NurturePressed += HandleNurturePressed;
+			_observables.FeedPressed += HandleFeedPressed;
 
 			Gallery = await GetGalleryFromDatabase();
 			ForegroundIndex = -1;
@@ -89,7 +87,7 @@ public partial class Main : Node3D
 				_logger.LogInfo("The Gallery is empty.");
 				return;
 			}
-			_logger.LogInfo("The Gallery is NOT empty.");
+			_logger.LogDebug("The Gallery is NOT empty.");
 			ForegroundIndex += 1;
 			if (ForegroundIndex == Gallery.Count) ForegroundIndex = 0;
 
@@ -101,6 +99,7 @@ public partial class Main : Node3D
 			{
 				case Enumerations.CreatureTypes.Egg:
 					ForegroundSubject = _fgFactory.SpawnEgg(GetNode("."), (EggModel)nextModel, fgPos);
+					UpdateMetersForEgg((EggModel)nextModel);
 					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
 					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
 					break;
@@ -111,7 +110,7 @@ public partial class Main : Node3D
 					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
 					break;
 				default:
-					_logger.LogInfo("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
+					_logger.LogError("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
 					break;
 			}
 			
@@ -126,21 +125,24 @@ public partial class Main : Node3D
 
 	private void UpdateMetersForEgg(EggModel model)
 	{
-		_meterObservable.EmitUpdateHeartMeterMax(-1);
-		_meterObservable.EmitUpdateHeartMeterValue(-1);
+		_logger.LogInfo("Start UpdateMetersForEgg");
+		_observables.EmitUpdateHeartMeterMax(1);
+		_observables.EmitUpdateHeartMeterValue(0);
 
-		_meterObservable.EmitUpdateHungerMeterMax(-1);
-		_meterObservable.EmitUpdateHungerMeterValue(-1);
+		_observables.EmitUpdateHungerMeterMax(1);
+		_observables.EmitUpdateHungerMeterValue(0);
+		_logger.LogInfo("End UpdateMetersForEgg");
 	}
 
 	private void UpdateMetersForAnimal(AnimalModel model)
 	{
-		
-		_meterObservable.EmitUpdateHeartMeterMax(model.LoveMax);
-		_meterObservable.EmitUpdateHeartMeterValue(model.LoveLevel);
+		_logger.LogInfo("Start UpdateMetersForAnimal");
+		_observables.EmitUpdateHeartMeterMax(model.LoveMax);
+		_observables.EmitUpdateHeartMeterValue(model.LoveLevel);
 
-		_meterObservable.EmitUpdateHungerMeterMax(model.StomachMax);
-		_meterObservable.EmitUpdateHungerMeterValue(model.StomachLevel);
+		_observables.EmitUpdateHungerMeterMax(model.StomachMax);
+		_observables.EmitUpdateHungerMeterValue(model.StomachLevel);
+		_logger.LogInfo("End UpdateMetersForAnimal");
 	}
 
 	private async Task<List<CreatureModel>> GetGalleryFromDatabase()

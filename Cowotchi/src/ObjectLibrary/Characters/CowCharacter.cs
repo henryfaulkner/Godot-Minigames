@@ -9,7 +9,7 @@ public partial class CowCharacter : ForegroundSubject
 	public override IExecuter Executer { get; set; }
 	
 	private IAnimalInteractor _animalInteractor { get; set; } 
-	private MeterObservable _meterObservable { get; set; }
+	private Observables _observables { get; set; }
 
 	public void ReadyInstance(AnimalModel model)
 	{
@@ -27,7 +27,7 @@ public partial class CowCharacter : ForegroundSubject
 			_logger.LogDebug($"Executer == null {Executer == null}");
 
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
-			_meterObservable = GetNode<MeterObservable>(Constants.SingletonNodes.MeterObservable);
+			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		} 
 		catch (Exception ex)
 		{
@@ -47,7 +47,7 @@ public partial class CowCharacter : ForegroundSubject
 
 		_animalInteractor.NurtureAnimal(Model.Id);
 		Model.LoveLevel += increase;
-		_meterObservable.EmitUpdateHeartMeterValue(Model.LoveLevel);
+		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
 	} 
 
 	public async Task Eat() 
@@ -56,6 +56,6 @@ public partial class CowCharacter : ForegroundSubject
 
 		_animalInteractor.FeedAnimal(Model.Id);
 		Model.StomachLevel += increase;
-		_meterObservable.EmitUpdateHungerMeterValue(Model.StomachLevel);
+		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
 	} 
 }
