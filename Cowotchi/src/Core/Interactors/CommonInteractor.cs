@@ -10,7 +10,7 @@ public partial class CommonInteractor : Node, ICommonInteractor
 
 	public override void _Ready() 
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 	
 	public async Task InitDatabaseIfRequired()

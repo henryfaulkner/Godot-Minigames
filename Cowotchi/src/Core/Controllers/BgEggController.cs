@@ -16,7 +16,7 @@ public partial class BgEggController : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
 	public override void _PhysicsProcess(double delta)

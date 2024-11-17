@@ -31,10 +31,10 @@ shadow_enabled = true
 [node name="FarmWanderers" type="Node3D" parent="."]
 
 [node name="BgCow" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.31161, 1.5, -0.743503)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.31161, 1.5, -0.743503)
 
 [node name="BgCow2" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16111, 1.5, -0.836737)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.16111, 1.5, -0.836737)
 
 [node name="BgEgg" parent="FarmWanderers" instance=ExtResource("7_a0ut1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76193, 1.46735, -4.03216)

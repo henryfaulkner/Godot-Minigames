@@ -14,7 +14,7 @@ public partial class EggPage : Control
 	
 	public override void _Ready()
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
 		
 		Stats.Pressed += HandleStatsPressed;

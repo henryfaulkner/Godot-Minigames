@@ -26,8 +26,8 @@ public partial class CowCharacter : ForegroundSubject
 			);
 			_logger.LogDebug($"Executer == null {Executer == null}");
 
-			_animalInteractor = GetNode<IAnimalInteractor>("/root/AnimalInteractor");
-			_meterObservable = GetNode<MeterObservable>("/root/MeterObservable");
+			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
+			_meterObservable = GetNode<MeterObservable>(Constants.SingletonNodes.MeterObservable);
 		} 
 		catch (Exception ex)
 		{

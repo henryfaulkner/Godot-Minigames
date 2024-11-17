@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 public partial class AnimalInteractor : Node, IAnimalInteractor 
 {
-	private TimeSpan EVENT_CAPTURE_SPAN = new TimeSpan(1, 0, 0, 0);
+	private TimeSpan DEFAULT_EVENT_CAPTURE_SPAN = new TimeSpan(1, 0, 0, 0);
 
 	private ILoggerService _logger { get; set; }
 
 	public override void _Ready() 
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
 	public async Task<AnimalModel> GetAnimal(int id)
@@ -24,7 +24,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				var entity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
-				var eventSummary = await GetAnimal_RecentEventData(entity.Id);
+				var eventSummary = await GetAnimalEventSummary(entity.Id);
 				result = entity.MapToModel(eventSummary);
 			}
 			_logger.LogDebug("End AnimalInteractor GetAnimal");
@@ -52,7 +52,7 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 				
 				foreach (var entity in entityList)
 				{
-					var eventSummary = await GetAnimal_RecentEventData(entity.Id);
+					var eventSummary = await GetAnimalEventSummary(entity.Id);
 					result.Add(entity.MapToModel(eventSummary));
 				}
 			}
@@ -66,14 +66,14 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		return result;
 	}
 
-	public async Task<AnimalEventSummary> GetAnimal_RecentEventData(int id, TimeSpan? timeSpan = null)
+	public async Task<AnimalEventSummary> GetAnimalEventSummary(int id, TimeSpan? timeSpan = null)
 	{
-		if (timeSpan == null) timeSpan = EVENT_CAPTURE_SPAN;
+		if (timeSpan == null) timeSpan = DEFAULT_EVENT_CAPTURE_SPAN;
 		
 		AnimalEventSummary result = new AnimalEventSummary();
 		try
 		{
-			_logger.LogDebug("Start AnimalInteractor GetAnimal_RecentEventData");
+			_logger.LogDebug("Start AnimalInteractor GetAnimalEventSummary");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
 				DateTime thresholdDate = DateTime.Now - timeSpan.Value;
@@ -96,11 +96,11 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 						)).ToList();
 				result.FeedCount = aeFeedEntityList.Count;		
 			}
-			_logger.LogDebug("End AnimalInteractor GetAnimal_RecentEventData");
+			_logger.LogDebug("End AnimalInteractor GetAnimalEventSummary");
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError($"AnimalInteractor GetAnimal_RecentEventData Error: {ex.Message}", ex);
+			_logger.LogError($"AnimalInteractor GetAnimalEventSummary Error: {ex.Message}", ex);
 			throw;
 		}
 		return result;

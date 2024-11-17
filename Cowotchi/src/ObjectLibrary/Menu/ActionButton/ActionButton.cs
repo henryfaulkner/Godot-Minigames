@@ -42,7 +42,7 @@ public partial class ActionButton : Control
 		TextureButton.MouseExited += HandleMouseExited;
 		TextureButton.Pressed += HandlePressed;
 		
-		_logger = GetNode<LoggerService>("/root/LoggerService");
+		_logger = GetNode<LoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
 

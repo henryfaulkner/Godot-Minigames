@@ -3,9 +3,12 @@
 [ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Meter/Meter.cs" id="1_eudks"]
 [ext_resource type="Texture2D" uid="uid://cjd4rqo5mb8mh" path="res://src/Assets/Icons/HeartMeterIcon.png" id="1_ew308"]
 
-[node name="MeterContainer" type="MarginContainer"]
+[node name="MeterContainer" type="MarginContainer" node_paths=PackedStringArray("Icon", "ProgressBar", "ValueLabel")]
 size_flags_vertical = 3
 script = ExtResource("1_eudks")
+Icon = NodePath("HBoxContainer/TextureRect")
+ProgressBar = NodePath("HBoxContainer/ProgressBar")
+ValueLabel = NodePath("HBoxContainer/Value")
 
 [node name="HBoxContainer" type="GridContainer" parent="."]
 layout_mode = 2

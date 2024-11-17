@@ -8,6 +8,6 @@ public partial class ForegroundSubject : CharacterBody3D, IForegroundSubject
 
 	public override void _Ready()
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 }

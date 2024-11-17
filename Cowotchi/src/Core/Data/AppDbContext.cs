@@ -95,7 +95,7 @@ public class AppDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var connectionString = Constants.ConnectionString;
+		var connectionString = Constants.Config.ConnectionString;
 		optionsBuilder.UseSqlite(connectionString);
 	}
 	

@@ -8,8 +8,10 @@
 [ext_resource type="AudioStream" uid="uid://ls5cexjnk20h" path="res://src/Assets/Audio/2. Menu Select copy.wav" id="4_aop3a"]
 [ext_resource type="PackedScene" uid="uid://v5sccupxhj7q" path="res://src/ObjectLibrary/Menu/Meter/Meter.tscn" id="5_gsw0f"]
 
-[node name="Menu" type="CanvasLayer"]
+[node name="Menu" type="CanvasLayer" node_paths=PackedStringArray("LoveMeter", "StomachMeter")]
 script = ExtResource("1_6ijgr")
+LoveMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartMeterContainer")
+StomachMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerMeterContainer")
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_iwf10")

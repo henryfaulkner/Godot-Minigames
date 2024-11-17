@@ -64,7 +64,7 @@ public partial class BgAnimalController : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_logger = GetNode<ILoggerService>("/root/LoggerService");
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 
 		Timer.Timeout += HandleTimerTimeout;
 	}

@@ -28,13 +28,13 @@ public partial class Main : Node3D
 	{
 		try
 		{
-			_logger = GetNode<ILoggerService>("/root/LoggerService");
-			_commonInteractor = GetNode<ICommonInteractor>("/root/CommonInteractor");
-			_eggInteractor = GetNode<IEggInteractor>("/root/EggInteractor");
-			_animalInteractor = GetNode<IAnimalInteractor>("/root/AnimalInteractor");
+			_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
+			_commonInteractor = GetNode<ICommonInteractor>(Constants.SingletonNodes.CommonInteractor);
+			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
+			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
 			_foregroundActionObservable = GetNode<ForegroundActionObservable>("/root/ForegroundActionObservable");
-			_fgFactory = GetNode<ForegroundSubjectFactory>("/root/ForegroundSubjectFactory");
-			_meterObservable = GetNode<MeterObservable>("/root/MeterObservable");
+			_fgFactory = GetNode<ForegroundSubjectFactory>(Constants.SingletonNodes.ForegroundSubjectFactory);
+			_meterObservable = GetNode<MeterObservable>(Constants.SingletonNodes.MeterObservable);
 
 			await _commonInteractor.InitDatabaseIfRequired();
 

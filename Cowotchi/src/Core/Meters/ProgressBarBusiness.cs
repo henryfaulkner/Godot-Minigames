@@ -5,20 +5,15 @@ public class ProgressBarBusiness
 {
 	public float MaxLevel { get; set; }
 	public float CurrentLevel { get; set; }
-
-	public Label ValueLabel { get; set; }
 	public ProgressBar ProgressBar { get; set; }
 
 	public ProgressBarBusiness(
 		float currentLevel,
 		float maxLevel,
-		Label valueLabel,
 		ProgressBar progressBar)
 	{
 		CurrentLevel = currentLevel;
 		MaxLevel = maxLevel;
-
-		ValueLabel = valueLabel;
 		ProgressBar = progressBar;
 	}
 
@@ -41,7 +36,6 @@ public class ProgressBarBusiness
 		{
 			CurrentLevel = MaxLevel;
 		}
-		ValueLabel.Text = $"{CurrentLevel}/{MaxLevel}";
 		TweenVisualLevelTowardCurrentLevel();
 	}
 
