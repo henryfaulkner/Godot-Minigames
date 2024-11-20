@@ -10,4 +10,7 @@ Minigame based on the Japanese Party Game, Konpira.
 
 - knock is unavailable if user is holding the object
 
-An player loses if they tap or grab the table.s
+An player loses if they tap or grab the table.
+
+
+https://www.youtube.com/watch?v=ZmiZ6VkSJBE&t=2s

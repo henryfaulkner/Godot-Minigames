@@ -24,6 +24,16 @@ public partial class ForegroundSubjectFactory : Node
 		return result;
 	}
 
+	public BgEggCharacter SpawnBgEgg(Node parent, EggModel model, Vector3 position)
+	{
+		var result = _eggScene.Instantiate<BgEggCharacter>();
+		model.InstanceId = result.GetInstanceId();
+		parent.AddChild(result);
+		result.GlobalPosition = position;
+		result.ReadyInstance(model);
+		return result;
+	}
+
 	public CowCharacter SpawnCow(Node parent, AnimalModel model, Vector3 position)
 	{
 		var result = _cowScene.Instantiate<CowCharacter>();
@@ -33,4 +43,14 @@ public partial class ForegroundSubjectFactory : Node
 		result.ReadyInstance(model);
 		return result;
 	}
+
+	public BgCowCharacter SpawnBgCow(Node parent, AnimalModel model, Vector3 position)
+	{
+		var result = _cowScene.Instantiate<BgCowCharacter>();
+		model.InstanceId = result.GetInstanceId();
+		parent.AddChild(result);
+		result.GlobalPosition = position;
+		result.ReadyInstance(model);
+		return result;
+	} 
 }

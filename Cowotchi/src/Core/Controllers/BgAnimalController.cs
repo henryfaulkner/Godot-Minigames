@@ -24,7 +24,7 @@ public partial class BgAnimalController : CharacterBody3D
 	private int MaxJumpNum { get; set; } = 1;
 	
 	[Export]
-	private float RotationSpeed { get; set; } = 1.0f;
+	private float RotationSpeed { get; set; } = 0.2f;
 
 	[Export]
 	private float RotationCloseEnough { get; set; } = 0.2f;
@@ -33,7 +33,7 @@ public partial class BgAnimalController : CharacterBody3D
 
 	#region Instance Variables
 
-	private ILoggerService _logger { get; set; }
+	protected ILoggerService _logger { get; set; }
 
 	private bool IsGrounded { get; set; } // If entity is grounded this frame
 	private bool WasGrounded { get; set; } // If entity was grounded last frame
@@ -96,7 +96,7 @@ public partial class BgAnimalController : CharacterBody3D
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError($"Error in FarmWandererController _PhysicsProcess {ex.Message}", ex);
+			_logger.LogError($"Error in BgAnimalController _PhysicsProcess {ex.Message}", ex);
 		}
 	}
 
@@ -114,8 +114,8 @@ public partial class BgAnimalController : CharacterBody3D
 				HandleWalkingState();
 				break;
 			default:
-				_logger.LogError($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
-				throw new Exception($"FarmWandererController HandleCurrentState failed to map state. Node name: {Name}.");
+				_logger.LogError($"BgAnimalController HandleCurrentState failed to map state. Node name: {Name}.");
+				throw new Exception($"BgAnimalController HandleCurrentState failed to map state. Node name: {Name}.");
 				break;
 		}
 	}

@@ -45,6 +45,8 @@ public partial class Main : Node3D
 			ForegroundIndex = -1;
 			ForegroundSubject = GetNode<ForegroundSubject>(FOREGROUND_PLACEHOLDER_PATH);
 			RotateForegroundSubjects();
+
+			_observables.GrabEgg += HandleGrabEgg;
 		}
 		catch (Exception ex)
 		{
@@ -166,5 +168,20 @@ public partial class Main : Node3D
 		}
 
 		return result;
+	}
+
+	private void HandleGrabEgg(ulong instanceId)
+	{
+		_logger.LogError("Call HandleGrabEgg");
+		_logger.LogError($"instanceId {instanceId}");
+
+		foreach (var model in Gallery)
+		{
+			_logger.LogError($"model.InstanceId {model.InstanceId}");
+			if (model.InstanceId == instanceId)
+			{
+				_logger.LogError("Grabbed egg was found in gallery");
+			}
+		}
 	}
 }

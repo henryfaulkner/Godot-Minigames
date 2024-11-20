@@ -23,7 +23,7 @@ public partial class MainCamera : Camera3D
 			if (hitNode == null) return;
 			if (hitNode.Name.ToString().Contains("BgEgg"))
 			{
-				_logger.LogError($"Grab Egg");
+				//_logger.LogError($"Grab Egg");
 				_observables.EmitGrabEgg(hitNode.GetInstanceId());
 			}
 		}
@@ -35,7 +35,7 @@ public partial class MainCamera : Camera3D
 		if (hitNode == null) return;
 		if (hitNode.Name.ToString().Contains("BgEgg"))
 		{
-			_logger.LogError($"Show Grab Egg");
+			//_logger.LogError($"Show Grab Egg");
 		}
 	}
 	
