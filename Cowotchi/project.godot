@@ -23,6 +23,8 @@ EggInteractor="*res://src/Core/Interactors/EggInteractor.cs"
 AnimalInteractor="*res://src/Core/Interactors/AnimalInteractor.cs"
 ForegroundSubjectFactory="*res://src/Core/ForegroundSubject/ForegroundSubjectFactory.cs"
 Observables="*res://src/Core/Observables.cs"
+AnimationPathFactory="*res://src/Core/Animations/AnimationPathFactory.cs"
+BackgroundSubjectFactory="*res://src/Core/BackgroundSubject/BackgroundSubjectFactory.cs"
 
 [display]
 

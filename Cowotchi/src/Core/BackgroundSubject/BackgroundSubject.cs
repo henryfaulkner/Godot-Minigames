@@ -1,10 +1,8 @@
 using Godot;
 
-public partial class ForegroundSubject : CharacterBody3D, IForegroundSubject
+public partial class BackgroundSubject : CharacterBody3D, IBackgroundSubject
 {
 	public virtual CreatureModel Model { get; set; }
-	public virtual IExecuter Executer { get; set; }
-
 	protected ILoggerService _logger { get; set; }
 
 	public override void _Ready()

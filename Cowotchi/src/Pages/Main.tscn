@@ -32,19 +32,26 @@ shadow_enabled = true
 
 [node name="BgCow" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.31161, 1.5, -0.743503)
+visible = false
 
 [node name="BgCow2" parent="FarmWanderers" instance=ExtResource("7_3n2o0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.16111, 1.5, -0.836737)
+visible = false
 
 [node name="BgEgg" parent="FarmWanderers" instance=ExtResource("7_a0ut1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76193, 1.46735, -4.03216)
+visible = false
 
 [node name="BgEgg2" parent="FarmWanderers" instance=ExtResource("7_a0ut1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27305, 0.86119, -2.33604)
+visible = false
 
 [node name="MainCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 0, 1.55099, 6.71391)
 script = ExtResource("9_gywr0")
+
+[node name="BgSpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9338, -2.08784)
 
 [node name="HUD" type="Node2D" parent="."]
 

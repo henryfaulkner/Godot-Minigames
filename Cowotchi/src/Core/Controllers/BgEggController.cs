@@ -2,11 +2,13 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class BgEggController : CharacterBody3D
+public partial class BgEggController : BackgroundSubject
 {
 	[ExportGroup("Nodes")]
 	[Export]
 	private CollisionShape3D Collider { get; set; }
+	[Export]
+	private MeshInstance3D Mesh { get; set; }
 
 	protected ILoggerService _logger { get; set; }
 	private AnimationPathFactory _animationPathFactory { get; set; }
@@ -36,12 +38,17 @@ public partial class BgEggController : CharacterBody3D
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_animationPathFactory = GetNode<AnimationPathFactory>(Constants.SingletonNodes.AnimationPathFactory);
-		
-		BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), this);
 	}
 
+	private bool IsReady = false;
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!IsReady)
+		{
+			BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), this, Mesh);
+			IsReady = true;
+		}
+		
 		try
 		{
 			// Lock player collider rotation

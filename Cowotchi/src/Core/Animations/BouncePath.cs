@@ -17,9 +17,6 @@ public partial class BouncePath : Path3D
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-
-		_pathFollow = GetNode<PathFollow3D>("./PathFollow3D");
-		_remoteTransform = GetNode<RemoteTransform3D>("./PathFollow3D/RemoteTransform3D");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -29,9 +26,12 @@ public partial class BouncePath : Path3D
 		if (isCycleFinished) EmitSignal(SignalName.CycleFinished);
 	}
 
-	public void ReadyInstance(CharacterBody3D character)
+	public void ReadyInstance(CharacterBody3D character, MeshInstance3D mesh)
 	{
-		PopulatePoints(character);
+		_pathFollow = GetNode<PathFollow3D>("./PathFollow3D");
+		_remoteTransform = GetNode<RemoteTransform3D>("./PathFollow3D/RemoteTransform3D");
+		
+		PopulatePoints(character, mesh);
 		AttachRemoteToCharacter(character);
 	}
 
@@ -40,24 +40,24 @@ public partial class BouncePath : Path3D
 		IsAnimating = true;
 	}
 
-	private void PopulatePoints(CharacterBody3D character)
+	private void PopulatePoints(CharacterBody3D character, MeshInstance3D mesh)
 	{
-		var characterPos = character.Position;
-		var characterSize = GetCharacterSize(character);
+		var pos = character.Position;
+		var size = GetSize(mesh);
 
-		Curve.AddPoint(characterPos);
+		Curve.AddPoint(pos);
 		Curve.AddPoint(new Vector3(
-			characterPos.X,
-			characterPos.Y + characterSize.Y,
-			characterPos.Z
+			pos.X,
+			pos.Y + size.Y,
+			pos.Z
 		));
-		Curve.AddPoint(characterPos);
+		Curve.AddPoint(pos);
 		Curve.AddPoint(new Vector3(
-			characterPos.X,
-			characterPos.Y * (characterSize.Y * 2),
-			characterPos.Z
+			pos.X,
+			pos.Y * (size.Y * 2),
+			pos.Z
 		));
-		Curve.AddPoint(characterPos);
+		Curve.AddPoint(pos);
 	}
 
 	private void AttachRemoteToCharacter(CharacterBody3D character)
@@ -89,11 +89,9 @@ public partial class BouncePath : Path3D
 		return result;
 	}
 
-	private Vector3 GetCharacterSize(CharacterBody3D character)
+	private Vector3 GetSize(MeshInstance3D mesh)
 	{
-		 // Get the global AABB of the character
-		var globalAabb = character.GlobalTransform.Basis.XformAabb(character.GetAabb());
-		// Return the size of the global AABB
-		return globalAabb.Size;
+		return mesh.GetAabb().Size;
 	}
+
 }

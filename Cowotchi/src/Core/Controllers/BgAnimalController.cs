@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class BgAnimalController : CharacterBody3D
+public partial class BgAnimalController : BackgroundSubject
 {
 	#region Exports
 

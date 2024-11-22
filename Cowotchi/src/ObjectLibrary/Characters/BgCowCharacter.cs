@@ -5,8 +5,6 @@ public partial class BgCowCharacter : BgAnimalController
 {
 	public AnimalModel Model { get; set; }
 
-	
-
 	public void ReadyInstance(AnimalModel model)
 	{
 		_logger.LogDebug("Start BgCowController ReadyInstance");
