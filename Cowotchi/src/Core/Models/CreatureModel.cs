@@ -7,4 +7,16 @@ public class CreatureModel
 	public string Name { get; set; }
 	public Enumerations.CreatureTypes CreatureType { get; protected set; }
 	public DateTime BirthDate { get; set; }
+
+	// This levels are calculated by number of event record 
+    // created within a designated time span.
+    public int StomachLevel { get; set; } 
+	public int StomachMax { get; set; }
+	public int LoveLevel { get; set; }
+	public int LoveMax { get; set; }
+
+	public CreatureModel(Enumerations.CreatureTypes creatureType)
+	{
+		CreatureType = creatureType;
+	}
 }

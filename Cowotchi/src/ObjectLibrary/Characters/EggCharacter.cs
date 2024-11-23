@@ -2,23 +2,34 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EggCharacter : ForegroundSubject
+public partial class EggCharacter : CharacterBody3D, ICharacterWithForegroundSubject<CreatureModel>
 {
-	private EggModel Model { get; set; }
+	public ForegroundSubject<CreatureModel> ForegroundSubject { get; set; }
+	public CreatureModel Model { get; set; }
+	public IExecuter Executer { get; set; }
 	
-	public override IExecuter Executer { get; set; } 
+	private ILoggerService _logger { get; set; }
+	private IEggInteractor _eggInteractor { get; set; } 
+	private Observables _observables { get; set; }
 
-	public void ReadyInstance(EggModel model)
+	public void ReadyInstance(CreatureModel model)
 	{
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_logger.LogDebug("Start EggCharacter ReadyInstance");
 		try
 		{
+			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
+			ForegroundSubject.ReadyInstance(this, model);
+			
 			Model = model;
 
 			Executer = new EggExecuter(
 				model,
 				_logger
 			);
+
+			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
+			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		} 
 		catch (Exception ex)
 		{

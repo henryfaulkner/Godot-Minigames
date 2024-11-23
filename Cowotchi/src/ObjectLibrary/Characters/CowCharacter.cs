@@ -2,20 +2,25 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class CowCharacter : ForegroundSubject
+public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSubject<CreatureModel>
 {
-	private AnimalModel Model { get; set; }
-
-	public override IExecuter Executer { get; set; }
+	public ForegroundSubject<CreatureModel> ForegroundSubject { get; set; }
+	public CreatureModel Model { get; set; }
+	public IExecuter Executer { get; set; }
 	
+	private ILoggerService _logger { get; set; }
 	private IAnimalInteractor _animalInteractor { get; set; } 
 	private Observables _observables { get; set; }
 
-	public void ReadyInstance(AnimalModel model)
+	public void ReadyInstance(CreatureModel model)
 	{
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_logger.LogDebug("Start CowCharacter ReadyInstance");
 		try
 		{
+			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
+			ForegroundSubject.ReadyInstance(this, model);
+			
 			Model = model;
 
 			Executer = new AnimalExecuter(

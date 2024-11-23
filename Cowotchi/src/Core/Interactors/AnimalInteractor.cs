@@ -15,9 +15,9 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
-	public async Task<AnimalModel> GetAnimal(int id)
+	public async Task<CreatureModel> GetAnimal(int id)
 	{
-		AnimalModel result;
+		CreatureModel result;
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor GetAnimal");
@@ -37,9 +37,9 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		return result;
 	}
 
-	public async Task<List<AnimalModel>> GetAllAnimals()
+	public async Task<List<CreatureModel>> GetAllAnimals()
 	{
-		var result = new List<AnimalModel>();
+		var result = new List<CreatureModel>();
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor GetAllAnimals");

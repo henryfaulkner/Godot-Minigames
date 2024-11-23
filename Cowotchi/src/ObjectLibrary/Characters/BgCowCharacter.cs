@@ -1,16 +1,25 @@
 using Godot;
 using System;
 
-public partial class BgCowCharacter : BgAnimalController
+public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgroundSubject<CreatureModel>
 {
-	public AnimalModel Model { get; set; }
+	public BackgroundSubject<CreatureModel> BackgroundSubject { get; set; }
+	public CreatureModel Model { get; set; }
+	
+	private ILoggerService _logger { get; set; }
+	private Observables _observables { get; set; }
 
-	public void ReadyInstance(AnimalModel model)
+	public void ReadyInstance(CreatureModel model)
 	{
 		_logger.LogDebug("Start BgCowController ReadyInstance");
 		try
 		{
+			BackgroundSubject = new BackgroundSubject<CreatureModel>(_logger);
+			BackgroundSubject.ReadyInstance(this, model);
+
 			Model = model;
+			
+			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		}
 		catch (Exception ex)
 		{

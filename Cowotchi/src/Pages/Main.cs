@@ -12,10 +12,10 @@ public partial class Main : Node3D
 	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
 	public List<CreatureModel> CreatureList { get; set; }
-	public List<BackgroundSubject> Gallery { get; set; }
+	public List<BackgroundSubject<CreatureModel>> Gallery { get; set; }
 
-	public ForegroundSubject ForegroundSubject { get; set; }
-	public int ForegroundIndex { get; set; }
+	public ICharacterWithForegroundSubject<CreatureModel> ForegroundCharacter { get; set; }
+	public int ForegroundCreatureIndex { get; set; } = -1;
 
 	private ILoggerService _logger { get; set; }
 	private ICommonInteractor _commonInteractor { get; set; } 
@@ -36,6 +36,7 @@ public partial class Main : Node3D
 			_fgFactory = GetNode<ForegroundSubjectFactory>(Constants.SingletonNodes.ForegroundSubjectFactory);
 			_bgFactory = GetNode<BackgroundSubjectFactory>(Constants.SingletonNodes.BackgroundSubjectFactory);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+			_logger.LogInfo("Log 1");
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
@@ -44,15 +45,19 @@ public partial class Main : Node3D
 			_observables.NurturePressed += HandleNurturePressed;
 			_observables.FeedPressed += HandleFeedPressed;
 
+			_logger.LogInfo("Log 2");
 			CreatureList = await GetCreatureListFromDatabase();
-			Gallery = new List<BackgroundSubject>();
+			Gallery = new List<BackgroundSubject<CreatureModel>>();
 			foreach (var creature in CreatureList)
 			{
 				AddBackgroundSubject(creature);
 			}
-			ForegroundIndex = -1;
-			ForegroundSubject = GetNode<ForegroundSubject>(FOREGROUND_PLACEHOLDER_PATH);
-			RotateForegroundSubjects();
+			_logger.LogInfo("Log 3");
+			var placeholder = GetNode<CharacterBody3D>(FOREGROUND_PLACEHOLDER_PATH);
+			ForegroundCharacter = _fgFactory.SpawnEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), placeholder.Position);
+			_logger.LogInfo("Log 4");
+			RotateForegroundSubjects(ForegroundCharacter);
+			_logger.LogInfo("Log Last");
 
 			_observables.GrabEgg += HandleGrabEgg;
 		}
@@ -66,60 +71,59 @@ public partial class Main : Node3D
 	private void HandleStatsPressed()
 	{
 		_logger.LogDebug("Call Menu HandleStatsPressed");
-		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Stats);
+		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Stats);
 	}
 
 	private void HandleSwapPressed()
 	{
 		_logger.LogDebug("Call Menu HandleSwapPressed");
-		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
-		RotateForegroundSubjects(); 
+		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
+		RotateForegroundSubjects(ForegroundCharacter); 
 	}
 
 	private void HandleNurturePressed()
 	{
 		_logger.LogDebug("Call Menu HandleNurturePressed");
-		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Nurture);
+		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Nurture);
 	}
 
 	private void HandleFeedPressed()
 	{
 		_logger.LogDebug("Call Menu HandleFeedPressed");
-		ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Feed);
+		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Feed);
 	}
 
-	private void RotateForegroundSubjects()
+	private void RotateForegroundSubjects(ICharacterWithForegroundSubject<CreatureModel> fgCharacter)
 	{
 		try
 		{
+			_logger.LogInfo("Log 5");
 			if (!CreatureList.Any())
 			{
 				_logger.LogInfo("The CreatureList is empty.");
 				return;
 			}
 			_logger.LogDebug("The CreatureList is NOT empty.");
-			ForegroundIndex += 1;
-			if (ForegroundIndex == CreatureList.Count) ForegroundIndex = 0;
+			ForegroundCreatureIndex += 1;
+			if (ForegroundCreatureIndex == CreatureList.Count) ForegroundCreatureIndex = 0;
 
-			var fgPos = ForegroundSubject.GlobalPosition;
-			var oldFgInstanceId = ForegroundSubject.Model.InstanceId;
-			ForegroundSubject.QueueFree();
+			_logger.LogInfo("Log 5.5");
+			var fgPos = fgCharacter.ForegroundSubject.CharacterBody3D.GlobalPosition;
+			_logger.LogInfo("Log 5.6");
+			var oldFgInstanceId = fgCharacter.ForegroundSubject.Model?.InstanceId ?? ulong.MaxValue;
+			fgCharacter.ForegroundSubject.CharacterBody3D.QueueFree();
+			_logger.LogInfo("Log 6");
 
-			var nextModel = CreatureList[ForegroundIndex];
-			var newFgInstanceId = ForegroundSubject.Model.InstanceId;
+			var nextModel = CreatureList[ForegroundCreatureIndex];
 			switch (nextModel.CreatureType)
 			{
 				case Enumerations.CreatureTypes.Egg:
-					ForegroundSubject = _fgFactory.SpawnEgg(GetNode("."), (EggModel)nextModel, fgPos);
-					UpdateMetersForEgg((EggModel)nextModel);
-					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
-					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
+					fgCharacter.ForegroundSubject = _fgFactory.SpawnEgg(GetNode("."), (CreatureModel)nextModel, fgPos).ForegroundSubject;
+					UpdateMetersForEgg((CreatureModel)nextModel);
 					break;
 				case Enumerations.CreatureTypes.Cow:
-					ForegroundSubject = _fgFactory.SpawnCow(GetNode("."), (AnimalModel)nextModel, fgPos);
-					UpdateMetersForAnimal((AnimalModel)nextModel);
-					_logger.LogDebug($"ForegroundSubject == null {ForegroundSubject == null}");
-					_logger.LogDebug($"ForegroundSubject.Executer == null {ForegroundSubject.Executer == null}");
+					fgCharacter.ForegroundSubject = _fgFactory.SpawnCow(GetNode("."), (CreatureModel)nextModel, fgPos).ForegroundSubject;
+					UpdateMetersForAnimal((CreatureModel)nextModel);
 					break;
 				default:
 					_logger.LogError("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
@@ -128,9 +132,15 @@ public partial class Main : Node3D
 			
 			SubjectNameLabel.Text = nextModel.Name;
 
-			BackgroundSubject newFgBg = GetBackgroundSubject(oldFgInstanceId);
+			_logger.LogInfo($"nextModel == null {nextModel == null}");
+			var newFgInstanceId = fgCharacter.ForegroundSubject.Model.InstanceId;
+			_logger.LogInfo("Log 7");
+			BackgroundSubject<CreatureModel> newFgBg = GetBackgroundSubject(newFgInstanceId);
+			_logger.LogInfo("Log 8");
 			RemoveBackgroundSubject(newFgBg);
-			AddBackgroundSubject(GetCreatureInstance(oldFgInstanceId));
+			_logger.LogInfo("Log 9");
+			if (oldFgInstanceId != ulong.MaxValue) AddBackgroundSubject(GetCreatureInstance(oldFgInstanceId));
+			_logger.LogInfo("Log 10");
 		} 
 		catch (Exception ex)
 		{
@@ -140,35 +150,40 @@ public partial class Main : Node3D
 	}
 
 	
-	private void RemoveBackgroundSubject(BackgroundSubject bgSubject)
+	private void RemoveBackgroundSubject(BackgroundSubject<CreatureModel> bgSubject)
 	{
 		Gallery.Remove(bgSubject);
-		bgSubject.QueueFree();
+		bgSubject.CharacterBody3D.QueueFree();
 	}
 
 	private void AddBackgroundSubject(CreatureModel model)
 	{
+		_logger.LogInfo("Log 7.1");
 		var defaultSpawnPointNode = GetNode<Node3D>(Constants.KeyNodePaths.BgSpawnPoint);
+		_logger.LogInfo("Log 7.2");
 		var spawnPoint = AlterSpawnPoint(defaultSpawnPointNode.Position);
-		
+		_logger.LogInfo("Log 7.3");
 		switch (model.CreatureType)
 		{
 			case Enumerations.CreatureTypes.Egg:
 				{
-					var bgSubject = _bgFactory.SpawnEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (EggModel)model, spawnPoint);
-					Gallery.Add((BackgroundSubject)bgSubject);
+					var bgSubject = _bgFactory.SpawnEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+					_logger.LogInfo("Log 7.4");
+					Gallery.Add(bgSubject.BackgroundSubject);
 					break;
 				}
 			case Enumerations.CreatureTypes.Cow:
 				{
-					var bgSubject = _bgFactory.SpawnCow(GetNode(Constants.KeyNodePaths.FarmWanderers), (AnimalModel)model, spawnPoint);
-					Gallery.Add((BackgroundSubject)bgSubject);
+					var bgSubject = _bgFactory.SpawnCow(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+					_logger.LogInfo("Log 7.4");
+					Gallery.Add(bgSubject.BackgroundSubject);
 					break;
 				}
 			default:
 				_logger.LogError("Main AddBackgroundSubject: Next model was not mapped to a creature type");
 				break;
 		}
+		_logger.LogInfo("Log 7.5");
 	}
 
 	private Vector3 AlterSpawnPoint(Vector3 spawnPoint)
@@ -188,7 +203,7 @@ public partial class Main : Node3D
 		);
 	}
 
-	private void UpdateMetersForEgg(EggModel model)
+	private void UpdateMetersForEgg(CreatureModel model)
 	{
 		_logger.LogInfo("Start UpdateMetersForEgg");
 		_observables.EmitUpdateHeartMeterMax(1);
@@ -199,7 +214,7 @@ public partial class Main : Node3D
 		_logger.LogInfo("End UpdateMetersForEgg");
 	}
 
-	private void UpdateMetersForAnimal(AnimalModel model)
+	private void UpdateMetersForAnimal(CreatureModel model)
 	{
 		_logger.LogInfo("Start UpdateMetersForAnimal");
 		_observables.EmitUpdateHeartMeterMax(model.LoveMax);
@@ -243,11 +258,17 @@ public partial class Main : Node3D
 		throw new Exception("Creature not found.");
 	}
 
-	private BackgroundSubject GetBackgroundSubject(ulong instanceId)
+	private BackgroundSubject<CreatureModel> GetBackgroundSubject(ulong instanceId)
 	{
+		_logger.LogInfo("Log 7.01");
 		foreach (var bgSubject in Gallery)
 		{
-			if (bgSubject.Model.InstanceId == instanceId) return bgSubject;
+			_logger.LogInfo($"bgSubject.Model == null {bgSubject.Model == null}");
+			if (bgSubject.Model.InstanceId == instanceId) 
+			{
+				_logger.LogInfo("Log 7.02");
+				return bgSubject;
+			}
 		}
 		_logger.LogError("Main GetBackgroundSubject: BackgroundSubject not found.");
 		throw new Exception("Creature not found.");

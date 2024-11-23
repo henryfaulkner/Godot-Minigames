@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class AnimalExecuter : IExecuter
 {
-	private AnimalModel Model { get; set; }
+	private CreatureModel Model { get; set; }
 	private ILoggerService _logger { get; set; }
 
 	private Action? StatsCallback { get; set; }
@@ -12,7 +12,7 @@ public class AnimalExecuter : IExecuter
 	private Action? FeedCallback { get; set; }
 
 	public AnimalExecuter(
-		AnimalModel model, 
+		CreatureModel model, 
 		ILoggerService logger,
 		Action? statsCallback = null, 
 		Action? swapCallback = null,

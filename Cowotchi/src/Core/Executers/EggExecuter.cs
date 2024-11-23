@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 public class EggExecuter : IExecuter
 {
-	private EggModel Model { get; set; }
+	private CreatureModel Model { get; set; }
 	private ILoggerService _logger { get; set; }
 
 	private Action? StatsCallback { get; set; }
@@ -12,7 +12,7 @@ public class EggExecuter : IExecuter
 	private Action? FeedCallback { get; set; }
 
 	public EggExecuter(
-		EggModel model, 
+		CreatureModel model, 
 		ILoggerService logger,
 		Action? statsCallback = null, 
 		Action? swapCallback = null,

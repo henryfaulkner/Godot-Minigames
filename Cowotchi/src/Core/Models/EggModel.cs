@@ -1,7 +1,7 @@
-public class EggModel : CreatureModel
-{
-	public EggModel() : base()
-	{
-		CreatureType = Enumerations.CreatureTypes.Egg;
-	}
-}
+// hpublic class EggModel : CreatureModel
+// {
+// 	public CreatureModel() : base()
+// 	{
+// 		CreatureType = Enumerations.CreatureTypes.Egg;
+// 	}
+// }

@@ -3,19 +3,19 @@ using System;
 
 public partial class BackgroundSubjectFactory : Node
 {
-    private readonly StringName BG_EGG_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgEggCharacter.tscn";
-    private readonly StringName BG_COW_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgCowCharacter.tscn";
+	private readonly StringName BG_EGG_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgEggCharacter.tscn";
+	private readonly StringName BG_COW_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgCowCharacter.tscn";
 
-    private readonly PackedScene _bgEggScene;
-    private readonly PackedScene _bgCowScene;
+	private readonly PackedScene _bgEggScene;
+	private readonly PackedScene _bgCowScene;
 
-    public BackgroundSubjectFactory()
-    {
-        _bgEggScene = (PackedScene)ResourceLoader.Load(BG_EGG_SCENE_PATH);
-        _bgCowScene = (PackedScene)ResourceLoader.Load(BG_COW_SCENE_PATH);
-    }
+	public BackgroundSubjectFactory()
+	{
+		_bgEggScene = (PackedScene)ResourceLoader.Load(BG_EGG_SCENE_PATH);
+		_bgCowScene = (PackedScene)ResourceLoader.Load(BG_COW_SCENE_PATH);
+	}
 
-    public BgEggCharacter SpawnEgg(Node parent, EggModel model, Vector3 position)
+	public BgEggCharacter SpawnEgg(Node parent, CreatureModel model, Vector3 position)
 	{
 		var result = _bgEggScene.Instantiate<BgEggCharacter>();
 		model.InstanceId = result.GetInstanceId();
@@ -25,7 +25,7 @@ public partial class BackgroundSubjectFactory : Node
 		return result;
 	}
 
-	public BgCowCharacter SpawnCow(Node parent, AnimalModel model, Vector3 position)
+	public BgCowCharacter SpawnCow(Node parent, CreatureModel model, Vector3 position)
 	{
 		var result = _bgCowScene.Instantiate<BgCowCharacter>();
 		model.InstanceId = result.GetInstanceId();

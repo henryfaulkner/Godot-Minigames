@@ -27,9 +27,9 @@ public partial class EggInteractor : Node, IEggInteractor
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
-	public async Task<EggModel> CreateEgg()
+	public async Task<CreatureModel> CreateEgg()
 	{
-		EggModel result;
+		CreatureModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor CreateEgg");
@@ -61,9 +61,9 @@ public partial class EggInteractor : Node, IEggInteractor
 		return result;
 	}
 
-	public async Task<EggModel> GetEgg(int id)
+	public async Task<CreatureModel> GetEgg(int id)
 	{
-		EggModel result;
+		CreatureModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor GetEgg");
@@ -82,9 +82,9 @@ public partial class EggInteractor : Node, IEggInteractor
 		return result;
 	}
 	
-	public async Task<List<EggModel>> GetAllEggs()
+	public async Task<List<CreatureModel>> GetAllEggs()
 	{
-		var result = new List<EggModel>();
+		var result = new List<CreatureModel>();
 		try
 		{
 			_logger.LogDebug("Start EggInteractor GetAllEggs");
@@ -131,9 +131,9 @@ public partial class EggInteractor : Node, IEggInteractor
 		}
 	}
 
-	public async Task<AnimalModel> HatchEgg(int id)
+	public async Task<CreatureModel> HatchEgg(int id)
 	{
-		AnimalModel result;
+		CreatureModel result;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor HatchEgg");

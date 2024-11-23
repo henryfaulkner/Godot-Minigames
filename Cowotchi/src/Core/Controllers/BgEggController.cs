@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class BgEggController : BackgroundSubject
+public partial class BgEggController : CharacterBody3D
 {
 	[ExportGroup("Nodes")]
 	[Export]

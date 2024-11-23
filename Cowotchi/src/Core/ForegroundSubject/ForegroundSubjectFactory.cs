@@ -14,7 +14,7 @@ public partial class ForegroundSubjectFactory : Node
 		_cowScene = (PackedScene)ResourceLoader.Load(COW_SCENE_PATH);
 	}
 
-	public EggCharacter SpawnEgg(Node parent, EggModel model, Vector3 position)
+	public EggCharacter SpawnEgg(Node parent, CreatureModel model, Vector3 position)
 	{
 		var result = _eggScene.Instantiate<EggCharacter>();
 		model.InstanceId = result.GetInstanceId();
@@ -24,7 +24,7 @@ public partial class ForegroundSubjectFactory : Node
 		return result;
 	}
 
-	public CowCharacter SpawnCow(Node parent, AnimalModel model, Vector3 position)
+	public CowCharacter SpawnCow(Node parent, CreatureModel model, Vector3 position)
 	{
 		var result = _cowScene.Instantiate<CowCharacter>();
 		model.InstanceId = result.GetInstanceId();

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public interface IEggInteractor
 {
-	Task<EggModel> CreateEgg();
-	Task<List<EggModel>> GetAllEggs();
-	Task<EggModel> GetEgg(int id);
+	Task<CreatureModel> CreateEgg();
+	Task<List<CreatureModel>> GetAllEggs();
+	Task<CreatureModel> GetEgg(int id);
 	Task RenameEgg(int id, string name);
-	Task<AnimalModel> HatchEgg(int id);
+	Task<CreatureModel> HatchEgg(int id);
 }
