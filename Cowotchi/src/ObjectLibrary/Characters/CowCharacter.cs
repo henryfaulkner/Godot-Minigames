@@ -18,9 +18,6 @@ public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSub
 		_logger.LogDebug("Start CowCharacter ReadyInstance");
 		try
 		{
-			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
-			ForegroundSubject.ReadyInstance(this, model);
-			
 			Model = model;
 
 			Executer = new AnimalExecuter(
@@ -29,7 +26,9 @@ public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSub
 				nurtureCallback: () => ReceiveLove(),
 				feedCallback: () => Eat()
 			);
-			_logger.LogDebug($"Executer == null {Executer == null}");
+
+			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
+			ForegroundSubject.ReadyInstance(this, model, Executer);
 
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);

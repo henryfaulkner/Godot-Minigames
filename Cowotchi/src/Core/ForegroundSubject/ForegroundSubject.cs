@@ -12,12 +12,13 @@ public partial class ForegroundSubject<TModel> : IForegroundSubject<TModel> wher
 		_logger = logger;
 	}
 
-	public virtual void ReadyInstance(CharacterBody3D characterBody3D, TModel model)
+	public virtual void ReadyInstance(CharacterBody3D characterBody3D, TModel model, IExecuter executer)
 	{
 		_logger.LogDebug("Start ReadyInstance");
 		_logger.LogDebug($"Initializing ForegroundSubject with model of type {typeof(TModel).Name}");
 		CharacterBody3D = characterBody3D;
 		Model = model;
+		Executer = executer;
 		_logger.LogDebug("End ReadyInstance");
 	}
 }

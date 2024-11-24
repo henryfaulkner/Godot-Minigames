@@ -18,15 +18,15 @@ public partial class EggCharacter : CharacterBody3D, ICharacterWithForegroundSub
 		_logger.LogDebug("Start EggCharacter ReadyInstance");
 		try
 		{
-			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
-			ForegroundSubject.ReadyInstance(this, model);
-			
 			Model = model;
 
 			Executer = new EggExecuter(
 				model,
 				_logger
 			);
+
+			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
+			ForegroundSubject.ReadyInstance(this, model, Executer);
 
 			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);

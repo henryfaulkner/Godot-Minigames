@@ -6,7 +6,6 @@ public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgrou
 	public BackgroundSubject<CreatureModel> BackgroundSubject { get; set; }
 	public CreatureModel Model { get; set; }
 	
-	private ILoggerService _logger { get; set; }
 	private Observables _observables { get; set; }
 
 	public void ReadyInstance(CreatureModel model)
@@ -14,6 +13,7 @@ public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgrou
 		_logger.LogDebug("Start BgCowController ReadyInstance");
 		try
 		{
+			_logger.LogInfo("7.35");
 			BackgroundSubject = new BackgroundSubject<CreatureModel>(_logger);
 			BackgroundSubject.ReadyInstance(this, model);
 

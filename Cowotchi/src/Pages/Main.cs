@@ -77,6 +77,9 @@ public partial class Main : Node3D
 	private void HandleSwapPressed()
 	{
 		_logger.LogDebug("Call Menu HandleSwapPressed");
+		_logger.LogInfo($"ForegroundCharacter == null {ForegroundCharacter == null}");
+		_logger.LogInfo($"ForegroundCharacter.ForegroundSubject == null {ForegroundCharacter.ForegroundSubject == null}");
+		_logger.LogInfo($"ForegroundCharacter.ForegroundSubject.Executer == null {ForegroundCharacter.ForegroundSubject.Executer == null}");
 		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
 		RotateForegroundSubjects(ForegroundCharacter); 
 	}
@@ -110,7 +113,7 @@ public partial class Main : Node3D
 			_logger.LogInfo("Log 5.5");
 			var fgPos = fgCharacter.ForegroundSubject.CharacterBody3D.GlobalPosition;
 			_logger.LogInfo("Log 5.6");
-			var oldFgInstanceId = fgCharacter.ForegroundSubject.Model?.InstanceId ?? ulong.MaxValue;
+			var oldFgModel = fgCharacter.ForegroundSubject.Model;
 			fgCharacter.ForegroundSubject.CharacterBody3D.QueueFree();
 			_logger.LogInfo("Log 6");
 
@@ -139,7 +142,7 @@ public partial class Main : Node3D
 			_logger.LogInfo("Log 8");
 			RemoveBackgroundSubject(newFgBg);
 			_logger.LogInfo("Log 9");
-			if (oldFgInstanceId != ulong.MaxValue) AddBackgroundSubject(GetCreatureInstance(oldFgInstanceId));
+			if (oldFgModel != null) AddBackgroundSubject(oldFgModel);
 			_logger.LogInfo("Log 10");
 		} 
 		catch (Exception ex)
@@ -252,6 +255,9 @@ public partial class Main : Node3D
 	{
 		foreach (var model in CreatureList)
 		{
+			_logger.LogInfo($"GetCreatureInstance model.instanceId {model.InstanceId}");
+			_logger.LogInfo($"GetCreatureInstance instanceId {instanceId}");
+			
 			if (model.InstanceId == instanceId) return model;
 		}
 		_logger.LogError("Main GetCreatureInstance: Creature not found.");
