@@ -47,7 +47,7 @@ public partial class Enumerations
 
 
 
-	public enum ForegroundActions
+	public enum Commands
 	{
 		[Description("Stats")]
 		Stats,

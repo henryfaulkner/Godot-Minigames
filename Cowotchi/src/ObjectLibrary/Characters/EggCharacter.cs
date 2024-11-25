@@ -2,11 +2,10 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EggCharacter : CharacterBody3D, ICharacterWithForegroundSubject<CreatureModel>
+public partial class EggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 {
-	public ForegroundSubject<CreatureModel> ForegroundSubject { get; set; }
+	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
-	public IExecuter Executer { get; set; }
 	
 	private ILoggerService _logger { get; set; }
 	private IEggInteractor _eggInteractor { get; set; } 
@@ -20,13 +19,8 @@ public partial class EggCharacter : CharacterBody3D, ICharacterWithForegroundSub
 		{
 			Model = model;
 
-			Executer = new EggExecuter(
-				model,
-				_logger
-			);
-
-			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
-			ForegroundSubject.ReadyInstance(this, model, Executer);
+			Subject = new Subject<CreatureModel>(_logger);
+			Subject.ReadyInstance(this, model);
 
 			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);

@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
-public partial class BgEggCharacter : BgEggController, ICharacterWithBackgroundSubject<CreatureModel>
+public partial class BgEggCharacter : BgEggController, ICharacter<CreatureModel>
 {
-	public BackgroundSubject<CreatureModel> BackgroundSubject { get; set; }
+	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
 	
 	private Observables _observables { get; set; }
@@ -13,12 +14,11 @@ public partial class BgEggCharacter : BgEggController, ICharacterWithBackgroundS
 		_logger.LogDebug("Start BgEggController ReadyInstance");
 		try
 		{
-			_logger.LogInfo("7.35");
-			BackgroundSubject = new BackgroundSubject<CreatureModel>(_logger);
-			BackgroundSubject.ReadyInstance(this, model);
-
 			Model = model;
-			
+
+			Subject = new Subject<CreatureModel>(_logger);
+			Subject.ReadyInstance(this, model);
+
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		}
 		catch (Exception ex)
@@ -27,4 +27,9 @@ public partial class BgEggCharacter : BgEggController, ICharacterWithBackgroundS
 		}
 		_logger.LogDebug("Start BgEggController ReadyInstance");
 	}
+
+	public async Task Hatch() 
+	{
+		throw new NotImplementedException();
+	} 
 }

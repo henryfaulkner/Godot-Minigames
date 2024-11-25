@@ -12,9 +12,9 @@ public partial class Main : Node3D
 	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
 	public List<CreatureModel> CreatureList { get; set; }
-	public List<BackgroundSubject<CreatureModel>> Gallery { get; set; }
+	public List<Subject<CreatureModel>> BgGallery { get; set; }
 
-	public ICharacterWithForegroundSubject<CreatureModel> ForegroundCharacter { get; set; }
+	public ICharacter<CreatureModel> ForegroundCharacter { get; set; }
 	public int ForegroundCreatureIndex { get; set; } = -1;
 
 	private ILoggerService _logger { get; set; }
@@ -24,6 +24,7 @@ public partial class Main : Node3D
 	private ForegroundSubjectFactory _fgFactory { get; set; }
 	private BackgroundSubjectFactory _bgFactory { get; set; }
 	private Observables _observables { get; set; }
+	public CommandInvoker _invoker { get; set; }
 
 	public override async void _Ready()
 	{
@@ -40,14 +41,11 @@ public partial class Main : Node3D
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
-			_observables.StatsPressed += HandleStatsPressed;
 			_observables.SwapPressed += HandleSwapPressed;
-			_observables.NurturePressed += HandleNurturePressed;
-			_observables.FeedPressed += HandleFeedPressed;
 
 			_logger.LogInfo("Log 2");
 			CreatureList = await GetCreatureListFromDatabase();
-			Gallery = new List<BackgroundSubject<CreatureModel>>();
+			BgGallery = new List<BackgroundSubject<CreatureModel>>();
 			foreach (var creature in CreatureList)
 			{
 				AddBackgroundSubject(creature);
@@ -68,35 +66,12 @@ public partial class Main : Node3D
 		}
 	}
 
-	private void HandleStatsPressed()
-	{
-		_logger.LogDebug("Call Menu HandleStatsPressed");
-		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Stats);
-	}
-
 	private void HandleSwapPressed()
 	{
-		_logger.LogDebug("Call Menu HandleSwapPressed");
-		_logger.LogInfo($"ForegroundCharacter == null {ForegroundCharacter == null}");
-		_logger.LogInfo($"ForegroundCharacter.ForegroundSubject == null {ForegroundCharacter.ForegroundSubject == null}");
-		_logger.LogInfo($"ForegroundCharacter.ForegroundSubject.Executer == null {ForegroundCharacter.ForegroundSubject.Executer == null}");
-		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Swap);
 		RotateForegroundSubjects(ForegroundCharacter); 
 	}
 
-	private void HandleNurturePressed()
-	{
-		_logger.LogDebug("Call Menu HandleNurturePressed");
-		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Nurture);
-	}
-
-	private void HandleFeedPressed()
-	{
-		_logger.LogDebug("Call Menu HandleFeedPressed");
-		ForegroundCharacter.ForegroundSubject.Executer.ExecuteAction(Enumerations.ForegroundActions.Feed);
-	}
-
-	private void RotateForegroundSubjects(ICharacterWithForegroundSubject<CreatureModel> fgCharacter)
+	private void RotateForegroundSubjects(ICharacter<CreatureModel> fgCharacter)
 	{
 		try
 		{
@@ -151,11 +126,10 @@ public partial class Main : Node3D
 			throw;
 		}
 	}
-
 	
 	private void RemoveBackgroundSubject(BackgroundSubject<CreatureModel> bgSubject)
 	{
-		Gallery.Remove(bgSubject);
+		BgGallery.Remove(bgSubject);
 		bgSubject.CharacterBody3D.QueueFree();
 	}
 
@@ -172,14 +146,14 @@ public partial class Main : Node3D
 				{
 					var bgSubject = _bgFactory.SpawnEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
 					_logger.LogInfo("Log 7.4");
-					Gallery.Add(bgSubject.BackgroundSubject);
+					BgGallery.Add(bgSubject.BackgroundSubject);
 					break;
 				}
 			case Enumerations.CreatureTypes.Cow:
 				{
 					var bgSubject = _bgFactory.SpawnCow(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
 					_logger.LogInfo("Log 7.4");
-					Gallery.Add(bgSubject.BackgroundSubject);
+					BgGallery.Add(bgSubject.BackgroundSubject);
 					break;
 				}
 			default:
@@ -267,7 +241,7 @@ public partial class Main : Node3D
 	private BackgroundSubject<CreatureModel> GetBackgroundSubject(ulong instanceId)
 	{
 		_logger.LogInfo("Log 7.01");
-		foreach (var bgSubject in Gallery)
+		foreach (var bgSubject in BgGallery)
 		{
 			_logger.LogInfo($"bgSubject.Model == null {bgSubject.Model == null}");
 			if (bgSubject.Model.InstanceId == instanceId) 

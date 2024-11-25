@@ -2,12 +2,10 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSubject<CreatureModel>
-{
-	public ForegroundSubject<CreatureModel> ForegroundSubject { get; set; }
+public partial class CowCharacter : CharacterBody3D, ICharacter<CreatureModel>{
+	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
-	public IExecuter Executer { get; set; }
-	
+
 	private ILoggerService _logger { get; set; }
 	private IAnimalInteractor _animalInteractor { get; set; } 
 	private Observables _observables { get; set; }
@@ -20,15 +18,8 @@ public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSub
 		{
 			Model = model;
 
-			Executer = new AnimalExecuter(
-				model,
-				_logger,
-				nurtureCallback: () => ReceiveLove(),
-				feedCallback: () => Eat()
-			);
-
-			ForegroundSubject = new ForegroundSubject<CreatureModel>(_logger);
-			ForegroundSubject.ReadyInstance(this, model, Executer);
+			Subject = new Subject<CreatureModel>(_logger);
+			Subject.ReadyInstance(this, model);
 
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
@@ -38,11 +29,6 @@ public partial class CowCharacter : CharacterBody3D, ICharacterWithForegroundSub
 			_logger.LogError($"CowCharacter ReadyInstance Error: {ex.Message}", ex);
 		}
 		_logger.LogDebug("End CowCharacter ReadyInstance");
-	}
-
-	public async Task Hatch() 
-	{
-		throw new NotImplementedException();
 	}
 	 
 	public async Task ReceiveLove() 

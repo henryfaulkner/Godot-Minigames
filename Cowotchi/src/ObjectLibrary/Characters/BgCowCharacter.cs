@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
-public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgroundSubject<CreatureModel>
+public partial class BgCowCharacter : BgAnimalController, ICharacter<CreatureModel>
 {
-	public BackgroundSubject<CreatureModel> BackgroundSubject { get; set; }
+	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
 	
 	private Observables _observables { get; set; }
@@ -13,11 +14,10 @@ public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgrou
 		_logger.LogDebug("Start BgCowController ReadyInstance");
 		try
 		{
-			_logger.LogInfo("7.35");
-			BackgroundSubject = new BackgroundSubject<CreatureModel>(_logger);
-			BackgroundSubject.ReadyInstance(this, model);
-
 			Model = model;
+
+			Subject = new Subject<CreatureModel>(_logger);
+			Subject.ReadyInstance(this, model);
 			
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		}
@@ -27,4 +27,22 @@ public partial class BgCowCharacter : BgAnimalController, ICharacterWithBackgrou
 		}
 		_logger.LogDebug("Start BgCowController ReadyInstance");
 	}
+	
+	public async Task ReceiveLove() 
+	{
+		int increase = 1;
+
+		_animalInteractor.NurtureAnimal(Model.Id);
+		Model.LoveLevel += increase;
+		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
+	} 
+
+	public async Task Eat() 
+	{
+		int increase = 1;
+
+		_animalInteractor.FeedAnimal(Model.Id);
+		Model.StomachLevel += increase;
+		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
+	} 
 }
