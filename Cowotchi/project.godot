@@ -21,10 +21,12 @@ LoggerService="*res://src/Core/Logging/LoggerService.cs"
 CommonInteractor="*res://src/Core/Interactors/CommonInteractor.cs"
 EggInteractor="*res://src/Core/Interactors/EggInteractor.cs"
 AnimalInteractor="*res://src/Core/Interactors/AnimalInteractor.cs"
-ForegroundSubjectFactory="*res://src/Core/ForegroundSubject/ForegroundSubjectFactory.cs"
 Observables="*res://src/Core/Observables.cs"
 AnimationPathFactory="*res://src/Core/Animations/AnimationPathFactory.cs"
-BackgroundSubjectFactory="*res://src/Core/BackgroundSubject/BackgroundSubjectFactory.cs"
+ForegroundSubjectFactory="*res://src/Core/Subjects/ForegroundSubjectFactory.cs"
+BackgroundSubjectFactory="*res://src/Core/Subjects/BackgroundSubjectFactory.cs"
+CommandFactory="*res://src/Core/Commands/CommandFactory.cs"
+GameStateInteractor="*res://src/Core/Interactors/GameStateInteractor.cs"
 
 [display]
 

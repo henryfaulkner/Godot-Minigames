@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://boym7vb8pf7sd"]
+
+[ext_resource type="Script" path="res://src/Core/Commands/Commands/StatsCommand.cs" id="1_s1x1b"]
+
+[node name="StatsCommand" type="Node"]
+script = ExtResource("1_s1x1b")

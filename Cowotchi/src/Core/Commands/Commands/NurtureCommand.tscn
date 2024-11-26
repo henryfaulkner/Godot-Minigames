@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4l6qjc4jwe6j"]
+
+[ext_resource type="Script" path="res://src/Core/Commands/Commands/NurtureCommand.cs" id="1_dvudh"]
+
+[node name="NurtureCommand" type="Node"]
+script = ExtResource("1_dvudh")

@@ -15,6 +15,7 @@ public partial class Observables: Node
 	public delegate void SwapPressedEventHandler();
 	public void EmitSwapPressed()
 	{
+		GD.PrintErr("Call EmitSwapPressed");
 		EmitSignal(SignalName.SwapPressed);
 	}
 
@@ -70,6 +71,15 @@ public partial class Observables: Node
 	public void EmitGrabEgg(ulong instanceId)
 	{
 		EmitSignal(SignalName.GrabEgg, instanceId);
+	}
+	#endregion
+
+	#region Labels
+	[Signal]
+	public delegate void UpdateSubjectNameLabelEventHandler(string text); 
+	public void EmitUpdateSubjectNameLabel(string text)
+	{
+		EmitSignal(SignalName.UpdateSubjectNameLabel, text);
 	}
 	#endregion
 }

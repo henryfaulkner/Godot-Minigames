@@ -15,7 +15,7 @@ public partial class LoveEffect : RigidBody3D
 
 	public void ReadyInstance(Vector3 position)
 	{
-		RigidBody3D.Position = position;
+		Position = position;
 	}
 
 	public void EmitEffect()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=11 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/EggCharacter.tscn" id="2_5onax"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dfbol2cb2rl73" path="res://src/ObjectLibrary/Characters/BgCowCharacter.tscn" id="7_3n2o0"]
 [ext_resource type="PackedScene" uid="uid://bfr7trnw28fod" path="res://src/ObjectLibrary/Characters/BgEggCharacter.tscn" id="7_a0ut1"]
 [ext_resource type="FontFile" uid="uid://tx3hb6cxwd6i" path="res://src/Assets/Fonts/Kenney Future Narrow.ttf" id="8_nwoen"]
+[ext_resource type="Script" path="res://src/Pages/SubjectNameLabel.cs" id="9_f1tk1"]
 [ext_resource type="Script" path="res://src/Pages/MainCamera.cs" id="9_gywr0"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("SubjectNameLabel")]
@@ -63,5 +64,8 @@ offset_bottom = 252.0
 theme_override_fonts/normal_font = ExtResource("8_nwoen")
 theme_override_font_sizes/normal_font_size = 56
 bbcode_enabled = true
+script = ExtResource("9_f1tk1")
 
 [node name="Menu" parent="HUD" instance=ExtResource("2_sae3e")]
+
+[node name="Commands" type="Node" parent="."]

@@ -24,11 +24,11 @@ public class CommandInvoker
 	{
 		if (_commands.TryGetValue(commandKey, out var command))
 		{
-			return await command.Execute();
+			return await command.ExecuteAsync(commandKey);
 		}
 		else
 		{
-			_logger.LogError($"Command '{actionName.GetDescription()}' not found.");
+			_logger.LogError($"Command '{commandKey.GetDescription()}' not found.");
 		}
 		return false;
 	}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdlq7fnultu64"]
+
+[ext_resource type="Script" path="res://src/Core/Commands/Commands/FeedCommand.cs" id="1_g4tjm"]
+
+[node name="FeedCommand" type="Node"]
+script = ExtResource("1_g4tjm")

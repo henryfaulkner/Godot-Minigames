@@ -16,18 +16,20 @@ public partial class AnimalPage : Control, ICommander
 	
 	private ILoggerService _logger { get; set; }
 	private Observables _observables { get; set; }
+	private CommandFactory _commandFactory { get; set; }
 	public CommandInvoker _invoker { get; set; }
 	
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+		_commandFactory = GetNode<CommandFactory>(Constants.SingletonNodes.CommandFactory);
 
 		_invoker = new CommandInvoker(_logger);
-		_invoker.RegisterCommand(Enumerations.Commands.Stats, new StatsCommand());
-		_invoker.RegisterCommand(Enumerations.Commands.Swap, new SwapCommand());
-		_invoker.RegisterCommand(Enumerations.Commands.Nurture, new NurtureCommand());
-		_invoker.RegisterCommand(Enumerations.Commands.Feed, new FeedCommand());
+		_invoker.RegisterCommand(Enumerations.Commands.Stats, _commandFactory.SpawnStatsCommand());
+		_invoker.RegisterCommand(Enumerations.Commands.Swap, _commandFactory.SpawnSwapCommand());
+		_invoker.RegisterCommand(Enumerations.Commands.Nurture, _commandFactory.SpawnNurtureCommand());
+		_invoker.RegisterCommand(Enumerations.Commands.Feed, _commandFactory.SpawnFeedCommand());
 
 		Stats.Pressed += () => ExecuteCommandAsync(Enumerations.Commands.Stats);
 		Swap.Pressed += () => ExecuteCommandAsync(Enumerations.Commands.Swap);
@@ -37,29 +39,7 @@ public partial class AnimalPage : Control, ICommander
 
 	public async Task<bool> ExecuteCommandAsync(Enumerations.Commands command)
 	{
+		_logger.LogInfo($"AnimalPage ExecuteCommandAsync {command.GetDescription()}");
 		return await _invoker.ExecuteCommandAsync(command);
-	}
-
-	private void HandleStatsPressed()
-	{
-		_logger.LogDebug("Call Menu HandleStatsPressed");
-		_invoker.ExecuteCommandAsync(Enumerations.Commands.Stats);
-	}
-
-	private void HandleSwapPressed()
-	{
-		_invoker.ExecuteCommandAsync(Enumerations.Commands.Swap);
-	}
-
-	private void HandleNurturePressed()
-	{
-		_logger.LogDebug("Call Menu HandleNurturePressed");
-		ForegroundCharacter.ExecuteCommandAsync(Enumerations.Commands.Nurture);
-	}
-
-	private void HandleFeedPressed()
-	{
-		_logger.LogDebug("Call Menu HandleFeedPressed");
-		ForegroundCharacter.ExecuteCommandAsync(Enumerations.Commands.Feed);
 	}
 }
