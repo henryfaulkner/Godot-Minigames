@@ -65,7 +65,7 @@ public partial class CowCharacter : CharacterBody3D, ICharacter<CreatureModel>
 		_animalInteractor.NurtureAnimal(Model.Id);
 		Model.LoveLevel += increase;
 		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
-		_loveEffect.EmitEffect();
+		_loveEffect.TriggerEffect();
 	} 
 
 	public async Task Eat() 
@@ -75,6 +75,6 @@ public partial class CowCharacter : CharacterBody3D, ICharacter<CreatureModel>
 		_animalInteractor.FeedAnimal(Model.Id);
 		Model.StomachLevel += increase;
 		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
-		_fedEffect.EmitEffect();
+		_fedEffect.TriggerEffect();
 	} 
 }
