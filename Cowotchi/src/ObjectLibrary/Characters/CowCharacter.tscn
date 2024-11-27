@@ -3,9 +3,13 @@
 [ext_resource type="Script" path="res://src/ObjectLibrary/Characters/CowCharacter.cs" id="1_6uaih"]
 [ext_resource type="ArrayMesh" uid="uid://dc1hjamgkwxg2" path="res://src/Assets/Meshes/Animals/Sheep.obj" id="2_t3423"]
 
-[node name="CowCharacter" type="CharacterBody3D"]
+[node name="CowCharacter" type="CharacterBody3D" node_paths=PackedStringArray("HeadNode")]
 script = ExtResource("1_6uaih")
+HeadNode = NodePath("HeadNode")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, 0, 0)
 mesh = ExtResource("2_t3423")
+
+[node name="HeadNode" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.353082, -1.32527)

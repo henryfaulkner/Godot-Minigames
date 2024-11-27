@@ -6,8 +6,9 @@
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vhgsi"]
 points = PackedVector3Array(-2.18197, -1.06604, -0.865099, 2.08294, 1.52152, 0.22539, 2.08242, 1.52109, -0.18964, 0.888104, -1.65652, -0.662736, -1.62364, -1.28175, 0.873971, -1.98806, 0.940202, 0.308697, 2.02669, 0.3855, 1.20954, 1.9395, 0.826031, -1.16882, -1.78076, 0.836477, -0.8369, 2.73195, -0.406446, 0.240429, 0.353484, -1.81614, 0.768928, -1.31917, -1.81614, -0.904451, -2.24668, 0.193155, 0.72737, -1.23087, -1.37561, -1.16882, -1.83054, -1.72661, 0.560781, -2.62467, 0.113043, -0.278039, -2.0537, 0.107158, -1.09569, 1.8512, 0.737925, 1.20954, 2.7996, 1.0444, 0.145503, 2.73195, -0.31834, -0.287829, 0.816409, -1.27047, -0.993679, -1.30582, 1.17389, -0.516316, -1.12803, 1.07902, 0.544901, -2.6164, -0.563291, 0.0606671, -2.04521, -0.632092, 0.879709, -1.60715, 0.426466, 0.865329, 0.821857, -1.68655, 0.627652, -1.06743, 1.26544, 0.0587855, 2.78302, 0.953553, -0.276067, -1.83841, -1.73328, -0.69422, -1.29382, 0.26735, -1.16333, -0.722522, 1.16115, -0.673796)
 
-[node name="BgCowCharacter" type="CharacterBody3D" node_paths=PackedStringArray("Collider", "Timer")]
+[node name="BgCowCharacter" type="CharacterBody3D" node_paths=PackedStringArray("HeadNode", "Collider", "Timer")]
 script = ExtResource("1_mcs5c")
+HeadNode = NodePath("HeadNode")
 Collider = NodePath("CollisionShape3D")
 Timer = NodePath("Timer")
 WanderSpeed = 0.5
@@ -24,3 +25,6 @@ shape = SubResource("ConvexPolygonShape3D_vhgsi")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
+
+[node name="HeadNode" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.353082, -1.32527)

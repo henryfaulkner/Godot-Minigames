@@ -21,18 +21,16 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		_bgFactory = GetNode<BackgroundSubjectFactory>(Constants.SingletonNodes.BackgroundSubjectFactory);
 	}
 
-	public void ReadyInstance(List<CreatureModel> CreatureList, CharacterBody3D placeholder)
+	public void ReadyInstance(List<CreatureModel> creatureList, CharacterBody3D placeholder)
 	{
+		CreatureList = creatureList;
 		BgGallery = new List<Subject<CreatureModel>>();
 		foreach (var creature in CreatureList)
 		{
 			AddBackgroundSubject(creature);
 		}
-		_logger.LogInfo("Log 3");
 		ForegroundCharacter = _fgFactory.SpawnEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), placeholder.Position);
-		_logger.LogInfo("Log 4");
-		RotateForegroundSubjects(ForegroundCharacter);
-		_logger.LogInfo("Log Last");
+		RotateForegroundSubjects();
 	}
 
 	public ICharacter<CreatureModel> GetForegroundCharacter()
@@ -45,50 +43,43 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		return CreatureList;
 	}
 
-	public void RotateForegroundSubjects(ICharacter<CreatureModel> fgCharacter)
+	public void RotateForegroundSubjects()
 	{
 		try
 		{
-			_logger.LogInfo("Log 5");
 			if (!CreatureList.Any())
 			{
-				_logger.LogInfo("The CreatureList is empty.");
+				_logger.LogError("The CreatureList is empty.");
 				return;
 			}
 			_logger.LogDebug("The CreatureList is NOT empty.");
+
 			ForegroundCreatureIndex += 1;
 			if (ForegroundCreatureIndex == CreatureList.Count) ForegroundCreatureIndex = 0;
 
-			_logger.LogInfo("Log 5.5");
-			var fgPos = fgCharacter.Subject.CharacterBody3D.GlobalPosition;
-			_logger.LogInfo("Log 5.6");
-			var oldFgModel = fgCharacter.Subject.Model;
-			fgCharacter.Subject.CharacterBody3D.QueueFree();
-			_logger.LogInfo("Log 6");
+			var fgPos = ForegroundCharacter.Subject.CharacterBody3D.GlobalPosition;
+			var oldFgModel = ForegroundCharacter.Subject.Model;
+			ForegroundCharacter.Subject.CharacterBody3D.QueueFree();
 
 			var nextModel = CreatureList[ForegroundCreatureIndex];
 			switch (nextModel.CreatureType)
 			{
 				case Enumerations.CreatureTypes.Egg:
-					fgCharacter.Subject = _fgFactory.SpawnEgg(GetNode("."), (CreatureModel)nextModel, fgPos).Subject;
+					ForegroundCharacter = _fgFactory.SpawnEgg(GetNode("."), (CreatureModel)nextModel, fgPos);
 					break;
 				case Enumerations.CreatureTypes.Cow:
-					fgCharacter.Subject = _fgFactory.SpawnCow(GetNode("."), (CreatureModel)nextModel, fgPos).Subject;
+					ForegroundCharacter = _fgFactory.SpawnCow(GetNode("."), (CreatureModel)nextModel, fgPos);
 					break;
 				default:
 					_logger.LogError("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
 					break;
 			}
 
-			_logger.LogInfo($"nextModel == null {nextModel == null}");
-			var newFgInstanceId = fgCharacter.Subject.Model.InstanceId;
-			_logger.LogInfo("Log 7");
+			_logger.LogInfo($"nextModel.Name {nextModel.Name}");
+			var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
 			Subject<CreatureModel> newFgBg = GetBackgroundSubject(newFgInstanceId);
-			_logger.LogInfo("Log 8");
 			RemoveBackgroundSubject(newFgBg);
-			_logger.LogInfo("Log 9");
 			if (oldFgModel != null) AddBackgroundSubject(oldFgModel);
-			_logger.LogInfo("Log 10");
 		} 
 		catch (Exception ex)
 		{
@@ -105,24 +96,19 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 
 	public void AddBackgroundSubject(CreatureModel model)
 	{
-		_logger.LogInfo("Log 7.1");
 		var defaultSpawnPointNode = GetNode<Node3D>(Constants.KeyNodePaths.BgSpawnPoint);
-		_logger.LogInfo("Log 7.2");
 		var spawnPoint = AlterSpawnPoint(defaultSpawnPointNode.Position);
-		_logger.LogInfo("Log 7.3");
 		switch (model.CreatureType)
 		{
 			case Enumerations.CreatureTypes.Egg:
 				{
 					var bgSubject = _bgFactory.SpawnEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-					_logger.LogInfo("Log 7.4");
 					BgGallery.Add(bgSubject.Subject);
 					break;
 				}
 			case Enumerations.CreatureTypes.Cow:
 				{
 					var bgSubject = _bgFactory.SpawnCow(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-					_logger.LogInfo("Log 7.4");
 					BgGallery.Add(bgSubject.Subject);
 					break;
 				}
@@ -130,7 +116,6 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 				_logger.LogError("Main AddBackgroundSubject: Next model was not mapped to a creature type");
 				break;
 		}
-		_logger.LogInfo("Log 7.5");
 	}
 
 	private Vector3 AlterSpawnPoint(Vector3 spawnPoint)
@@ -165,13 +150,11 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 
 	private Subject<CreatureModel> GetBackgroundSubject(ulong instanceId)
 	{
-		_logger.LogInfo("Log 7.01");
 		foreach (var bgSubject in BgGallery)
 		{
 			_logger.LogInfo($"bgSubject.Model == null {bgSubject.Model == null}");
 			if (bgSubject.Model.InstanceId == instanceId) 
 			{
-				_logger.LogInfo("Log 7.02");
 				return bgSubject;
 			}
 		}

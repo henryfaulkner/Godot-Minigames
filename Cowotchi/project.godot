@@ -27,6 +27,7 @@ ForegroundSubjectFactory="*res://src/Core/Subjects/ForegroundSubjectFactory.cs"
 BackgroundSubjectFactory="*res://src/Core/Subjects/BackgroundSubjectFactory.cs"
 CommandFactory="*res://src/Core/Commands/CommandFactory.cs"
 GameStateInteractor="*res://src/Core/Interactors/GameStateInteractor.cs"
+EffectsFactory="*res://src/Core/Effects/EffectsFactory.cs"
 
 [display]
 

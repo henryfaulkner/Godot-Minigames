@@ -15,7 +15,7 @@ public partial class StatsCommand : Command
 
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		_observables.EmitStatsPressed();
+		_observables.EmitStats();
 		return true;
 	}
 }

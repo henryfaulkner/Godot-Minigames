@@ -5,33 +5,33 @@ public partial class Observables: Node
 {
 	#region Foreground Actions
 	[Signal]
-	public delegate void StatsPressedEventHandler();
-	public void EmitStatsPressed()
+	public delegate void StatsEventHandler();
+	public void EmitStats()
 	{
-		EmitSignal(SignalName.StatsPressed);
+		EmitSignal(SignalName.Stats);
 	}
 
 	[Signal]
-	public delegate void SwapPressedEventHandler();
-	public void EmitSwapPressed()
+	public delegate void SwapEventHandler();
+	public void EmitSwap()
 	{
-		GD.PrintErr("Call EmitSwapPressed");
-		EmitSignal(SignalName.SwapPressed);
+		GD.PrintErr("Call EmitSwap");
+		EmitSignal(SignalName.Swap);
 	}
 
 	[Signal]
-	public delegate void NurturePressedEventHandler();
-	public void EmitNurturePressed()
+	public delegate void NurtureEventHandler();
+	public void EmitNurture()
 	{
-		EmitSignal(SignalName.NurturePressed);
+		EmitSignal(SignalName.Nurture);
 	}
 
 
 	[Signal]
-	public delegate void FeedPressedEventHandler();
-	public void EmitFeedPressed()
+	public delegate void FeedEventHandler();
+	public void EmitFeed()
 	{
-		EmitSignal(SignalName.FeedPressed);	
+		EmitSignal(SignalName.Feed);	
 	}
 	#endregion
 

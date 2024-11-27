@@ -16,6 +16,7 @@ public static class Constants
 		public const string ForegroundSubjectFactory = "/root/ForegroundSubjectFactory";
 		public const string BackgroundSubjectFactory = "/root/BackgroundSubjectFactory";
 		public const string AnimationPathFactory = "/root/AnimationPathFactory";
+		public const string EffectsFactory = "/root/EffectsFactory";
 		public const string CommandFactory = "/root/CommandFactory";
 	}
 

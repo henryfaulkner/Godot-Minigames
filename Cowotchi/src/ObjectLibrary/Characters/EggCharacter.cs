@@ -32,6 +32,18 @@ public partial class EggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 		_logger.LogDebug("End EggCharacter ReadyInstance");
 	}
 
+	public async Task ExecuteActionAsync(Enumerations.CharacterActions action)
+	{
+		switch (action)
+		{
+			case Enumerations.CharacterActions.Hatch:
+				Hatch();
+				break;
+			default:
+				break;
+		}
+	}
+
 	public async Task Hatch() 
 	{
 		throw new NotImplementedException();

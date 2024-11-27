@@ -35,7 +35,6 @@ public partial class Main : Node3D
 			_bgFactory = GetNode<BackgroundSubjectFactory>(Constants.SingletonNodes.BackgroundSubjectFactory);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 			_gameStateInteractor = GetNode<GameStateInteractor>(Constants.SingletonNodes.GameStateInteractor);
-			_logger.LogInfo("Log 1");
 
 			await _commonInteractor.InitDatabaseIfRequired();
 
@@ -48,6 +47,7 @@ public partial class Main : Node3D
 		{
 			GD.PrintErr($"Main _Ready Error: {ex.Message}");
 			_logger.LogError($"Main _Ready Error: {ex.Message}", ex);
+			throw;
 		}
 	}
 

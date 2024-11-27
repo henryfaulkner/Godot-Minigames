@@ -28,6 +28,18 @@ public partial class BgEggCharacter : BgEggController, ICharacter<CreatureModel>
 		_logger.LogDebug("Start BgEggController ReadyInstance");
 	}
 
+	public async Task ExecuteActionAsync(Enumerations.CharacterActions action)
+	{
+		switch (action)
+		{
+			case Enumerations.CharacterActions.Hatch:
+				Hatch();
+				break;
+			default:
+				break;
+		}
+	}
+
 	public async Task Hatch() 
 	{
 		throw new NotImplementedException();

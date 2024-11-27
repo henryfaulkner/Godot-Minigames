@@ -24,33 +24,21 @@ public partial class BackgroundSubjectFactory : Node
 
 	public BgEggCharacter SpawnEgg(Node parent, CreatureModel model, Vector3 position)
 	{
-		_logger.LogInfo("7.301");
 		var result = _bgEggScene.Instantiate<BgEggCharacter>();
-		_logger.LogInfo("7.302");
 		model.InstanceId = result.GetInstanceId();
-		_logger.LogInfo("7.303");
 		parent.AddChild(result);
-		_logger.LogInfo("7.304");
 		result.GlobalPosition = position;
-		_logger.LogInfo("7.305");
 		result.ReadyInstance(model);
-		_logger.LogInfo("7.306");
 		return result;
 	}
 
 	public BgCowCharacter SpawnCow(Node parent, CreatureModel model, Vector3 position)
 	{
-		_logger.LogInfo("7.301");
 		var result = _bgCowScene.Instantiate<BgCowCharacter>();
-		_logger.LogInfo("7.302");
 		model.InstanceId = result.GetInstanceId();
-		_logger.LogInfo("7.303");
 		parent.AddChild(result);
-		_logger.LogInfo("7.304");
 		result.GlobalPosition = position;
-		_logger.LogInfo("7.305");
 		result.ReadyInstance(model);
-		_logger.LogInfo("7.306");
 		return result;
 	} 
 }

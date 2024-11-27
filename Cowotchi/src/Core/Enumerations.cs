@@ -45,8 +45,6 @@ public partial class Enumerations
 		Chicken = 2, 
 	}
 
-
-
 	public enum Commands
 	{
 		[Description("Stats")]
@@ -57,5 +55,15 @@ public partial class Enumerations
 		Nurture,
 		[Description("Feed")]
 		Feed,
+	}
+
+	public enum CharacterActions
+	{
+		[Description("ReceiveLove")]
+		ReceiveLove,
+		[Description("Eat")]
+		Eat,
+		[Description("Hatch")]
+		Hatch,
 	}
 }

@@ -18,8 +18,10 @@ public partial class SwapCommand : Command
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
 		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
-		_gameStateInteractor.RotateForegroundSubjects(fgCharacter);
+		_gameStateInteractor.RotateForegroundSubjects();
+		_logger.LogError(fgCharacter.Model.Name);
 		_observables.EmitUpdateSubjectNameLabel(fgCharacter.Model.Name);
+		_logger.LogError(fgCharacter.Model.Name);
 		return true;
 	}
 }

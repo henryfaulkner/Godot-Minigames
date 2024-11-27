@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://b241p4bbcaapi"]
 
 [ext_resource type="ArrayMesh" uid="uid://di1oyf6spr4xj" path="res://src/Assets/Meshes/Heart.obj" id="1_7hoih"]
+[ext_resource type="Material" uid="uid://c6n8sdiovatsx" path="res://src/Core/Effects/LoveEffect.tres" id="1_euwov"]
 [ext_resource type="Script" path="res://src/Core/Effects/LoveEffect.cs" id="1_fuham"]
-[ext_resource type="Material" path="res://src/Core/Animations/LoveEffect.tres" id="2_twch2"]
 
 [sub_resource type="Curve" id="Curve_xj7q8"]
 max_value = 3.0
@@ -29,11 +29,12 @@ damping_min = 1.0
 damping_max = 2.0
 damping_curve = SubResource("CurveTexture_2bv5v")
 
-[node name="LoveEffect" type="RigidBody3D"]
+[node name="LoveEffect" type="RigidBody3D" node_paths=PackedStringArray("Hearts")]
 script = ExtResource("1_fuham")
+Hearts = NodePath("GPUParticles3D")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-material_override = ExtResource("2_twch2")
+material_override = ExtResource("1_euwov")
 emitting = false
 amount = 5
 lifetime = 1.5

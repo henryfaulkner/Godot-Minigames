@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using System.Text;
 
 public class LocalLogger : ILogger
 {
@@ -23,9 +24,11 @@ public class LocalLogger : ILogger
 	{
 		try
 		{
-			string str;
-			if (exception != null) str = $"{message}. Exception: {exception.Message} {exception.InnerException.Message}";
-			else str = message;
+			var stringBuilder = new StringBuilder();
+			stringBuilder.Append(message);
+			if (exception != null && !string.IsNullOrEmpty(exception.Message)) stringBuilder.Append(" Exception: ").Append(exception.Message);
+			if (exception?.InnerException != null && !string.IsNullOrEmpty(exception.InnerException.Message)) stringBuilder.Append(" Inner Exception").Append(exception.InnerException.Message);
+			string str = stringBuilder.ToString();
 
 			switch(logLevel)
 			{
@@ -39,7 +42,7 @@ public class LocalLogger : ILogger
 		}
 		catch (Exception ex)
 		{
-			GD.PrintErr($"LocalLogger PublishLog Failed: {ex.Message}");
+			GD.PrintErr($"LocalLogger PublishLog Failed: {ex.Message} {ex.StackTrace}");
 		}
 	}
 }
