@@ -2,18 +2,37 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EggCharacter : CharacterBody3D, ICharacter<CreatureModel>
+public partial class FgEggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 {
+	[ExportGroup("Nodes")]
+	[Export]
+	private Node3D HeadNode { get; set; }
+
+	[Export]
+	private MeshInstance3D Mesh { get; set; }
+	
+	[Export]
+	private CollisionShape3D Collider { get; set; }
+	
 	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
+	public IController Controller { get; set; }
 	
 	private ILoggerService _logger { get; set; }
 	private IEggInteractor _eggInteractor { get; set; } 
+	private ControllerFactory _controllerFactory { get; set; }	
 	private Observables _observables { get; set; }
+	
+	public override void _Ready()
+	{
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
+		_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
+		_controllerFactory = GetNode<ControllerFactory>(Constants.SingletonNodes.ControllerFactory);
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+	} 
 
 	public void ReadyInstance(CreatureModel model)
 	{
-		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_logger.LogDebug("Start EggCharacter ReadyInstance");
 		try
 		{
@@ -22,8 +41,7 @@ public partial class EggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 			Subject = new Subject<CreatureModel>(_logger);
 			Subject.ReadyInstance(this, model);
 
-			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
-			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+			Controller = _controllerFactory.SpawnFgEggController(this, model, Collider, Mesh);
 		} 
 		catch (Exception ex)
 		{

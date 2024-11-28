@@ -13,11 +13,11 @@ public static class Constants
 		public const string CommonInteractor = "/root/CommonInteractor";
 		public const string EggInteractor = "/root/EggInteractor";
 		public const string AnimalInteractor = "/root/AnimalInteractor";
-		public const string ForegroundSubjectFactory = "/root/ForegroundSubjectFactory";
-		public const string BackgroundSubjectFactory = "/root/BackgroundSubjectFactory";
+		public const string CharacterFactory = "/root/CharacterFactory";
 		public const string AnimationPathFactory = "/root/AnimationPathFactory";
 		public const string EffectsFactory = "/root/EffectsFactory";
 		public const string CommandFactory = "/root/CommandFactory";
+		public const string ControllerFactory = "/root/ControllerFactory";
 	}
 
 	public static class KeyNodePaths
@@ -25,5 +25,14 @@ public static class Constants
 		public const string FarmWanderers = "/root/Main/FarmWanderers";
 		public const string BgSpawnPoint = "/root/Main/BgSpawnPoint";
 		public const string Commands = "../Main/Commands";
+	}
+
+	public static class AnimalMeshes
+	{
+		public const string Cat = "res://src/Assets/Meshes/Animals/Cat.obj";
+		public const string Dog = "res://src/Assets/Meshes/Animals/Dog.obj";
+		public const string Horse = "res://src/Assets/Meshes/Animals/Horse.obj";
+		public const string Pig = "res://src/Assets/Meshes/Animals/Pig.obj";
+		public const string Sheep = "res://src/Assets/Meshes/Animals/Sheep.obj";
 	}
 }

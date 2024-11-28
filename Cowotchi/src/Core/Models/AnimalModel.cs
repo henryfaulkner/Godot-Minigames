@@ -16,8 +16,8 @@
 //             case (int)Enumerations.AnimalTypes.Cow:
 //                 CreatureType = Enumerations.CreatureTypes.Cow;
 //                 break;
-//             case (int)Enumerations.AnimalTypes.Chicken:
-//                 CreatureType = Enumerations.CreatureTypes.Chicken;
+//             case (int)Enumerations.AnimalTypes.Pig:
+//                 CreatureType = Enumerations.CreatureTypes.Pig;
 //                 break;
 //             default:
 //                 break;

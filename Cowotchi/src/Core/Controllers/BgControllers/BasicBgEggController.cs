@@ -2,12 +2,10 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class BgEggController : CharacterBody3D
+public partial class BasicBgEggController : Node, IController
 {
-	[ExportGroup("Nodes")]
-	[Export]
+	private CharacterBody3D Puppet { get; set; }
 	private CollisionShape3D Collider { get; set; }
-	[Export]
 	private MeshInstance3D Mesh { get; set; }
 
 	protected ILoggerService _logger { get; set; }
@@ -40,12 +38,23 @@ public partial class BgEggController : CharacterBody3D
 		_animationPathFactory = GetNode<AnimationPathFactory>(Constants.SingletonNodes.AnimationPathFactory);
 	}
 
+	public void SetPuppet(CharacterBody3D puppet)
+	{
+		Puppet = puppet;
+	}
+
+	public void ReadyInstance(CollisionShape3D collider, MeshInstance3D mesh)
+	{
+		Collider = collider;
+		Mesh = mesh;
+	}
+
 	private bool IsReady = false;
-	public override void _PhysicsProcess(double delta)
+	public void PhysicsProcess(double delta)
 	{
 		if (!IsReady)
 		{
-			BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), this, Mesh);
+			BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), Puppet, Mesh);
 			IsReady = true;
 		}
 		
@@ -56,17 +65,17 @@ public partial class BgEggController : CharacterBody3D
 
 			// Update player state
 			WasGrounded = IsGrounded;
-			IsGrounded = IsOnFloor();
+			IsGrounded = Puppet.IsOnFloor();
 
 			// Handle gravity
-			if (!IsOnFloor()) 
+			if (!Puppet.IsOnFloor()) 
 			{
-				Velocity = new Vector3(
-								Velocity.X,
-								Velocity.Y - (Gravity * (float)delta),
-								Velocity.Z
+				Puppet.Velocity = new Vector3(
+								Puppet.Velocity.X,
+								Puppet.Velocity.Y - (Gravity * (float)delta),
+								Puppet.Velocity.Z
 							);
-				MoveAndSlide();
+				Puppet.MoveAndSlide();
 			} 
 
 			HandleCurrentState();

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://wgd5aw53wek4"]
+
+[ext_resource type="Script" path="res://src/ObjectLibrary/Characters/FgEggCharacter.cs" id="1_26lsi"]
+[ext_resource type="ArrayMesh" uid="uid://b22cqpdjk3a7i" path="res://src/Assets/Meshes/Egg.obj" id="2_0nva5"]
+
+[node name="FgEggCharacter" type="CharacterBody3D" node_paths=PackedStringArray("HeadNode", "Mesh", "Collider")]
+script = ExtResource("1_26lsi")
+HeadNode = NodePath("HeadNode")
+Mesh = NodePath("MeshInstance3D")
+Collider = NodePath("CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_0nva5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="HeadNode" type="Node3D" parent="."]

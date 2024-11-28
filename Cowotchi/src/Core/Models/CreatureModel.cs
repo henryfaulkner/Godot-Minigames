@@ -2,6 +2,11 @@ using System;
 
 public class CreatureModel
 {
+	public CreatureModel(Enumerations.CreatureTypes creatureType)
+	{
+		CreatureType = creatureType;
+	}
+
 	public int Id { get; set; }
 	public ulong InstanceId { get; set; }
 	public string Name { get; set; }
@@ -15,8 +20,8 @@ public class CreatureModel
 	public int LoveLevel { get; set; }
 	public int LoveMax { get; set; }
 
-	public CreatureModel(Enumerations.CreatureTypes creatureType)
-	{
-		CreatureType = creatureType;
-	}
+	public Enumerations.BgEggControllers BgEggController { get; set;}
+	public Enumerations.BgAnimalControllers BgAnimalController { get; set;}
+	public Enumerations.FgEggControllers FgEggController { get; set; }
+	public Enumerations.FgAnimalControllers FgAnimalController { get; set; }
 }

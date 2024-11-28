@@ -128,13 +128,23 @@ public partial class CommonInteractor : Node, ICommonInteractor
 				{
 					Id = (int)Enumerations.AnimalTypes.Cow,
 					Name = Enumerations.AnimalTypes.Cow.GetDescription(),
+					Mesh = Constants.AnimalMeshes.Sheep,
+					BgEggController = (int)Enumerations.BgEggControllers.Basic,
+					BgAnimalController = (int)Enumerations.BgAnimalControllers.Basic,
+					FgEggController = (int)Enumerations.FgEggControllers.Basic,
+					FgAnimalController = (int)Enumerations.FgAnimalControllers.Basic,
 				}
 			);
 			atList.Add(
 				new AnimalType()
 				{
-					Id = (int)Enumerations.AnimalTypes.Chicken,
-					Name = Enumerations.AnimalTypes.Chicken.GetDescription(),
+					Id = (int)Enumerations.AnimalTypes.Pig,
+					Name = Enumerations.AnimalTypes.Pig.GetDescription(),
+					Mesh = Constants.AnimalMeshes.Pig,
+					BgEggController = (int)Enumerations.BgEggControllers.Basic,
+					BgAnimalController = (int)Enumerations.BgAnimalControllers.Basic,
+					FgEggController = (int)Enumerations.FgEggControllers.Basic,
+					FgAnimalController = (int)Enumerations.FgAnimalControllers.Basic,
 				}
 			);
 			await animalTypeRepository.AddRangeAsync(atList);

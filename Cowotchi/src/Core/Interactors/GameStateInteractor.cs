@@ -11,14 +11,12 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 	private int ForegroundCreatureIndex { get; set; } = -1;
 
 	private ILoggerService _logger { get; set; } 
-	private ForegroundSubjectFactory _fgFactory { get; set; }
-	private BackgroundSubjectFactory _bgFactory { get; set; }
+	private CharacterFactory _characterFactory { get; set; }
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-		_fgFactory = GetNode<ForegroundSubjectFactory>(Constants.SingletonNodes.ForegroundSubjectFactory);
-		_bgFactory = GetNode<BackgroundSubjectFactory>(Constants.SingletonNodes.BackgroundSubjectFactory);
+		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
 	}
 
 	public void ReadyInstance(List<CreatureModel> creatureList, CharacterBody3D placeholder)
@@ -29,7 +27,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		{
 			AddBackgroundSubject(creature);
 		}
-		ForegroundCharacter = _fgFactory.SpawnEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), placeholder.Position);
+		ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), placeholder.Position);
 		RotateForegroundSubjects();
 	}
 
@@ -65,10 +63,10 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			switch (nextModel.CreatureType)
 			{
 				case Enumerations.CreatureTypes.Egg:
-					ForegroundCharacter = _fgFactory.SpawnEgg(GetNode("."), (CreatureModel)nextModel, fgPos);
+					ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), (CreatureModel)nextModel, fgPos);
 					break;
 				case Enumerations.CreatureTypes.Cow:
-					ForegroundCharacter = _fgFactory.SpawnCow(GetNode("."), (CreatureModel)nextModel, fgPos);
+					ForegroundCharacter = _characterFactory.SpawnFgAnimal(GetNode("."), (CreatureModel)nextModel, fgPos);
 					break;
 				default:
 					_logger.LogError("Main RotateForegroundSubjects: Next model was not mapped to a creature type");
@@ -102,14 +100,14 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		{
 			case Enumerations.CreatureTypes.Egg:
 				{
-					var bgSubject = _bgFactory.SpawnEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-					BgGallery.Add(bgSubject.Subject);
+					var bgChar = _characterFactory.SpawnBgEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+					BgGallery.Add(bgChar.Subject);
 					break;
 				}
 			case Enumerations.CreatureTypes.Cow:
 				{
-					var bgSubject = _bgFactory.SpawnCow(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-					BgGallery.Add(bgSubject.Subject);
+					var bgChar = _characterFactory.SpawnBgAnimal(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+					BgGallery.Add(bgChar.Subject);
 					break;
 				}
 			default:

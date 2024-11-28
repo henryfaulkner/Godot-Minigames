@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpwtnirawaj0o"]
+
+[ext_resource type="Script" path="res://src/Core/Controllers/FgControllers/BasicFgController.cs" id="1_rf1np"]
+
+[node name="BasicFgController" type="Node"]
+script = ExtResource("1_rf1np")

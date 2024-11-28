@@ -2,31 +2,18 @@ using Godot;
 using System;
 using System.ComponentModel;
 
-public partial class BgAnimalController : CharacterBody3D
+public partial class BasicBgAnimalController : Node, IController
 {
+	private CharacterBody3D Puppet { get; set; }
+	private CollisionShape3D Collider { get; set; }
+	private MeshInstance3D Mesh { get; set; }
+
 	#region Exports
 
-	[ExportGroup("Nodes")]
-	[Export]
-	private CollisionShape3D Collider { get; set; }
-
-	[Export]
-	private Timer Timer { get; set; }
-
-	[ExportGroup("Variables")]
-	[Export]
 	private float WanderSpeed { get; set; } = 10.0f;
-
-	[Export]
 	private float JumpVelocity { get; set; } = 6.0f;
-
-	[Export]
 	private int MaxJumpNum { get; set; } = 1;
-	
-	[Export]
 	private float RotationSpeed { get; set; } = 0.2f;
-
-	[Export]
 	private float RotationCloseEnough { get; set; } = 0.2f;
 
 	#endregion
@@ -34,6 +21,8 @@ public partial class BgAnimalController : CharacterBody3D
 	#region Instance Variables
 
 	protected ILoggerService _logger { get; set; }
+
+	private Timer _timer { get; set; }
 
 	private bool IsGrounded { get; set; } // If entity is grounded this frame
 	private bool WasGrounded { get; set; } // If entity was grounded last frame
@@ -65,11 +54,23 @@ public partial class BgAnimalController : CharacterBody3D
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-
-		Timer.Timeout += HandleTimerTimeout;
+		
+		_timer = SpawnTimer();
+		_timer.Timeout += HandleTimerTimeout;
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public void SetPuppet(CharacterBody3D puppet)
+	{
+		Puppet = puppet;
+	}
+
+	public void ReadyInstance(CollisionShape3D collider, MeshInstance3D mesh)
+	{
+		Collider = collider;
+		Mesh = mesh;
+	}
+
+	public void PhysicsProcess(double delta)
 	{
 		try
 		{
@@ -78,17 +79,17 @@ public partial class BgAnimalController : CharacterBody3D
 
 			// Update player state
 			WasGrounded = IsGrounded;
-			IsGrounded = IsOnFloor();
+			IsGrounded = Puppet.IsOnFloor();
 
 			// Handle gravity
-			if (!IsOnFloor()) 
+			if (!Puppet.IsOnFloor()) 
 			{
-				Velocity = new Vector3(
-								Velocity.X,
-								Velocity.Y - (Gravity * (float)delta),
-								Velocity.Z
+				Puppet.Velocity = new Vector3(
+								Puppet.Velocity.X,
+								Puppet.Velocity.Y - (Gravity * (float)delta),
+								Puppet.Velocity.Z
 							);
-				MoveAndSlide();
+				Puppet.MoveAndSlide();
 			} 
 			else CurrJumpNum = 0;
 			
@@ -127,7 +128,7 @@ public partial class BgAnimalController : CharacterBody3D
 
 	private void HandleTurningState()
 	{
-		Timer.Stop();
+		_timer.Stop();
 		
 		// Calculate the direction vector from the current position to the target
 		Vector3 direction = (WishDir - Vector3.Zero).Normalized();
@@ -138,14 +139,14 @@ public partial class BgAnimalController : CharacterBody3D
 		Vector3 targetRotation = targetBasis.GetEuler();
 
 		// Smoothly interpolate between the current rotation and the target rotation
-		GlobalRotation = GlobalRotation.Lerp(targetRotation, RotationSpeed);
+		Puppet.GlobalRotation = Puppet.GlobalRotation.Lerp(targetRotation, RotationSpeed);
 
 		// check is rotation is "close enough"
-		if (GlobalRotation.AngleTo(targetRotation) < RotationCloseEnough)
+		if (Puppet.GlobalRotation.AngleTo(targetRotation) < RotationCloseEnough)
 		{
 			_logger.LogDebug("Change state to walking.");
 			CurrentState = States.Walking;
-			Timer.Start();
+			_timer.Start();
 		}
 	}
 
@@ -154,23 +155,23 @@ public partial class BgAnimalController : CharacterBody3D
 		// Handle move as a vector jump
 		if (CurrJumpNum < MaxJumpNum && WishDir != Vector3.Zero)
 		{
-			Velocity = new Vector3(
-							Velocity.X,
+			Puppet.Velocity = new Vector3(
+							Puppet.Velocity.X,
 							JumpVelocity,
-							Velocity.Z
+							Puppet.Velocity.Z
 						);
 			CurrJumpNum += 1;
 		}
 
 		// Handle WASD movement
-		Velocity = new Vector3(
+		Puppet.Velocity = new Vector3(
 						WishDir.X * WanderSpeed,
-						Velocity.Y,
+						Puppet.Velocity.Y,
 						WishDir.Z * WanderSpeed
 					);
 
 		// Move 
-		MoveAndSlide();
+		Puppet.MoveAndSlide();
 	}
 
 	private Vector2 GetInputDir()
@@ -186,18 +187,26 @@ public partial class BgAnimalController : CharacterBody3D
 		// Calculate the normalized vector based on the angle
 		return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
 	}
+	
+	private Timer SpawnTimer()
+	{
+		var result = new Timer();
+		result.Autostart = true;
+		AddChild(result);
+		return result;
+	}
 
 	private void HandleTimerTimeout()
 	{
 		var rand = new Random();
 
 		// change timer interval to 3 - 6 seconds
-		Timer.WaitTime = rand.Next(3, 7); 
+		_timer.WaitTime = rand.Next(3, 7); 
 
 		// Get new direction
 		//var dirVector = GetInputDir();
 		var dirVector = GetRandomDir();
-		WishDir = (Transform.Basis * new Vector3(dirVector.X, 0, dirVector.Y)).Normalized();
+		WishDir = (Puppet.Transform.Basis * new Vector3(dirVector.X, 0, dirVector.Y)).Normalized();
 		_logger.LogDebug($"WishDir {WishDir.ToString()}");
 		Vector3 direction = (WishDir - Vector3.Zero).Normalized();
 		_logger.LogDebug($"direction {direction.ToString()}");

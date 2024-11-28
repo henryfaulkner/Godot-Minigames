@@ -23,11 +23,11 @@ EggInteractor="*res://src/Core/Interactors/EggInteractor.cs"
 AnimalInteractor="*res://src/Core/Interactors/AnimalInteractor.cs"
 Observables="*res://src/Core/Observables.cs"
 AnimationPathFactory="*res://src/Core/Animations/AnimationPathFactory.cs"
-ForegroundSubjectFactory="*res://src/Core/Subjects/ForegroundSubjectFactory.cs"
-BackgroundSubjectFactory="*res://src/Core/Subjects/BackgroundSubjectFactory.cs"
 CommandFactory="*res://src/Core/Commands/CommandFactory.cs"
 GameStateInteractor="*res://src/Core/Interactors/GameStateInteractor.cs"
 EffectsFactory="*res://src/Core/Effects/EffectsFactory.cs"
+ControllerFactory="*res://src/Core/Controllers/ControllerFactory.cs"
+CharacterFactory="*res://src/Core/Subjects/CharacterFactory.cs"
 
 [display]
 

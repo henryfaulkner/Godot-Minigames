@@ -23,8 +23,8 @@ public partial class Enumerations
 	{
 		[Description("Cow")]
 		Cow = 1,
-		[Description("Chicken")]
-		Chicken = 2, 
+		[Description("Pig")]
+		Pig = 2, 
 	}
 
 	public enum AnimalEventTypes
@@ -41,8 +41,8 @@ public partial class Enumerations
 		Egg = 0,
 		[Description("Cow")]
 		Cow = 1,
-		[Description("Chicken")]
-		Chicken = 2, 
+		[Description("Pig")]
+		Pig = 2, 
 	}
 
 	public enum Commands
@@ -65,5 +65,29 @@ public partial class Enumerations
 		Eat,
 		[Description("Hatch")]
 		Hatch,
+	}
+
+	public enum BgEggControllers
+	{
+		[Description("Background Basic Egg Controller")]
+		Basic = 1,
+	}
+
+	public enum BgAnimalControllers
+	{
+		[Description("Background Basic Animal Controller")]
+		Basic = 1,
+	}
+
+	public enum FgEggControllers
+	{
+		[Description("Foreground Basic Egg Controller")]
+		Basic = 1,
+	}
+
+	public enum FgAnimalControllers
+	{
+		[Description("Foreground Basic Animal Controller")]
+		Basic = 1,
 	}
 }

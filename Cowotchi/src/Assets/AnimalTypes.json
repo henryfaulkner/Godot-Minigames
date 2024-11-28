@@ -1,0 +1,14 @@
+[
+    {
+        "Id": 1,
+        "Name": "Cow",
+        "BgController": "BgCowController",
+        "Mesh": "Sheep.obj"
+    },
+    {
+        "Id": 2,
+        "Name": "Pig",
+        "BgController": "BgPigController",
+        "Mesh": "Pig.obj"
+    }
+]

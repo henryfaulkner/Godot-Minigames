@@ -36,8 +36,8 @@ public static class MapperExtensions
 			case (int)Enumerations.AnimalTypes.Cow:
 				return Enumerations.CreatureTypes.Cow;
 				break;
-			case (int)Enumerations.AnimalTypes.Chicken:
-				return Enumerations.CreatureTypes.Chicken;
+			case (int)Enumerations.AnimalTypes.Pig:
+				return Enumerations.CreatureTypes.Pig;
 				break;
 			default:
 				throw new Exception("MapperExtensions ConvertAnimalTypeToCreatureType: AnimalType not mapped.");

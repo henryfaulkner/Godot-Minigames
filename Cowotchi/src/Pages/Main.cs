@@ -17,8 +17,7 @@ public partial class Main : Node3D
 	private ICommonInteractor _commonInteractor { get; set; } 
 	private IEggInteractor _eggInteractor { get; set; } 
 	private IAnimalInteractor _animalInteractor { get; set; } 
-	private ForegroundSubjectFactory _fgFactory { get; set; }
-	private BackgroundSubjectFactory _bgFactory { get; set; }
+	private CharacterFactory _characterFactory { get; set; }
 	private Observables _observables { get; set; }
 	public CommandInvoker _invoker { get; set; }
 
@@ -31,8 +30,7 @@ public partial class Main : Node3D
 			_commonInteractor = GetNode<ICommonInteractor>(Constants.SingletonNodes.CommonInteractor);
 			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
-			_fgFactory = GetNode<ForegroundSubjectFactory>(Constants.SingletonNodes.ForegroundSubjectFactory);
-			_bgFactory = GetNode<BackgroundSubjectFactory>(Constants.SingletonNodes.BackgroundSubjectFactory);
+		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 			_gameStateInteractor = GetNode<GameStateInteractor>(Constants.SingletonNodes.GameStateInteractor);
 

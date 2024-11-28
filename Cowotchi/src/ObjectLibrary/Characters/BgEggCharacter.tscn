@@ -6,13 +6,15 @@
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6c5a8"]
 points = PackedVector3Array(-0.0672908, -0.133204, -0.386567, 0.0460525, -0.01995, 0.407772, 0.0943861, 0.0608261, 0.389698, 0.353188, -0.359487, -0.0303021, 0.142588, 0.463531, -0.0624835, -0.35838, -0.230222, 0.0989633, -0.260011, 0.318171, 0.0502778, -0.0517559, -0.542217, 0.0834755, 0.383218, 0.0924755, -0.110435, 0.334238, -0.116022, 0.258418, -0.241003, 0.202966, -0.220882, -0.162841, -0.389162, -0.254832, 0.157833, 0.0920681, -0.350138, 0.205633, -0.339722, -0.285778, 0.0620358, -0.407357, 0.308791, 0.15822, 0.365335, 0.210732, -0.194149, 0.0439785, 0.337908, -0.357229, -0.0844064, -0.143073, -0.195221, -0.293146, 0.307457, -0.0505706, 0.429615, 0.178661, -0.0507659, 0.446968, -0.142829, 0.143958, -0.52547, -0.0795476, 0.333067, 0.21948, 0.129739, 0.23854, -0.437463, 0.178599, -0.293489, -0.391745, -0.0464281, -0.0183847, 0.269153, -0.30313, -0.35695, 0.0928163, 0.0825487, 0.334127, -0.164057, -0.238263, 0.420142, -0.13372, 0.0343683, 0.188966, 0.314428, -0.220816, -0.0677397, -0.507859, -0.160706, -0.194868, -0.035935, -0.335023)
 
-[node name="BgEggCharacter" type="CharacterBody3D" node_paths=PackedStringArray("Collider", "Mesh")]
+[node name="BgEggCharacter" type="CharacterBody3D" node_paths=PackedStringArray("Mesh", "Collider")]
 script = ExtResource("1_tu0m4")
-Collider = NodePath("CollisionShape3D")
 Mesh = NodePath("MeshInstance3D")
+Collider = NodePath("CollisionShape3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("2_vegaj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_6c5a8")
+
+[node name="HeadNode" type="Node3D" parent="."]
