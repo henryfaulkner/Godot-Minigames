@@ -85,7 +85,7 @@ public partial class FgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		_animalInteractor.NurtureAnimal(Model.Id);
 		Model.LoveLevel += increase;
 		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
-		_loveEffect.TriggerEffect();
+		_loveEffect.TriggerEffectAsync();
 	} 
 
 	public async Task Eat() 
@@ -95,6 +95,6 @@ public partial class FgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		_animalInteractor.FeedAnimal(Model.Id);
 		Model.StomachLevel += increase;
 		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
-		_fedEffect.TriggerEffect();
+		_fedEffect.TriggerEffectAsync();
 	} 
 }

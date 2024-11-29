@@ -50,6 +50,7 @@ public partial class BgEggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 		catch (Exception ex)
 		{
 			_logger.LogError($"BgEggCharacter ReadyInstance Error: {ex.Message}", ex);
+			throw;
 		}
 		_logger.LogDebug("Start BgEggController ReadyInstance");
 	}

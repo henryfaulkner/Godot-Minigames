@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class LoveEffect : RigidBody3D
 {
@@ -22,7 +23,7 @@ public partial class LoveEffect : RigidBody3D
 		if (@event.IsActionPressed("space")) 
 		{
 			_logger.LogInfo("Handle Space Pressed");
-			TriggerEffect();
+			TriggerEffectAsync();
 		}
 	}
 
@@ -31,10 +32,17 @@ public partial class LoveEffect : RigidBody3D
 		Position = position;
 	}
 
-	public void TriggerEffect()
+	private bool _isDebounced = false;
+	public async void TriggerEffectAsync()
 	{
-		_logger.LogInfo("Call TriggerEffect");
-		_logger.LogInfo($"Effect Position: {Position.ToString()}");
+		if (_isDebounced) return;
+		_isDebounced = true;
+
 		Hearts.Emitting = true;
+		Hearts.Restart();
+
+		TimingFunctions.SetTimeout(() => {
+			_isDebounced = false;
+		}, (int)Hearts.Lifetime * 1000);
 	}
 }

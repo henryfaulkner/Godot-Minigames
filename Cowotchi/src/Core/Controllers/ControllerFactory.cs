@@ -1,4 +1,5 @@
 using Godot;
+using Newtonsoft.Json;
 
 public partial class ControllerFactory : Node
 {
@@ -33,10 +34,10 @@ public partial class ControllerFactory : Node
 		_basicBgAnimalControllerScene = (PackedScene)ResourceLoader.Load(BASIC_BG_ANIMAL_CONTROLLER_SCENE_PATH);
 
 		// FgEggControllers
-		_basicBgEggControllerScene = (PackedScene)ResourceLoader.Load(BASIC_BG_EGG_CONTROLLER_SCENE_PATH);
+		_basicFgEggControllerScene = (PackedScene)ResourceLoader.Load(BASIC_FG_EGG_CONTROLLER_SCENE_PATH);
 
 		// FgAnimalControllers
-		_basicBgAnimalControllerScene = (PackedScene)ResourceLoader.Load(BASIC_BG_ANIMAL_CONTROLLER_SCENE_PATH);
+		_basicFgAnimalControllerScene = (PackedScene)ResourceLoader.Load(BASIC_FG_ANIMAL_CONTROLLER_SCENE_PATH);
 	}
 
 	public override void _Ready()
@@ -46,7 +47,7 @@ public partial class ControllerFactory : Node
 
 	public IController SpawnBgEggController(CharacterBody3D puppet, CreatureModel model, CollisionShape3D collider, MeshInstance3D mesh)
 	{
-		var result = InstantiateBgEggController(model.BgEggController);
+		var result = InstantiateBgEggController(puppet, model.BgEggController);
 		result.SetPuppet(puppet);
 		result.ReadyInstance(collider, mesh);
 		return result;
@@ -54,7 +55,7 @@ public partial class ControllerFactory : Node
 
 	public IController SpawnBgAnimalController(CharacterBody3D puppet, CreatureModel model, CollisionShape3D collider, MeshInstance3D mesh)
 	{
-		var result = InstantiateBgAnimalController(model.BgAnimalController);
+		var result = InstantiateBgAnimalController(puppet, model.BgAnimalController);
 		result.SetPuppet(puppet);
 		result.ReadyInstance(collider, mesh);
 		return result;
@@ -62,7 +63,7 @@ public partial class ControllerFactory : Node
 
 	public IController SpawnFgEggController(CharacterBody3D puppet, CreatureModel model, CollisionShape3D collider, MeshInstance3D mesh)
 	{
-		var result = InstantiateFgEggController(model.FgEggController);
+		var result = InstantiateFgEggController(puppet, model.FgEggController);
 		result.SetPuppet(puppet);
 		result.ReadyInstance(collider, mesh);
 		return result;
@@ -70,63 +71,75 @@ public partial class ControllerFactory : Node
 
 	public IController SpawnFgAnimalController(CharacterBody3D puppet, CreatureModel model, CollisionShape3D collider, MeshInstance3D mesh)
 	{
-		var result = InstantiateFgAnimalController(model.FgAnimalController);
+		var result = InstantiateFgAnimalController(puppet, model.FgAnimalController);
 		result.SetPuppet(puppet);
 		result.ReadyInstance(collider, mesh);
 		return result;	
 	}
 
-	private IController? InstantiateBgEggController(Enumerations.BgEggControllers type)
+	private IController? InstantiateBgEggController(Node parent, Enumerations.BgEggControllers type)
 	{
 		IController? result = null;
 		switch (type)
 		{
 			case Enumerations.BgEggControllers.Basic:
-				result = _basicBgEggControllerScene.Instantiate<BasicBgEggController>();
+				var node = _basicBgEggControllerScene.Instantiate<BasicBgEggController>();
+				parent.AddChild(node);
+				result = node;
 				break;
 			default:
+			_logger.LogError($"Unknown BgEggController type: {type}");
 				break;
 		}
 		return result;
 	}
 
-	private IController? InstantiateBgAnimalController(Enumerations.BgAnimalControllers type)
+	private IController? InstantiateBgAnimalController(Node parent, Enumerations.BgAnimalControllers type)
 	{
 		IController? result = null;
 		switch (type)
 		{
 			case Enumerations.BgAnimalControllers.Basic:
-				result = _basicBgAnimalControllerScene.Instantiate<BasicBgAnimalController>();
+				var node = _basicBgAnimalControllerScene.Instantiate<BasicBgAnimalController>();
+				parent.AddChild(node);
+				result = node;
 				break;
 			default: 
+				_logger.LogError($"Unknown BgAnimalController type: {type}");
 				break;
 		}
 		return result;
 	}	
 
-	private IController? InstantiateFgEggController(Enumerations.FgEggControllers type)
+	private IController? InstantiateFgEggController(Node parent, Enumerations.FgEggControllers type)
 	{
 		IController? result = null;
 		switch (type)
 		{
 			case Enumerations.FgEggControllers.Basic:
-				result = _basicFgEggControllerScene.Instantiate<BasicFgController>();
+				var node = _basicFgEggControllerScene.Instantiate<BasicFgController>();
+				parent.AddChild(node);
+				result = node;
 				break;
 			default:
+				_logger.LogError($"Unknown FgEggController type: {type}");
 				break;
 		}
 		return result;
 	}
 
-	private IController? InstantiateFgAnimalController(Enumerations.FgAnimalControllers type)
+	private IController? InstantiateFgAnimalController(Node parent, Enumerations.FgAnimalControllers type)
 	{
 		IController? result = null;
 		switch (type)
 		{
 			case Enumerations.FgAnimalControllers.Basic:
-				result = _basicFgAnimalControllerScene.Instantiate<BasicFgController>();
+				var node = _basicFgAnimalControllerScene.Instantiate<BasicFgController>();
+				parent.AddChild(node);
+				result = node;
 				break;
 			default:
+				_logger.LogError($"Unknown FgAnimalController type: {type}");
 				break;
 		}
 		return result;

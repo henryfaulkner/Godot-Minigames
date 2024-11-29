@@ -10,8 +10,8 @@ public partial class BasicBgAnimalController : Node, IController
 
 	#region Exports
 
-	private float WanderSpeed { get; set; } = 10.0f;
-	private float JumpVelocity { get; set; } = 6.0f;
+	private float WanderSpeed { get; set; } = 0.5f;
+	private float JumpVelocity { get; set; } = 2.0f;
 	private int MaxJumpNum { get; set; } = 1;
 	private float RotationSpeed { get; set; } = 0.2f;
 	private float RotationCloseEnough { get; set; } = 0.2f;
@@ -98,6 +98,7 @@ public partial class BasicBgAnimalController : Node, IController
 		catch (Exception ex)
 		{
 			_logger.LogError($"Error in BgAnimalController _PhysicsProcess {ex.Message}", ex);
+			throw;
 		}
 	}
 

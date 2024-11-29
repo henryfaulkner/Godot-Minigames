@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://dvqi6pjm1ocr1"]
+[gd_scene load_steps=2 format=3 uid="uid://dvqi6pjm1ocr1"]
+
+[ext_resource type="Script" path="res://src/Core/Controllers/BgControllers/BasicBgAnimalController.cs" id="1_m78ui"]
 
 [node name="BasicBgAnimalController" type="Node"]
+script = ExtResource("1_m78ui")

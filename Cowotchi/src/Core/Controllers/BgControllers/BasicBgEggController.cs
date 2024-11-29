@@ -28,7 +28,7 @@ public partial class BasicBgEggController : Node, IController
 		Bouncing = 1,
 	}
 
-	private States CurrentState { get; set; } = States.Bouncing;
+	private States CurrentState { get; set; } = States.Standing;
 
 	#endregion
 
@@ -54,7 +54,7 @@ public partial class BasicBgEggController : Node, IController
 	{
 		if (!IsReady)
 		{
-			BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), Puppet, Mesh);
+			//BouncePath = _animationPathFactory.SpawnBouncePath(GetNode(".."), Puppet, Mesh);
 			IsReady = true;
 		}
 		
@@ -83,6 +83,7 @@ public partial class BasicBgEggController : Node, IController
 		catch (Exception ex)
 		{
 			_logger.LogError($"Error in BgEggController _PhysicsProcess {ex.Message}", ex);
+			throw;
 		}
 	}
 

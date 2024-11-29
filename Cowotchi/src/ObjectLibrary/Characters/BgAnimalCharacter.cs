@@ -46,7 +46,7 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 
 	public void ReadyInstance(CreatureModel model)
 	{
-		_logger.LogDebug("Start BgCowController ReadyInstance");
+		_logger.LogDebug("Start BgAnimalController ReadyInstance");
 		try
 		{
 			Model = model;
@@ -58,9 +58,10 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError($"BgCowCharacter ReadyInstance Error: {ex.Message}", ex);
+			_logger.LogError($"BgAnimalController ReadyInstance Error: {ex.Message}", ex);
+			throw;
 		}
-		_logger.LogDebug("Start BgCowController ReadyInstance");
+		_logger.LogDebug("Start BgAnimalController ReadyInstance");
 	}
 
 	public async Task ExecuteActionAsync(Enumerations.CharacterActions action)
@@ -85,7 +86,7 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		_animalInteractor.NurtureAnimal(Model.Id);
 		Model.LoveLevel += increase;
 		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
-		_loveEffect.TriggerEffect();
+		_loveEffect.TriggerEffectAsync();
 	} 
 
 	public async Task Eat() 
@@ -95,6 +96,6 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		_animalInteractor.FeedAnimal(Model.Id);
 		Model.StomachLevel += increase;
 		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
-		_fedEffect.TriggerEffect();
+		_fedEffect.TriggerEffectAsync();
 	} 
 }

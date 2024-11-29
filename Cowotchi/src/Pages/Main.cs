@@ -30,7 +30,7 @@ public partial class Main : Node3D
 			_commonInteractor = GetNode<ICommonInteractor>(Constants.SingletonNodes.CommonInteractor);
 			_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
 			_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
-		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
+			_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
 			_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 			_gameStateInteractor = GetNode<GameStateInteractor>(Constants.SingletonNodes.GameStateInteractor);
 

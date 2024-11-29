@@ -39,6 +39,7 @@ Hearts = NodePath("GPUParticles3D")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 material_override = ExtResource("1_euwov")
+emitting = false
 amount = 12
 lifetime = 1.5
 explosiveness = 1.0
