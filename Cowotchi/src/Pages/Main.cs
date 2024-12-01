@@ -37,7 +37,10 @@ public partial class Main : Node3D
 			await _commonInteractor.InitDatabaseIfRequired();
 
 			var placeholder = GetNode<CharacterBody3D>(FOREGROUND_PLACEHOLDER_PATH);
-			_gameStateInteractor.ReadyInstance(await GetCreatureListFromDatabase(), placeholder);
+			var position = placeholder.Position;
+			placeholder.QueueFree();
+
+			_gameStateInteractor.ReadyInstance(await GetCreatureListFromDatabase(), position);
 			
 			_observables.GrabEgg += HandleGrabEgg;
 		}

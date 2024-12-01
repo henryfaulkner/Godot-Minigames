@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public interface IGameStateInteractor
 {
-	public void ReadyInstance(List<CreatureModel> CreatureList, CharacterBody3D placeholder);
+	public void ReadyInstance(List<CreatureModel> CreatureList, Vector3 initialPosition);
 	public ICharacter<CreatureModel> GetForegroundCharacter();
 	public List<CreatureModel> GetCreatureList();
 	public void RotateForegroundSubjects();

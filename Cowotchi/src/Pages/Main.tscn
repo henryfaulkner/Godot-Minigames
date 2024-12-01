@@ -48,7 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27305, 0.86119, -2.33604)
 visible = false
 
 [node name="MainCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 0, 1.55099, 6.71391)
+transform = Transform3D(1, 0, 0, 0, 0.929963, 0.367654, 0, -0.367654, 0.929963, 0, 1.55099, 13.1544)
 script = ExtResource("9_gywr0")
 
 [node name="BgSpawnPoint" type="Marker3D" parent="."]

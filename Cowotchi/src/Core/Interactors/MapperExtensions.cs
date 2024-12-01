@@ -14,6 +14,7 @@ public static class MapperExtensions
 		result.LoveLevel = -1;
 		result.LoveMax = -1;
 
+		result.Mesh = egg.AnimalType.Mesh;
 		result.BgEggController = (Enumerations.BgEggControllers)egg.AnimalType.BgEggController;
 		result.BgAnimalController = (Enumerations.BgAnimalControllers)egg.AnimalType.BgAnimalController;
 		result.FgEggController = (Enumerations.FgEggControllers)egg.AnimalType.FgEggController;
@@ -34,6 +35,7 @@ public static class MapperExtensions
 		result.LoveLevel = eventSummary.NurtureCount;
 		result.LoveMax = animal.LoveMax;
 
+		result.Mesh = animal.AnimalType.Mesh;
 		result.BgEggController = (Enumerations.BgEggControllers)animal.AnimalType.BgEggController;
 		result.BgAnimalController = (Enumerations.BgAnimalControllers)animal.AnimalType.BgAnimalController;
 		result.FgEggController = (Enumerations.FgEggControllers)animal.AnimalType.FgEggController;

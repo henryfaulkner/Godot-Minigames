@@ -67,23 +67,28 @@ public partial class BasicBgEggController : Node, IController
 			WasGrounded = IsGrounded;
 			IsGrounded = Puppet.IsOnFloor();
 
-			// Handle gravity
-			if (!Puppet.IsOnFloor()) 
-			{
-				Puppet.Velocity = new Vector3(
-								Puppet.Velocity.X,
-								Puppet.Velocity.Y - (Gravity * (float)delta),
-								Puppet.Velocity.Z
-							);
-				Puppet.MoveAndSlide();
-			} 
-
+			HandleGravity(delta);
 			HandleCurrentState();
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError($"Error in BgEggController _PhysicsProcess {ex.Message}", ex);
+			_logger.LogError($"Error in BasicBgEggController _PhysicsProcess {ex.Message}", ex);
 			throw;
+		}
+	}
+	
+	public void HandleGravity(double delta)
+	{
+		// Apply gravity always
+		Puppet.Velocity += new Vector3(0, -Gravity * (float)delta, 0);
+		
+		// Move the puppet and handle collisions
+		Puppet.MoveAndSlide();
+		
+		// Optional: Zero-out velocity when hitting the floor
+		if (Puppet.IsOnFloor())
+		{
+			Puppet.Velocity = new Vector3(Puppet.Velocity.X, 0, Puppet.Velocity.Z);
 		}
 	}
 

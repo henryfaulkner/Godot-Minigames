@@ -63,7 +63,7 @@ public partial class CharacterFactory : Node
 		var result = _fgAnimalScene.Instantiate<FgAnimalCharacter>();
 		model.InstanceId = result.GetInstanceId();
 		parent.AddChild(result);
-		result.GlobalPosition = position;
+		result.GlobalPosition = new Vector3(position.X, position.Y + 1, position.Z);
 		result.ReadyInstance(model);
 		return result;
 	}

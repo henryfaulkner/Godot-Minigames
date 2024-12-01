@@ -9,6 +9,11 @@ public partial class BasicFgController : Node, IController
 
 	protected ILoggerService _logger { get; set; }
 
+	private bool IsGrounded { get; set; } // If entity is grounded this frame
+	private bool WasGrounded { get; set; } // If entity was grounded last frame
+
+	private static readonly float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
+
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
@@ -27,5 +32,29 @@ public partial class BasicFgController : Node, IController
 
 	public void PhysicsProcess(double delta)
 	{
+		try
+		{
+			HandleGravity(delta);	
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"Error in BasicFgController _PhysicsProcess {ex.Message}", ex);
+			throw;
+		}
+	}
+	
+	public void HandleGravity(double delta)
+	{
+		// Apply gravity always
+		Puppet.Velocity += new Vector3(0, -Gravity * (float)delta, 0);
+		
+		// Move the puppet and handle collisions
+		Puppet.MoveAndSlide();
+		
+		// Optional: Zero-out velocity when hitting the floor
+		if (Puppet.IsOnFloor())
+		{
+			Puppet.Velocity = new Vector3(Puppet.Velocity.X, 0, Puppet.Velocity.Z);
+		}
 	}
 }

@@ -29,10 +29,10 @@ public static class Constants
 
 	public static class AnimalMeshes
 	{
-		public const string Cat = "res://src/Assets/Meshes/Animals/Cat.obj";
-		public const string Dog = "res://src/Assets/Meshes/Animals/Dog.obj";
-		public const string Horse = "res://src/Assets/Meshes/Animals/Horse.obj";
-		public const string Pig = "res://src/Assets/Meshes/Animals/Pig.obj";
-		public const string Sheep = "res://src/Assets/Meshes/Animals/Sheep.obj";
+		public const string Cat = "res://src/Assets/Meshes/Animals/Cat.tres";
+		public const string Dog = "res://src/Assets/Meshes/Animals/Dog.tres";
+		public const string Horse = "res://src/Assets/Meshes/Animals/Horse.tres";
+		public const string Pig = "res://src/Assets/Meshes/Animals/Pig.tres";
+		public const string Sheep = "res://src/Assets/Meshes/Animals/Sheep.tres";
 	}
 }

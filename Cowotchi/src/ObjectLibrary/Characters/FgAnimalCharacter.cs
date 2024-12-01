@@ -55,6 +55,8 @@ public partial class FgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 			Subject.ReadyInstance(this, model);
 
 			Controller = _controllerFactory.SpawnFgAnimalController(this, model, Collider, Mesh);
+
+			Mesh.Mesh = GD.Load<Mesh>(model.Mesh);
 		} 
 		catch (Exception ex)
 		{

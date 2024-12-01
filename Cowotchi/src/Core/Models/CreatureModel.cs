@@ -20,6 +20,7 @@ public class CreatureModel
 	public int LoveLevel { get; set; }
 	public int LoveMax { get; set; }
 
+	public string Mesh { get; set; }
 	public Enumerations.BgEggControllers BgEggController { get; set;}
 	public Enumerations.BgAnimalControllers BgAnimalController { get; set;}
 	public Enumerations.FgEggControllers FgEggController { get; set; }
