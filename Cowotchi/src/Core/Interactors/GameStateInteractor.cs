@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public partial class GameStateInteractor : Node, IGameStateInteractor 
 {
 	private List<CreatureModel> CreatureList { get; set; }
+	private Menu Menu { get; set; }
 	private List<Subject<CreatureModel>> BgGallery { get; set; }
 	private ICharacter<CreatureModel> ForegroundCharacter { get; set; }
 	private int ForegroundCreatureIndex { get; set; } = -1;
@@ -19,9 +20,10 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
 	}
 
-	public void ReadyInstance(List<CreatureModel> creatureList, Vector3 initialPosition)
+	public void ReadyInstance(List<CreatureModel> creatureList, Vector3 initialPosition, Menu menu)
 	{
 		CreatureList = creatureList;
+		Menu = menu;
 		BgGallery = new List<Subject<CreatureModel>>();
 		foreach (var creature in CreatureList)
 		{
@@ -60,10 +62,17 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			ForegroundCharacter.Subject.CharacterBody3D.QueueFree();
 
 			var nextModel = CreatureList[ForegroundCreatureIndex];
+			Menu.SetCreatureInfo(nextModel);
 			if (nextModel.CreatureType == Enumerations.CreatureTypes.Egg) 
+			{
 				ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), (CreatureModel)nextModel, fgPos);
-			else 
+				Menu.SwapPage(Enumerations.MenuPageType.Egg);
+			}
+			else
+			{ 
 				ForegroundCharacter = _characterFactory.SpawnFgAnimal(GetNode("."), (CreatureModel)nextModel, fgPos);
+				Menu.SwapPage(Enumerations.MenuPageType.Animal);
+			}
 
 			_logger.LogInfo($"nextModel.Name {nextModel.Name}");
 			var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
@@ -115,6 +124,12 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			spawnPoint.Y,
 			spawnPoint.Z + (float)zPos
 		);
+	}
+
+	public void ToggleInfoContainer()
+	{
+		var toggleValue = !Menu.IsOn_InfoContainer;
+		Menu.ToggleInfoContainer(toggleValue);
 	}
 
 	private CreatureModel GetCreatureInstance(ulong instanceId)

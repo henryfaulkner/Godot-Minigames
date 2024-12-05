@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://ddxwlgk2wjt6l"]
+
+[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Pages/EggPage/EggPage.cs" id="1_jnh5u"]
+[ext_resource type="PackedScene" uid="uid://du8u63yyytnm5" path="res://src/ObjectLibrary/Menu/ActionButton/ActionButton.tscn" id="2_hd573"]
+[ext_resource type="Texture2D" uid="uid://d14iuqnebb4wd" path="res://src/Assets/Icons/StatsIcon.png" id="3_5dnuq"]
+[ext_resource type="Texture2D" uid="uid://74whe3k0h1tq" path="res://src/Assets/Icons/SwapIcon.png" id="4_5saoh"]
+
+[node name="EggPage" type="Control" node_paths=PackedStringArray("Stats", "Swap")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jnh5u")
+Stats = NodePath("OptionContainer/Stats")
+Swap = NodePath("OptionContainer/Swap")
+
+[node name="OptionContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 180
+
+[node name="Stats" parent="OptionContainer" instance=ExtResource("2_hd573")]
+layout_mode = 2
+NormalTexture = ExtResource("3_5dnuq")
+HoverTexture = ExtResource("3_5dnuq")
+
+[node name="Swap" parent="OptionContainer" instance=ExtResource("2_hd573")]
+layout_mode = 2
+NormalTexture = ExtResource("4_5saoh")
+HoverTexture = ExtResource("4_5saoh")

@@ -1,17 +1,22 @@
-[gd_scene load_steps=8 format=3 uid="uid://cil33363eqyqa"]
+[gd_scene load_steps=9 format=3 uid="uid://cil33363eqyqa"]
 
 [ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Menu.cs" id="1_6ijgr"]
 [ext_resource type="StyleBox" uid="uid://6ncfjc3ywwad" path="res://src/ObjectLibrary/Menu/PageStyles/BiggieCombatStyleBox.tres" id="1_77cs8"]
-[ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/AnimalPage/AnimalPage.tscn" id="2_d1od1"]
+[ext_resource type="PackedScene" uid="uid://clph2g6ck8ex3" path="res://src/ObjectLibrary/Menu/Pages/AnimalPage/AnimalPage.tscn" id="2_d1od1"]
 [ext_resource type="AudioStream" uid="uid://bjnpm13fp0joi" path="res://src/Assets/Audio/13. Menu Scroll copy.wav" id="3_iwf10"]
-[ext_resource type="PackedScene" uid="uid://ddxwlgk2wjt6l" path="res://src/ObjectLibrary/Menu/EggPage/EggPage.tscn" id="3_l8bet"]
+[ext_resource type="PackedScene" uid="uid://ddxwlgk2wjt6l" path="res://src/ObjectLibrary/Menu/Pages/EggPage/EggPage.tscn" id="3_l8bet"]
 [ext_resource type="AudioStream" uid="uid://ls5cexjnk20h" path="res://src/Assets/Audio/2. Menu Select copy.wav" id="4_aop3a"]
 [ext_resource type="PackedScene" uid="uid://v5sccupxhj7q" path="res://src/ObjectLibrary/Menu/Meter/Meter.tscn" id="5_gsw0f"]
+[ext_resource type="PackedScene" uid="uid://df485dq1xlp85" path="res://src/ObjectLibrary/Menu/Containers/InfoContainer.tscn" id="5_h4au6"]
 
-[node name="Menu" type="CanvasLayer" node_paths=PackedStringArray("LoveMeter", "StomachMeter")]
+[node name="Menu" type="CanvasLayer" node_paths=PackedStringArray("EggPage", "AnimalPage", "MeterContainer", "InfoContainer", "LoveMeter", "StomachMeter")]
 script = ExtResource("1_6ijgr")
-LoveMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HeartMeterContainer")
-StomachMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters/HungerMeterContainer")
+EggPage = NodePath("GridContainer/VBoxContainer/Panel/CenterContainer/EggPage")
+AnimalPage = NodePath("GridContainer/VBoxContainer/Panel/CenterContainer/AnimalPage")
+MeterContainer = NodePath("GridContainer/VBoxContainer/AboveMenu/MetersContainer")
+InfoContainer = NodePath("GridContainer/VBoxContainer/AboveMenu/InfoContainer")
+LoveMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MetersContainer/Meters/HeartMeterContainer")
+StomachMeter = NodePath("GridContainer/VBoxContainer/AboveMenu/MetersContainer/Meters/HungerMeterContainer")
 
 [node name="Switch_AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_iwf10")
@@ -44,31 +49,31 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="GridContainer/VBoxContainer/AboveMenu"]
+[node name="MetersContainer" type="MarginContainer" parent="GridContainer/VBoxContainer/AboveMenu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_top = 180
 theme_override_constants/margin_bottom = 12
 
-[node name="Meters" type="VBoxContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer"]
+[node name="Meters" type="VBoxContainer" parent="GridContainer/VBoxContainer/AboveMenu/MetersContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="HeartMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters" instance=ExtResource("5_gsw0f")]
+[node name="HeartMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MetersContainer/Meters" instance=ExtResource("5_gsw0f")]
 layout_mode = 2
 
-[node name="HungerMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MarginContainer/Meters" instance=ExtResource("5_gsw0f")]
+[node name="HungerMeterContainer" parent="GridContainer/VBoxContainer/AboveMenu/MetersContainer/Meters" instance=ExtResource("5_gsw0f")]
 layout_mode = 2
 
 [node name="Control" type="Control" parent="GridContainer/VBoxContainer/AboveMenu"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control2" type="Control" parent="GridContainer/VBoxContainer/AboveMenu"]
+[node name="InfoContainer" parent="GridContainer/VBoxContainer/AboveMenu" instance=ExtResource("5_h4au6")]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="Panel" type="Panel" parent="GridContainer/VBoxContainer"]
 layout_mode = 2

@@ -90,4 +90,10 @@ public partial class Enumerations
 		[Description("Foreground Basic Animal Controller")]
 		Basic = 1,
 	}
+
+	public enum MenuPageType
+	{
+		Egg,
+		Animal,
+	}
 }

@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://df485dq1xlp85"]
+
+[ext_resource type="StyleBox" uid="uid://6ncfjc3ywwad" path="res://src/ObjectLibrary/Menu/PageStyles/BiggieCombatStyleBox.tres" id="1_bgsen"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Containers/InfoContainer.cs" id="1_hcys3"]
+
+[node name="InfoContainer" type="MarginContainer" node_paths=PackedStringArray("Title", "Subtitle", "Content")]
+size_flags_horizontal = 3
+theme_override_constants/margin_bottom = 12
+script = ExtResource("1_hcys3")
+Title = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer/Title")
+Subtitle = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer/Subtitle")
+Content = NodePath("Panel/MarginContainer/VBoxContainer/Content")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_bgsen")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 30
+
+[node name="Panel" type="Panel" parent="Panel/MarginContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "TITLE"
+
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "SUBTITLE"
+
+[node name="Content" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae weid. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae."

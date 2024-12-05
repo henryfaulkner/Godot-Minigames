@@ -8,6 +8,8 @@ public partial class Main : Node3D
 {
 	[Export]
 	private RichTextLabel SubjectNameLabel { get; set; }
+	[Export]
+	private Menu Menu { get; set; }
 
 	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
@@ -40,7 +42,7 @@ public partial class Main : Node3D
 			var position = placeholder.Position;
 			placeholder.QueueFree();
 
-			_gameStateInteractor.ReadyInstance(await GetCreatureListFromDatabase(), position);
+			_gameStateInteractor.ReadyInstance(await GetCreatureListFromDatabase(), position, Menu);
 			
 			_observables.GrabEgg += HandleGrabEgg;
 		}
