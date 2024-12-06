@@ -83,21 +83,11 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 	
 	public async Task ReceiveLove() 
 	{
-		int increase = 1;
-
-		_animalInteractor.NurtureAnimal(Model.Id);
-		Model.LoveLevel += increase;
-		_observables.EmitUpdateHeartMeterValue(Model.LoveLevel);
 		_loveEffect.TriggerEffectAsync();
 	} 
 
 	public async Task Eat() 
 	{
-		int increase = 1;
-
-		_animalInteractor.FeedAnimal(Model.Id);
-		Model.StomachLevel += increase;
-		_observables.EmitUpdateHungerMeterValue(Model.StomachLevel);
 		_fedEffect.TriggerEffectAsync();
 	} 
 }

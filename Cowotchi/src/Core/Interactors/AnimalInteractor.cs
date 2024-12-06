@@ -126,13 +126,21 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		}
 	}
 
-	public async Task FeedAnimal(int id)
+	public async Task FeedAnimal(int id, int xp)
 	{
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor FeedAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
+				var aEntity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
+				aEntity.XpOffset = aEntity.XpOffset + xp; 
+				if (aEntity.XpOffset > XpTableHelper.GetLevelsXpGoal(aEntity.Level))
+				{
+					aEntity.XpOffset = aEntity.XpOffset - XpTableHelper.GetLevelsXpGoal(aEntity.Level);
+					aEntity.Level = aEntity.Level + 1;
+				}
+
 				var aeEntity = new AnimalEvent();
 				aeEntity.AnimalId = id;
 				aeEntity.AnimalEventTypeId = (int)Enumerations.AnimalEventTypes.Feed;
@@ -148,13 +156,21 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 		}
 	}
 
-	public async Task NurtureAnimal(int id)
+	public async Task NurtureAnimal(int id, int xp)
 	{
 		try
 		{
 			_logger.LogDebug("Start AnimalInteractor LoveAnimal");
 			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
 			{
+				var aEntity = await unitOfWork.AnimalRepository.GetByIdIncludesAsync(id, IncludesHelper.GetAnimalIncludes());
+				aEntity.XpOffset = aEntity.XpOffset + xp; 
+				if (aEntity.XpOffset > XpTableHelper.GetLevelsXpGoal(aEntity.Level))
+				{
+					aEntity.XpOffset = aEntity.XpOffset - XpTableHelper.GetLevelsXpGoal(aEntity.Level);
+					aEntity.Level = aEntity.Level + 1;
+				}
+
 				var aeEntity = new AnimalEvent();
 				aeEntity.AnimalId = id;
 				aeEntity.AnimalEventTypeId = (int)Enumerations.AnimalEventTypes.Nurture;

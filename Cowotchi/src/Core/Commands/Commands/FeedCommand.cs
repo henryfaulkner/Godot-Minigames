@@ -19,12 +19,14 @@ public partial class FeedCommand : Command
 
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		int increase = 1;
+		int foodMeterIncrease = 1;
+		int xpIncrease = 5;
 		
 		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
-		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.Eat);
 		fgCharacter.Model.StomachLevel += increase;
 		UpdateMeters(fgCharacter.Model);
+		_animalInteractor.FeedAnimal(fgCharacter.Model.Id, xpIncrease);
+		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.Eat);
 		return true;
 	}
 

@@ -5,6 +5,7 @@ public static class MapperExtensions
 	public static CreatureModel MapToModel(this Egg egg)
 	{
 		var result = new CreatureModel(Enumerations.CreatureTypes.Egg);
+
 		result.Id = egg.Id;
 		result.Name = egg.Name;
 		result.BirthDate = egg.CreatedDate;
@@ -19,6 +20,10 @@ public static class MapperExtensions
 		result.BgAnimalController = (Enumerations.BgAnimalControllers)egg.AnimalType.BgAnimalController;
 		result.FgEggController = (Enumerations.FgEggControllers)egg.AnimalType.FgEggController;
 		result.FgAnimalController = (Enumerations.FgAnimalControllers)egg.AnimalType.FgAnimalController;
+
+		result.CreatureLevel = 0;
+		result.XpOffset = 0;
+
 		return result;
 	}
 
@@ -26,6 +31,7 @@ public static class MapperExtensions
 	{
 		var creatureType = ConvertAnimalTypeToCreatureType(animal.AnimalType);
 		var result = new CreatureModel(creatureType);
+
 		result.Id = animal.Id;
 		result.Name = animal.Name;
 		result.BirthDate = animal.CreatedDate;
@@ -40,6 +46,10 @@ public static class MapperExtensions
 		result.BgAnimalController = (Enumerations.BgAnimalControllers)animal.AnimalType.BgAnimalController;
 		result.FgEggController = (Enumerations.FgEggControllers)animal.AnimalType.FgEggController;
 		result.FgAnimalController = (Enumerations.FgAnimalControllers)animal.AnimalType.FgAnimalController;
+
+		result.CreatureLevel = animal.Level;
+		result.XpOffset = animal.XpOffset;
+
 		return result;
 	}
 	

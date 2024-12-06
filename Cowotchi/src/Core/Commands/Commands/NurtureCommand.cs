@@ -19,12 +19,14 @@ public partial class NurtureCommand : Command
 
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		int increase = 1;
+		int loveMeterIncrease = 1;
+		int xpIncrease = 5;
 		
 		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
-		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.ReceiveLove);
 		fgCharacter.Model.LoveLevel += increase;
 		UpdateMeters(fgCharacter.Model);
+		_animalInteractor.NurtureAnimal(fgCharacter.Model.Id, xpIncrease);
+		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.ReceiveLove);
 		return true;
 	}
 

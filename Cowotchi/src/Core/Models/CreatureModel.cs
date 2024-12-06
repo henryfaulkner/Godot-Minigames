@@ -25,4 +25,7 @@ public class CreatureModel
 	public Enumerations.BgAnimalControllers BgAnimalController { get; set;}
 	public Enumerations.FgEggControllers FgEggController { get; set; }
 	public Enumerations.FgAnimalControllers FgAnimalController { get; set; }
+
+	public int CreatureLevel { get; set; }
+	public int XpOffset { get; set; }
 }

@@ -30,6 +30,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			AddBackgroundSubject(creature);
 		}
 		ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), initialPosition);
+		
 		RotateForegroundSubjects();
 	}
 
@@ -109,6 +110,8 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		}
 	}
 
+	public int[] GetXpTable() => XpTable;
+
 	private Vector3 AlterSpawnPoint(Vector3 spawnPoint)
 	{
 		var r = new Random();
@@ -158,4 +161,6 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		_logger.LogError("Main GetBackgroundSubject: BackgroundSubject not found.");
 		throw new Exception("Creature not found.");
 	}
+
+	
 }

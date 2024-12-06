@@ -22,6 +22,8 @@ public partial class Menu : CanvasLayer
 	public Meter StomachMeter { get; set; }
 
 	private Observables _observables;
+	private IGameStateInteractor _gameStateInteractor;
+	private ILoggerService _logger;
 
 	public bool IsOn_MeterContainer { get; private set; }
 	public bool IsOn_InfoContainer { get; private set; }
@@ -29,6 +31,8 @@ public partial class Menu : CanvasLayer
 	public override void _Ready()
 	{
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+		_gameStateInteractor = GetNode<GameStateInteractor>(Constants.SingletonNodes.GameStateInteractor);
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 
 		_observables.UpdateHeartMeterValue += LoveMeter.UpdateValue;
 		_observables.UpdateHeartMeterMax += LoveMeter.UpdateMax;
@@ -94,8 +98,10 @@ public partial class Menu : CanvasLayer
 
 	public void SetCreatureInfo(CreatureModel model)
 	{
+		_logger.LogInfo($"_gameStateInteractor.GetXpTable()[0] {_gameStateInteractor.GetXpTable()[0]}");
+
 		InfoContainer.Title.Text = model.Name;
-		InfoContainer.Subtitle.Text = model.CreatureType.GetDescription();
-		InfoContainer.Content.Text = "";
+		InfoContainer.Subtitle.Text = $"{model.CreatureType.GetDescription()}, Lv.{model.CreatureLevel}, Xp.{model.XpOffset}/{_gameStateInteractor.GetXpTable()[model.CreatureLevel]}";
+		InfoContainer.Content.Text = "Strong as hell\nFat as hell\nBad as hell";
 	}
 }

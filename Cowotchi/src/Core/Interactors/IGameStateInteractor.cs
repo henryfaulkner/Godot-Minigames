@@ -2,13 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public interface IGameStateInteractor
+interface IGameStateInteractor
 {
-	public void ReadyInstance(List<CreatureModel> CreatureList, Vector3 initialPosition, Menu menu);
-	public ICharacter<CreatureModel> GetForegroundCharacter();
-	public List<CreatureModel> GetCreatureList();
-	public void RotateForegroundSubjects();
-	public void RemoveBackgroundSubject(Subject<CreatureModel> bgSubject);	
-	public void AddBackgroundSubject(CreatureModel model);
-	public void ToggleInfoContainer();
+	void ReadyInstance(List<CreatureModel> CreatureList, Vector3 initialPosition, Menu menu);
+	ICharacter<CreatureModel> GetForegroundCharacter();
+	List<CreatureModel> GetCreatureList();
+	void RotateForegroundSubjects();
+	void RemoveBackgroundSubject(Subject<CreatureModel> bgSubject);	
+	void AddBackgroundSubject(CreatureModel model);
+	void ToggleInfoContainer();
+	int[] GetXpTable();
 }

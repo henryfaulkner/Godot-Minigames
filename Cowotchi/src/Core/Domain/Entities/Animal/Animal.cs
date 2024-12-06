@@ -10,6 +10,8 @@ public class Animal : AuditEntity
 	public int LoveMax { get; set; }
 	public int AnimalTypeId { get; set; }
 	public int EggId { get; set; }
+	public int Level { get; set; }
+	public int XpOffset { get; set; }
 
 	[ForeignKey(nameof(AnimalTypeId))]
 	public AnimalType AnimalType { get; set; }
