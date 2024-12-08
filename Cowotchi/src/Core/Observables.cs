@@ -15,7 +15,6 @@ public partial class Observables: Node
 	public delegate void SwapEventHandler();
 	public void EmitSwap()
 	{
-		GD.PrintErr("Call EmitSwap");
 		EmitSignal(SignalName.Swap);
 	}
 
@@ -74,12 +73,21 @@ public partial class Observables: Node
 	}
 	#endregion
 
-	#region Labels
+	#region Label Actions
 	[Signal]
 	public delegate void UpdateSubjectNameLabelEventHandler(string text); 
 	public void EmitUpdateSubjectNameLabel(string text)
 	{
 		EmitSignal(SignalName.UpdateSubjectNameLabel, text);
+	}
+	#endregion
+
+	#region Info Container Actions
+	[Signal]
+	public delegate void UpdateCurrentCreatureInfoEventHandler();
+	public void EmitUpdateCurrentCreatureInfo()
+	{
+		EmitSignal(SignalName.UpdateCurrentCreatureInfo);
 	}
 	#endregion
 }

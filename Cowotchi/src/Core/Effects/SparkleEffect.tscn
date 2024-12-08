@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://jcgrub6wwg0x"]
+
+[ext_resource type="ArrayMesh" uid="uid://ceakx82j4j57c" path="res://src/Assets/Meshes/Effects/Sparkle.obj" id="1_0vntu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eamgf"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 0, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s0ask"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(3, 1, 1)
+emission_shape = 1
+emission_sphere_radius = 64.0
+gravity = Vector3(0, 0, 0)
+
+[node name="SparkleEffect" type="RigidBody3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_eamgf")
+amount = 5
+lifetime = 2.0
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_s0ask")
+draw_pass_1 = ExtResource("1_0vntu")

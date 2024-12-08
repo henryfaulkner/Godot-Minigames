@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ObjectLibrary/Menu/Pages/EggPage/EggPage.cs" id="1_jnh5u"]
 [ext_resource type="PackedScene" uid="uid://du8u63yyytnm5" path="res://src/ObjectLibrary/Menu/ActionButton/ActionButton.tscn" id="2_hd573"]
-[ext_resource type="Texture2D" uid="uid://d14iuqnebb4wd" path="res://src/Assets/Icons/StatsIcon.png" id="3_5dnuq"]
+[ext_resource type="Texture2D" uid="uid://dartqtw3mjdww" path="res://src/Assets/Icons/StatsIconFA.png" id="3_mmo3q"]
 [ext_resource type="Texture2D" uid="uid://74whe3k0h1tq" path="res://src/Assets/Icons/SwapIcon.png" id="4_5saoh"]
 
 [node name="EggPage" type="Control" node_paths=PackedStringArray("Stats", "Swap")]
@@ -29,8 +29,8 @@ theme_override_constants/separation = 180
 
 [node name="Stats" parent="OptionContainer" instance=ExtResource("2_hd573")]
 layout_mode = 2
-NormalTexture = ExtResource("3_5dnuq")
-HoverTexture = ExtResource("3_5dnuq")
+NormalTexture = ExtResource("3_mmo3q")
+HoverTexture = ExtResource("3_mmo3q")
 
 [node name="Swap" parent="OptionContainer" instance=ExtResource("2_hd573")]
 layout_mode = 2

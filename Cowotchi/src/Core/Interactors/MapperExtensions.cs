@@ -10,10 +10,10 @@ public static class MapperExtensions
 		result.Name = egg.Name;
 		result.BirthDate = egg.CreatedDate;
 
-		result.StomachLevel = -1;
-		result.StomachMax = -1;
-		result.LoveLevel = -1;
-		result.LoveMax = -1;
+		result.StomachLevel = 0;
+		result.StomachMax = 0;
+		result.LoveLevel = 0;
+		result.LoveMax = 0;
 
 		result.Mesh = egg.AnimalType.Mesh;
 		result.BgEggController = (Enumerations.BgEggControllers)egg.AnimalType.BgEggController;

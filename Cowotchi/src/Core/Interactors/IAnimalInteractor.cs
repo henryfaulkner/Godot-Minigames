@@ -8,6 +8,6 @@ public interface IAnimalInteractor
 	Task<List<CreatureModel>> GetAllAnimals();
 	Task<AnimalEventSummary> GetAnimalEventSummary(int id, TimeSpan? timeSpan);
 	Task RenameAnimal(int id, string name);
-	Task FeedAnimal(int id);
-	Task NurtureAnimal(int id);
+	Task FeedAnimal(int id, int xpIncrease);
+	Task NurtureAnimal(int id, int xpIncrease);
 }

@@ -17,22 +17,53 @@ public partial class NurtureCommand : Command
 		_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
 	}
 
+	int loveMeterIncrease = 1;
+	int xpIncrease = 5;
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		int loveMeterIncrease = 1;
-		int xpIncrease = 5;
-		
 		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
-		fgCharacter.Model.LoveLevel += increase;
-		UpdateMeters(fgCharacter.Model);
-		_animalInteractor.NurtureAnimal(fgCharacter.Model.Id, xpIncrease);
-		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.ReceiveLove);
-		return true;
+		
+		if (fgCharacter.Model.LoveLevel < fgCharacter.Model.LoveMax)
+		{
+			UpdateDatabase(fgCharacter);
+			
+			UpdateModel(fgCharacter);
+
+			UpdateGame(fgCharacter);
+
+			return true;
+		}
+		return false;
 	}
+	
+	private void UpdateDatabase(ICharacter<CreatureModel> fgCharacter)
+	{
+		_animalInteractor.NurtureAnimal(fgCharacter.Model.Id, xpIncrease);
+	}
+	
+	private void UpdateModel(ICharacter<CreatureModel> fgCharacter)
+	{
+		fgCharacter.Model.LoveLevel += loveMeterIncrease;
+		fgCharacter.Model.XpOffset = fgCharacter.Model.XpOffset + xpIncrease; 
+		if (fgCharacter.Model.XpOffset > XpTableHelper.GetLevelsXpGoal(fgCharacter.Model.CreatureLevel))
+		{
+			fgCharacter.Model.XpOffset = fgCharacter.Model.XpOffset - XpTableHelper.GetLevelsXpGoal(fgCharacter.Model.CreatureLevel);
+			fgCharacter.Model.CreatureLevel = fgCharacter.Model.CreatureLevel + 1;
+		}
+	}
+	
+	private async Task UpdateGame(ICharacter<CreatureModel> fgCharacter)
+	{
+		UpdateMeters(fgCharacter.Model);
+		_observables.EmitUpdateCurrentCreatureInfo();
+		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.ReceiveLove);
+	} 
 
 	private void UpdateMeters(CreatureModel model)
 	{
 		_observables.EmitUpdateHeartMeterMax(model.LoveMax);
 		_observables.EmitUpdateHeartMeterValue(model.LoveLevel);
 	}
+	
+	
 }

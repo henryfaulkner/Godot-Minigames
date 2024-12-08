@@ -11,5 +11,4 @@ interface IGameStateInteractor
 	void RemoveBackgroundSubject(Subject<CreatureModel> bgSubject);	
 	void AddBackgroundSubject(CreatureModel model);
 	void ToggleInfoContainer();
-	int[] GetXpTable();
 }

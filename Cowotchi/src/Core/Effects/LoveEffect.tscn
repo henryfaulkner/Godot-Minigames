@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://b241p4bbcaapi"]
 
-[ext_resource type="ArrayMesh" uid="uid://di1oyf6spr4xj" path="res://src/Assets/Meshes/Heart.obj" id="1_7hoih"]
+[ext_resource type="ArrayMesh" uid="uid://di1oyf6spr4xj" path="res://src/Assets/Meshes/Effects/Heart.obj" id="1_7hoih"]
 [ext_resource type="Material" uid="uid://c6n8sdiovatsx" path="res://src/Core/Effects/LoveEffect.tres" id="1_euwov"]
 [ext_resource type="Script" path="res://src/Core/Effects/LoveEffect.cs" id="1_fuham"]
 

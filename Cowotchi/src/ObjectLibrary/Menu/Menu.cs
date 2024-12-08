@@ -39,6 +39,11 @@ public partial class Menu : CanvasLayer
 
 		_observables.UpdateHungerMeterValue += StomachMeter.UpdateValue;
 		_observables.UpdateHungerMeterMax += StomachMeter.UpdateMax;
+
+		_observables.UpdateCurrentCreatureInfo += () => {
+			var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
+			SetCreatureInfo(fgCharacter.Model);	
+		};
 	}
 
 	public void SwapPage(Enumerations.MenuPageType type)
@@ -98,10 +103,10 @@ public partial class Menu : CanvasLayer
 
 	public void SetCreatureInfo(CreatureModel model)
 	{
-		_logger.LogInfo($"_gameStateInteractor.GetXpTable()[0] {_gameStateInteractor.GetXpTable()[0]}");
+		_logger.LogInfo($"XpTableHelper.GetLevelsXpGoal(model.CreatureLevel) {XpTableHelper.GetLevelsXpGoal(model.CreatureLevel)}");
 
 		InfoContainer.Title.Text = model.Name;
-		InfoContainer.Subtitle.Text = $"{model.CreatureType.GetDescription()}, Lv.{model.CreatureLevel}, Xp.{model.XpOffset}/{_gameStateInteractor.GetXpTable()[model.CreatureLevel]}";
+		InfoContainer.Subtitle.Text = $"{model.CreatureType.GetDescription()}, Lv.{model.CreatureLevel}, Xp.{model.XpOffset}/{XpTableHelper.GetLevelsXpGoal(model.CreatureLevel)}";
 		InfoContainer.Content.Text = "Strong as hell\nFat as hell\nBad as hell";
 	}
 }

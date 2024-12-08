@@ -17,11 +17,22 @@ public partial class SwapCommand : Command
 
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
 		_gameStateInteractor.RotateForegroundSubjects();
-		_logger.LogError(fgCharacter.Model.Name);
+
+		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
+
 		_observables.EmitUpdateSubjectNameLabel(fgCharacter.Model.Name);
-		_logger.LogError(fgCharacter.Model.Name);
+		_observables.EmitUpdateCurrentCreatureInfo();
+		UpdateMeters(fgCharacter.Model);
+
 		return true;
+	}
+
+	private void UpdateMeters(CreatureModel model)
+	{
+		_observables.EmitUpdateHeartMeterMax(model.LoveMax);
+		_observables.EmitUpdateHeartMeterValue(model.LoveLevel);
+		_observables.EmitUpdateHungerMeterMax(model.StomachMax);
+		_observables.EmitUpdateHungerMeterValue(model.StomachLevel);
 	}
 }

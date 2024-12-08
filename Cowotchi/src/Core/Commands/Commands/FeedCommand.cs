@@ -17,17 +17,47 @@ public partial class FeedCommand : Command
 		_animalInteractor = GetNode<IAnimalInteractor>(Constants.SingletonNodes.AnimalInteractor);
 	}
 
+	int foodMeterIncrease = 1;
+	int xpIncrease = 5;
 	public override async Task<bool> ExecuteAsync(Enumerations.Commands command)
 	{
-		int foodMeterIncrease = 1;
-		int xpIncrease = 5;
-		
 		var fgCharacter = _gameStateInteractor.GetForegroundCharacter();
-		fgCharacter.Model.StomachLevel += increase;
-		UpdateMeters(fgCharacter.Model);
+
+		if (fgCharacter.Model.StomachLevel < fgCharacter.Model.StomachMax)
+		{
+			UpdateDatabase(fgCharacter);
+			
+			UpdateModel(fgCharacter);
+
+			UpdateGame(fgCharacter);
+		
+			return true;
+		}
+		return false;
+	}
+
+	private void UpdateDatabase(ICharacter<CreatureModel> fgCharacter)
+	{
 		_animalInteractor.FeedAnimal(fgCharacter.Model.Id, xpIncrease);
+	}
+
+	private void UpdateModel(ICharacter<CreatureModel> fgCharacter)
+	{
+		
+		fgCharacter.Model.StomachLevel += foodMeterIncrease;
+		fgCharacter.Model.XpOffset = fgCharacter.Model.XpOffset + xpIncrease; 
+		if (fgCharacter.Model.XpOffset > XpTableHelper.GetLevelsXpGoal(fgCharacter.Model.CreatureLevel))
+		{
+			fgCharacter.Model.XpOffset = fgCharacter.Model.XpOffset - XpTableHelper.GetLevelsXpGoal(fgCharacter.Model.CreatureLevel);
+			fgCharacter.Model.CreatureLevel = fgCharacter.Model.CreatureLevel + 1;
+		}
+	}
+
+	private async Task UpdateGame(ICharacter<CreatureModel> fgCharacter)
+	{
+		UpdateMeters(fgCharacter.Model);
+		_observables.EmitUpdateCurrentCreatureInfo();
 		await fgCharacter.ExecuteActionAsync(Enumerations.CharacterActions.Eat);
-		return true;
 	}
 
 	private void UpdateMeters(CreatureModel model)

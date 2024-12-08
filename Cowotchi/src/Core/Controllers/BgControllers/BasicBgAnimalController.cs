@@ -13,8 +13,8 @@ public partial class BasicBgAnimalController : Node, IController
 	private float WanderSpeed { get; set; } = 0.5f;
 	private float JumpVelocity { get; set; } = 2.0f;
 	private int MaxJumpNum { get; set; } = 1;
-	private float RotationSpeed { get; set; } = 0.2f;
-	private float RotationCloseEnough { get; set; } = 0.2f;
+	private float RotationSpeed { get; set; } = 1.0f;
+	private float RotationCloseEnough { get; set; } = 0.02f;
 
 	#endregion
 

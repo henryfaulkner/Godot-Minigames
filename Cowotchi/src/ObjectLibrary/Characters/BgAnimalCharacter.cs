@@ -36,7 +36,7 @@ public partial class BgAnimalCharacter : CharacterBody3D, ICharacter<CreatureMod
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 
 		_loveEffect = _effectsFactory.SpawnLoveEffect(HeadNode, HeadNode.Position);
-		_fedEffect = _effectsFactory.SpawnLoveEffect(HeadNode, HeadNode.Position);
+		_fedEffect = _effectsFactory.SpawnFeedEffect(HeadNode, HeadNode.Position);
 	} 
 
 	public override void _PhysicsProcess(double delta)

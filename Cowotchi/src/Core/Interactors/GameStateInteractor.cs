@@ -9,15 +9,17 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 	private Menu Menu { get; set; }
 	private List<Subject<CreatureModel>> BgGallery { get; set; }
 	private ICharacter<CreatureModel> ForegroundCharacter { get; set; }
-	private int ForegroundCreatureIndex { get; set; } = -1;
+	private int ForegroundCreatureIndex { get; set; } = 0;
 
 	private ILoggerService _logger { get; set; } 
 	private CharacterFactory _characterFactory { get; set; }
+	private Observables _observables { get; set; }
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 	}
 
 	public void ReadyInstance(List<CreatureModel> creatureList, Vector3 initialPosition, Menu menu)
@@ -29,9 +31,21 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		{
 			AddBackgroundSubject(creature);
 		}
-		ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), new CreatureModel(Enumerations.CreatureTypes.Egg), initialPosition);
 		
-		RotateForegroundSubjects();
+		// Set initial foreground creature
+		var model = CreatureList[ForegroundCreatureIndex];
+		ForegroundCharacter = SetCreatureInForeground(model, initialPosition);
+		
+		// Remove foreground creature from background
+		var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
+		RemoveBackgroundSubject(GetBackgroundSubject(newFgInstanceId));
+		
+		_observables.EmitUpdateSubjectNameLabel(ForegroundCharacter.Model.Name);
+		_observables.EmitUpdateCurrentCreatureInfo();
+		_observables.EmitUpdateHeartMeterMax(model.LoveMax);
+		_observables.EmitUpdateHeartMeterValue(model.LoveLevel);
+		_observables.EmitUpdateHungerMeterMax(model.StomachMax);
+		_observables.EmitUpdateHungerMeterValue(model.StomachLevel);
 	}
 
 	public ICharacter<CreatureModel> GetForegroundCharacter()
@@ -42,6 +56,22 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 	public List<CreatureModel> GetCreatureList()
 	{
 		return CreatureList;
+	}
+
+	private ICharacter<CreatureModel>? SetCreatureInForeground(CreatureModel model, Vector3 position)
+	{
+		ICharacter<CreatureModel>? result = null;
+		if (model.CreatureType == Enumerations.CreatureTypes.Egg) 
+		{
+			result = _characterFactory.SpawnFgEgg(GetNode("."), (CreatureModel)model, position);
+			Menu.SwapPage(Enumerations.MenuPageType.Egg);
+		}
+		else
+		{ 
+			result = _characterFactory.SpawnFgAnimal(GetNode("."), (CreatureModel)model, position);
+			Menu.SwapPage(Enumerations.MenuPageType.Animal);
+		}
+		return result;	
 	}
 
 	public void RotateForegroundSubjects()
@@ -63,22 +93,12 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			ForegroundCharacter.Subject.CharacterBody3D.QueueFree();
 
 			var nextModel = CreatureList[ForegroundCreatureIndex];
-			Menu.SetCreatureInfo(nextModel);
-			if (nextModel.CreatureType == Enumerations.CreatureTypes.Egg) 
-			{
-				ForegroundCharacter = _characterFactory.SpawnFgEgg(GetNode("."), (CreatureModel)nextModel, fgPos);
-				Menu.SwapPage(Enumerations.MenuPageType.Egg);
-			}
-			else
-			{ 
-				ForegroundCharacter = _characterFactory.SpawnFgAnimal(GetNode("."), (CreatureModel)nextModel, fgPos);
-				Menu.SwapPage(Enumerations.MenuPageType.Animal);
-			}
+			ForegroundCharacter = SetCreatureInForeground(nextModel, fgPos);
 
-			_logger.LogInfo($"nextModel.Name {nextModel.Name}");
+			// Remove foreground creature from background
 			var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
-			Subject<CreatureModel> newFgBg = GetBackgroundSubject(newFgInstanceId);
-			RemoveBackgroundSubject(newFgBg);
+			RemoveBackgroundSubject(GetBackgroundSubject(newFgInstanceId));
+
 			if (oldFgModel != null) AddBackgroundSubject(oldFgModel);
 		} 
 		catch (Exception ex)
@@ -109,8 +129,6 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			BgGallery.Add(bgChar.Subject);
 		}
 	}
-
-	public int[] GetXpTable() => XpTable;
 
 	private Vector3 AlterSpawnPoint(Vector3 spawnPoint)
 	{

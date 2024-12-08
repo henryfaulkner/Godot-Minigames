@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://k4wvivcxckhq"]
+
+[ext_resource type="Script" path="res://src/Core/Effects/LoveEffect.cs" id="1_oe3gr"]
+[ext_resource type="Material" uid="uid://ncg0rvcgeheb" path="res://src/Core/Effects/FeedEffect.tres" id="2_8kbtl"]
+[ext_resource type="ArrayMesh" uid="uid://ccawkxgekpgtb" path="res://src/Assets/Meshes/Effects/Wheat.obj" id="3_obaeo"]
+
+[sub_resource type="Curve" id="Curve_xj7q8"]
+max_value = 3.0
+_data = [Vector2(0, 0.032967), 0.0, 0.0, 0, 0, Vector2(0.673913, 1.97802), 0.0, 0.0, 0, 0, Vector2(1, 3), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2bv5v"]
+curve = SubResource("Curve_xj7q8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x8tqm"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(0.2, 0.2, 0.2)
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector3(0, 1, 0)
+spread = 140.0
+flatness = 0.2
+initial_velocity_max = 6.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 5.0
+gravity = Vector3(0, 2.45, 0)
+tangential_accel_min = 0.999998
+tangential_accel_max = 3.0
+damping_min = 1.0
+damping_max = 2.0
+damping_curve = SubResource("CurveTexture_2bv5v")
+scale_min = 0.02
+scale_max = 0.2
+
+[node name="NurtureEffect" type="RigidBody3D" node_paths=PackedStringArray("Hearts")]
+gravity_scale = 0.0
+script = ExtResource("1_oe3gr")
+Hearts = NodePath("GPUParticles3D")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+material_override = ExtResource("2_8kbtl")
+amount = 12
+lifetime = 1.5
+explosiveness = 1.0
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_x8tqm")
+draw_pass_1 = ExtResource("3_obaeo")

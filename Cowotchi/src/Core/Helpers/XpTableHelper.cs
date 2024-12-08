@@ -1,13 +1,33 @@
+using System;
+using System.Runtime.Caching;
+using Godot;
+
 public static class XpTableHelper
 {
-    public static int GetLevelsXpGoal(int level)
-    {
-        int[] xpTable = GenerateXpTable();
-        return xpTable[level];   
-    }
+	private static readonly MemoryCache _cache = MemoryCache.Default;
+	private static readonly string CacheKey = "XpTableCache";
+	private static readonly object _cacheLock = new object();
 
-    // DEPRECATED
-    public static int[] GenerateXpTable(int maxLevel = 20, int baseXP = 100, float multiplier = 1.5f)
+	public static int GetLevelsXpGoal(int level)
+	{
+		// Try to get the XP table from the cache
+		if (!_cache.Contains(CacheKey))
+		{
+			lock (_cacheLock)
+			{
+				if (!_cache.Contains(CacheKey)) // Double-check locking for thread safety
+				{
+					var xpTable = GenerateXpTable();
+					_cache.Set(CacheKey, xpTable, DateTimeOffset.UtcNow.AddMinutes(30)); // Cache for 30 minutes
+				}
+			}
+		}
+
+		var cachedTable = (int[])_cache.Get(CacheKey);
+		return cachedTable[level];
+	}
+
+	public static int[] GenerateXpTable(int maxLevel = 20, int baseXP = 100, float multiplier = 1.5f)
 	{
 		int[] result = new int[maxLevel + 1];  // Array to store XP required for each level
 
@@ -25,7 +45,7 @@ public static class XpTableHelper
 			}
 
 			// Print XP needed for each level
-			_logger.LogInfo($"Level {level}: {result[level]} XP");
+			GD.Print($"Level {level}: {result[level]} XP");
 		}
 
 		return result;
