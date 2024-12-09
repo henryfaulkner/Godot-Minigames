@@ -7,9 +7,11 @@ using System.Linq;
 public partial class Main : Node3D
 {
 	[Export]
-	private RichTextLabel SubjectNameLabel { get; set; }
+	private SubjectNameLabel SubjectNameLabel { get; set; }
 	[Export]
 	private Menu Menu { get; set; }
+	[Export]
+	private RenameModal RenameModal { get; set; }
 
 	private readonly string FOREGROUND_PLACEHOLDER_PATH = "./Placeholder";
 
@@ -43,8 +45,8 @@ public partial class Main : Node3D
 			placeholder.QueueFree();
 
 			_gameStateInteractor.ReadyInstance(await GetCreatureListFromDatabase(), position, Menu);
-			
-			_observables.GrabEgg += HandleGrabEgg;
+
+			RenameModal.Visible = false;
 		}
 		catch (Exception ex)
 		{
@@ -75,20 +77,5 @@ public partial class Main : Node3D
 		}
 
 		return result;
-	}
-
-	private void HandleGrabEgg(ulong instanceId)
-	{
-		_logger.LogError("Call HandleGrabEgg");
-		_logger.LogError($"instanceId {instanceId}");
-
-		foreach (var model in _gameStateInteractor.GetCreatureList())
-		{
-			_logger.LogError($"model.InstanceId {model.InstanceId}");
-			if (model.InstanceId == instanceId)
-			{
-				_logger.LogError("Grabbed egg was found in gallery");
-			}
-		}
 	}
 }

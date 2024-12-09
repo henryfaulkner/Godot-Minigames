@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://bevmsq8ke4xum"]
+
+[ext_resource type="FontFile" uid="uid://tx3hb6cxwd6i" path="res://src/Assets/Fonts/Kenney Future Narrow.ttf" id="1_23pm2"]
+[ext_resource type="Script" path="res://src/ObjectLibrary/NameLabel/SubjectNameLabel.cs" id="2_qhypv"]
+
+[node name="SubjectNameLabel" type="CanvasLayer" node_paths=PackedStringArray("NameLabel", "OpenRenameButton")]
+layer = 10
+offset = Vector2(50, 50)
+transform = Transform2D(1, 0, 0, 1, 50, 50)
+script = ExtResource("2_qhypv")
+NameLabel = NodePath("NameLabel")
+OpenRenameButton = NodePath("NameLabel/Button")
+
+[node name="NameLabel" type="RichTextLabel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -752.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("1_23pm2")
+theme_override_font_sizes/normal_font_size = 56
+bbcode_enabled = true
+fit_content = true
+
+[node name="Button" type="Button" parent="NameLabel"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+action_mode = 0

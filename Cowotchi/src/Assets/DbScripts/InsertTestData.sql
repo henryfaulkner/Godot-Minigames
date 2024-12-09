@@ -1,8 +1,8 @@
-INSERT INTO Eggs (Name, AnimalTypeId, IsHatched, CreatedDate, ModifiedDate, IsDeleted) 
+INSERT INTO Eggs (Name, AnimalTypeId, IsHatched, IsInGallery, CreatedDate, ModifiedDate, IsDeleted) 
 VALUES
-('Monterey', 1, 0, datetime('now'), datetime('now'), 0),
-('Jack', 1, 1, datetime('now'), datetime('now'), 0),
-('Colby', 1, 1, datetime('now'), datetime('now'), 0);
+('Monterey', 1, 0, 1, datetime('now'), datetime('now'), 0),
+('Jack', 1, 1, 1, datetime('now'), datetime('now'), 0),
+('Colby', 1, 1, 1, datetime('now'), datetime('now'), 0);
 
 INSERT INTO HatchRequirements (EggId, HatchRequirementTypeId, ProgressIndex, Goal, CreatedDate, ModifiedDate, IsDeleted)
 VALUES
@@ -16,6 +16,6 @@ VALUES
 ('Jack', 3, 3, 1, 2, 1, 0, datetime('now'), datetime('now'), 0),
 ('Colby', 3, 3, 2, 3, 1, 0, datetime('now'), datetime('now'), 0);
 
-INSERT INTO Eggs (Name, AnimalTypeId, IsHatched, CreatedDate, ModifiedDate, IsDeleted) 
+INSERT INTO Eggs (Name, AnimalTypeId, IsHatched, IsInGallery, CreatedDate, ModifiedDate, IsDeleted) 
 VALUES
-('Cheddar', 1, 0, datetime('now'), datetime('now'), 0);
+('Cheddar', 1, 0, 0, datetime('now'), datetime('now'), 0);

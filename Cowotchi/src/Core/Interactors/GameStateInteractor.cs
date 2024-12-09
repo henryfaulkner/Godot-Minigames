@@ -7,26 +7,32 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 {
 	private List<CreatureModel> CreatureList { get; set; }
 	private Menu Menu { get; set; }
-	private List<Subject<CreatureModel>> BgGallery { get; set; }
+	private List<ICharacter<CreatureModel>> BgGallery { get; set; }
+	private List<ICharacter<CreatureModel>> BgNewEggs { get; set; }
 	private ICharacter<CreatureModel> ForegroundCharacter { get; set; }
 	private int ForegroundCreatureIndex { get; set; } = 0;
 
 	private ILoggerService _logger { get; set; } 
 	private CharacterFactory _characterFactory { get; set; }
 	private Observables _observables { get; set; }
+	private IEggInteractor _eggInteractor { get; set; }
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_characterFactory = GetNode<CharacterFactory>(Constants.SingletonNodes.CharacterFactory);
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+		_eggInteractor = GetNode<IEggInteractor>(Constants.SingletonNodes.EggInteractor);
+			
+		_observables.GrabEgg += HandleGrabEgg;
 	}
 
 	public void ReadyInstance(List<CreatureModel> creatureList, Vector3 initialPosition, Menu menu)
 	{
 		CreatureList = creatureList;
 		Menu = menu;
-		BgGallery = new List<Subject<CreatureModel>>();
+		BgGallery = new List<ICharacter<CreatureModel>>();
+		BgNewEggs = new List<ICharacter<CreatureModel>>();
 		foreach (var creature in CreatureList)
 		{
 			AddBackgroundSubject(creature);
@@ -85,14 +91,17 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			}
 			_logger.LogDebug("The CreatureList is NOT empty.");
 
-			ForegroundCreatureIndex += 1;
-			if (ForegroundCreatureIndex == CreatureList.Count) ForegroundCreatureIndex = 0;
-
 			var fgPos = ForegroundCharacter.Subject.CharacterBody3D.GlobalPosition;
 			var oldFgModel = ForegroundCharacter.Subject.Model;
 			ForegroundCharacter.Subject.CharacterBody3D.QueueFree();
 
-			var nextModel = CreatureList[ForegroundCreatureIndex];
+			CreatureModel nextModel = null;
+			do 
+			{
+				ForegroundCreatureIndex += 1;
+				if (ForegroundCreatureIndex == CreatureList.Count) ForegroundCreatureIndex = 0;
+				nextModel = CreatureList[ForegroundCreatureIndex];
+			} while (nextModel == null || !nextModel.IsInGallery);
 			ForegroundCharacter = SetCreatureInForeground(nextModel, fgPos);
 
 			// Remove foreground creature from background
@@ -108,25 +117,30 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		}
 	}
 	
-	public void RemoveBackgroundSubject(Subject<CreatureModel> bgSubject)
+	public void RemoveBackgroundSubject(ICharacter<CreatureModel> bgCharacter)
 	{
-		BgGallery.Remove(bgSubject);
-		bgSubject.CharacterBody3D.QueueFree();
+		BgGallery.Remove(bgCharacter);
+		bgCharacter.Subject.CharacterBody3D.QueueFree();
 	}
 
 	public void AddBackgroundSubject(CreatureModel model)
 	{
 		var defaultSpawnPointNode = GetNode<Node3D>(Constants.KeyNodePaths.BgSpawnPoint);
 		var spawnPoint = AlterSpawnPoint(defaultSpawnPointNode.Position);
-		if (model.CreatureType == Enumerations.CreatureTypes.Egg)
+		if (model.CreatureType == Enumerations.CreatureTypes.Egg && model.IsInGallery)
 		{
-			var bgChar = _characterFactory.SpawnBgEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-			BgGallery.Add(bgChar.Subject);
+			var bgCharacter = _characterFactory.SpawnBgEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+			BgGallery.Add(bgCharacter);
+		}
+		else if (model.CreatureType == Enumerations.CreatureTypes.Egg && !model.IsInGallery)
+		{
+			var bgCharacter = _characterFactory.SpawnBgEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+			BgNewEggs.Add(bgCharacter);
 		}
 		else
 		{
-			var bgChar = _characterFactory.SpawnBgAnimal(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-			BgGallery.Add(bgChar.Subject);
+			var bgCharacter = _characterFactory.SpawnBgAnimal(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
+			BgGallery.Add(bgCharacter);
 		}
 	}
 
@@ -166,19 +180,39 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		throw new Exception("Creature not found.");
 	}
 
-	private Subject<CreatureModel> GetBackgroundSubject(ulong instanceId)
+	private ICharacter<CreatureModel> GetBackgroundSubject(ulong instanceId)
 	{
-		foreach (var bgSubject in BgGallery)
+		foreach (var bgCharacter in BgGallery)
 		{
-			_logger.LogInfo($"bgSubject.Model == null {bgSubject.Model == null}");
-			if (bgSubject.Model.InstanceId == instanceId) 
+			if (bgCharacter.Model.InstanceId == instanceId) 
 			{
-				return bgSubject;
+				return bgCharacter;
 			}
 		}
 		_logger.LogError("Main GetBackgroundSubject: BackgroundSubject not found.");
 		throw new Exception("Creature not found.");
 	}
 
-	
+	private void HandleGrabEgg(ulong instanceId)
+	{
+		_logger.LogError("Call HandleGrabEgg");
+		_logger.LogError($"instanceId {instanceId}");
+
+		ICharacter<CreatureModel>? newEggCharacter = null;
+		foreach (var character in BgNewEggs)
+		{
+			if (character.Model.InstanceId == instanceId)
+			{
+				newEggCharacter = character;
+			}
+		}
+
+		if (newEggCharacter != null) 
+		{
+			BgNewEggs.Remove(newEggCharacter);
+			BgGallery.Add(newEggCharacter);
+			newEggCharacter.Model.IsInGallery = true;
+			_eggInteractor.AddEggToGallery(newEggCharacter.Model.Id);
+		}
+	}
 }

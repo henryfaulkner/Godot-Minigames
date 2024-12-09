@@ -43,9 +43,6 @@ public static class XpTableHelper
 				// Calculate XP for the next level based on the previous level
 				result[level] = (int)(result[level - 1] * multiplier);
 			}
-
-			// Print XP needed for each level
-			GD.Print($"Level {level}: {result[level]} XP");
 		}
 
 		return result;

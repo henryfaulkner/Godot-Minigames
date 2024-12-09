@@ -1,1 +1,1 @@
-Main RotateForegroundSubjects Error: Object reference not set to an instance of an object. Exception: Object reference not set to an instance of an object.
+Main _Ready Error: Object reference not set to an instance of an object. Exception: Object reference not set to an instance of an object.

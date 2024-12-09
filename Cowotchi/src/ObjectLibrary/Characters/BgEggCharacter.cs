@@ -17,17 +17,20 @@ public partial class BgEggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 	public Subject<CreatureModel> Subject { get; set; }
 	public CreatureModel Model { get; set; }
 	public IController Controller { get; set; }
+	private SparkleEffect? SparkleEffect { get; set; }
 
 	private ILoggerService _logger { get; set; }
 	private IEggInteractor _eggInteractor { get; set; } 
 	private ControllerFactory _controllerFactory { get; set; }	
 	private Observables _observables { get; set; }
+	private EffectsFactory _effectsFactory { get; set; }
 	
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_controllerFactory = GetNode<ControllerFactory>(Constants.SingletonNodes.ControllerFactory);
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
+		_effectsFactory = GetNode<EffectsFactory>(Constants.SingletonNodes.EffectsFactory);
 	} 
 
 	public override void _PhysicsProcess(double delta)
@@ -46,6 +49,8 @@ public partial class BgEggCharacter : CharacterBody3D, ICharacter<CreatureModel>
 			Subject.ReadyInstance(this, model);
 
 			Controller = _controllerFactory.SpawnBgEggController(this, model, Collider, Mesh);
+			
+			if (!model.IsInGallery) SparkleEffect = _effectsFactory.SpawnSparkleEffect(this, HeadNode.Position);
 		}
 		catch (Exception ex)
 		{

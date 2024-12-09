@@ -29,10 +29,6 @@ EffectsFactory="*res://src/Core/Effects/EffectsFactory.cs"
 ControllerFactory="*res://src/Core/Controllers/ControllerFactory.cs"
 CharacterFactory="*res://src/Core/Subjects/CharacterFactory.cs"
 
-[display]
-
-mouse_cursor/custom_image="res://src/Assets/Cursors/default.png"
-
 [dotnet]
 
 project/assembly_name="Cowotchi"

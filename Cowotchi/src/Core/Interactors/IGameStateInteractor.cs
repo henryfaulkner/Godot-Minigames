@@ -8,7 +8,7 @@ interface IGameStateInteractor
 	ICharacter<CreatureModel> GetForegroundCharacter();
 	List<CreatureModel> GetCreatureList();
 	void RotateForegroundSubjects();
-	void RemoveBackgroundSubject(Subject<CreatureModel> bgSubject);	
+	void RemoveBackgroundSubject(ICharacter<CreatureModel> bgSubject);	
 	void AddBackgroundSubject(CreatureModel model);
 	void ToggleInfoContainer();
 }

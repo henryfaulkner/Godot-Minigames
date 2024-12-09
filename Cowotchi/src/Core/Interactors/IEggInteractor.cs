@@ -8,4 +8,5 @@ public interface IEggInteractor
 	Task<CreatureModel> GetEgg(int id);
 	Task RenameEgg(int id, string name);
 	Task<CreatureModel> HatchEgg(int id);
+	Task AddEggToGallery(int id);
 }

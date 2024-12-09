@@ -80,6 +80,13 @@ public partial class Observables: Node
 	{
 		EmitSignal(SignalName.UpdateSubjectNameLabel, text);
 	}
+
+	[Signal]
+	public delegate void OpenCloseRenameWindowEventHandler(bool isOpen);
+	public void EmitOpenCloseRenameWindow(bool isOpen)
+	{
+		EmitSignal(SignalName.OpenCloseRenameWindow, isOpen);
+	} 
 	#endregion
 
 	#region Info Container Actions

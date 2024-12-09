@@ -7,14 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://clnvsbxj5pkk7" path="res://src/ObjectLibrary/Grass.tscn" id="6_5pt56"]
 [ext_resource type="PackedScene" uid="uid://dfbol2cb2rl73" path="res://src/ObjectLibrary/Characters/BgAnimalCharacter.tscn" id="7_3n2o0"]
 [ext_resource type="PackedScene" uid="uid://bfr7trnw28fod" path="res://src/ObjectLibrary/Characters/BgEggCharacter.tscn" id="7_a0ut1"]
-[ext_resource type="FontFile" uid="uid://tx3hb6cxwd6i" path="res://src/Assets/Fonts/Kenney Future Narrow.ttf" id="8_nwoen"]
-[ext_resource type="Script" path="res://src/Pages/SubjectNameLabel.cs" id="9_f1tk1"]
+[ext_resource type="PackedScene" uid="uid://bevmsq8ke4xum" path="res://src/ObjectLibrary/NameLabel/SubjectNameLabel.tscn" id="8_1itm6"]
 [ext_resource type="Script" path="res://src/Pages/MainCamera.cs" id="9_gywr0"]
+[ext_resource type="PackedScene" uid="uid://c0h8lewoneqst" path="res://src/ObjectLibrary/RenameModal/RenameModal.tscn" id="11_w0ylu"]
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("SubjectNameLabel", "Menu")]
+[node name="Main" type="Node3D" node_paths=PackedStringArray("Menu", "RenameModal")]
 script = ExtResource("1_bw4bp")
-SubjectNameLabel = NodePath("HUD/SubjectNameLabel")
 Menu = NodePath("HUD/Menu")
+RenameModal = NodePath("HUD/RenameModal")
 
 [node name="Placeholder" parent="." instance=ExtResource("2_5onax")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593994, 3.44791)
@@ -57,16 +57,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9338, -2.08784)
 
 [node name="HUD" type="Node2D" parent="."]
 
-[node name="SubjectNameLabel" type="RichTextLabel" parent="HUD"]
-offset_left = 54.0
-offset_top = 45.0
-offset_right = 567.0
-offset_bottom = 252.0
-theme_override_fonts/normal_font = ExtResource("8_nwoen")
-theme_override_font_sizes/normal_font_size = 56
-bbcode_enabled = true
-script = ExtResource("9_f1tk1")
+[node name="SubjectNameLabel" parent="HUD" instance=ExtResource("8_1itm6")]
 
 [node name="Menu" parent="HUD" instance=ExtResource("2_sae3e")]
+
+[node name="RenameModal" parent="HUD" instance=ExtResource("11_w0ylu")]
 
 [node name="Commands" type="Node" parent="."]

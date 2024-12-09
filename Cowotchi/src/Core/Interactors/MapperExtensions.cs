@@ -9,6 +9,7 @@ public static class MapperExtensions
 		result.Id = egg.Id;
 		result.Name = egg.Name;
 		result.BirthDate = egg.CreatedDate;
+		result.IsInGallery = egg.IsInGallery;
 
 		result.StomachLevel = 0;
 		result.StomachMax = 0;
@@ -35,6 +36,7 @@ public static class MapperExtensions
 		result.Id = animal.Id;
 		result.Name = animal.Name;
 		result.BirthDate = animal.CreatedDate;
+		result.IsInGallery = true;
 		
 		result.StomachLevel = eventSummary.FeedCount;
 		result.StomachMax = animal.StomachMax;

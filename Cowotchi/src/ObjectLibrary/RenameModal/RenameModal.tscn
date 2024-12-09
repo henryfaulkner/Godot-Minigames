@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0h8lewoneqst"]
+
+[ext_resource type="Script" path="res://src/ObjectLibrary/RenameModal/RenameModal.cs" id="1_slhjk"]
+
+[node name="RenameModal" type="PopupPanel" node_paths=PackedStringArray("NameInput", "SaveButton")]
+title = "Rename"
+initial_position = 1
+size = Vector2i(300, 300)
+visible = true
+borderless = false
+unfocusable = true
+min_size = Vector2i(300, 300)
+keep_title_visible = true
+script = ExtResource("1_slhjk")
+NameInput = NodePath("VBoxContainer/LineEdit")
+SaveButton = NodePath("HBoxContainer/Button")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 296.0
+offset_bottom = 296.0
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "placeholder name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 296.0
+offset_bottom = 296.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Save"

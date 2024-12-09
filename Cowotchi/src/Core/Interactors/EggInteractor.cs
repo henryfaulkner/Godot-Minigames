@@ -167,6 +167,26 @@ public partial class EggInteractor : Node, IEggInteractor
 		}
 		return result;
 	}
+	
+	public async Task AddEggToGallery(int id)
+	{
+		try
+		{
+			_logger.LogDebug("Start EggInteractor AddEggToGallery");
+			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
+			{
+				var eEntity = await unitOfWork.EggRepository.GetByIdAsync(id);
+				eEntity.IsInGallery = true;
+				_ = await unitOfWork.SaveChangesAsync();
+			}
+			_logger.LogDebug("End EggInteractor AddEggToGallery");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggInteractor AddEggToGallery Error: {ex.Message}", ex);
+			throw;
+		}
+	}
 
 	private string GetRandomName()
 	{
