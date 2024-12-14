@@ -15,8 +15,8 @@ public partial class Enumerations
 
 	public enum HatchRequirementTypes
 	{
-		[Description("Time")]
-		Time = 1,
+		[Description("Action Count Over Time")]
+		ActionCount = 1,
 	}
 
 	public enum AnimalTypes
@@ -55,6 +55,8 @@ public partial class Enumerations
 		Nurture,
 		[Description("Feed")]
 		Feed,
+		[Description("Hatch")]
+		Hatch,
 	}
 
 	public enum CharacterActions

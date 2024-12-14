@@ -23,6 +23,7 @@ public partial class Menu : CanvasLayer
 
 	private Observables _observables;
 	private IGameStateInteractor _gameStateInteractor;
+	private IEggInteractor _eggInteractor;
 	private ILoggerService _logger;
 
 	public bool IsOn_MeterContainer { get; private set; }
@@ -32,6 +33,7 @@ public partial class Menu : CanvasLayer
 	{
 		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 		_gameStateInteractor = GetNode<GameStateInteractor>(Constants.SingletonNodes.GameStateInteractor);
+		_eggInteractor = GetNode<EggInteractor>(Constants.SingletonNodes.EggInteractor);
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 
 		_observables.UpdateHeartMeterValue += LoveMeter.UpdateValue;
@@ -46,28 +48,31 @@ public partial class Menu : CanvasLayer
 		};
 	}
 
-	public void SwapPage(Enumerations.MenuPageType type)
+	public void SwapPage(CreatureModel newCreature, Enumerations.MenuPageType type)
 	{
 		switch (type)
 		{
 			case Enumerations.MenuPageType.Egg:
-				ShowEggPage();
+				ShowEggPage(newCreature);
 				break;
 			case Enumerations.MenuPageType.Animal:
-				ShowAnimalPage();
+				ShowAnimalPage(newCreature);
 				break;
 			default:
 				break;
 		}
 	}
 
-	private void ShowEggPage()
+	private void ShowEggPage(CreatureModel newCreature)
 	{
+		_logger.LogInfo($"Call ShowEggPage : will hatch? {_eggInteractor.IsReadyToHatch(newCreature.Id)}");
+		EggPage.ToggleHatchDisabled(!_eggInteractor.IsReadyToHatch(newCreature.Id));
+
 		EggPage.Show();
 		AnimalPage.Hide();
 	}
 
-	private void ShowAnimalPage()
+	private void ShowAnimalPage(CreatureModel newCreature)
 	{
 		EggPage.Hide();
 		AnimalPage.Show();

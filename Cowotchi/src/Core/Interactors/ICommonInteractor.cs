@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 
 public interface ICommonInteractor
 {
-    Task InitDatabaseIfRequired();
-    Task<List<AnimalEventType>> GetAnimalEventTypes();
-    Task<List<AnimalType>> GetAnimalTypes();
-    Task<List<HatchRequirementType>> GetHatchRequirementTypes();
+	Task InitDatabaseIfRequired();
+	Task<List<AnimalEventType>> GetAnimalEventTypes();
+	Task<List<AnimalType>> GetAnimalTypes();
+	Task<List<HatchRequirementType>> GetHatchRequirementTypes();
+	Task<int> CountAnimalEventsSinceDate(DateTime sinceDate);
 }

@@ -9,7 +9,10 @@ public class Egg : AuditEntity
 	public int AnimalTypeId { get; set; }
 	public bool IsHatched { get; set; }
 	public bool IsInGallery { get; set; }
+	public int HatchRequirementId { get; set; }
 
 	[ForeignKey(nameof(AnimalTypeId))]
 	public AnimalType AnimalType { get; set; }
+	[ForeignKey(nameof(HatchRequirementId))]
+	public HatchRequirement HatchRequirement { get; set; }
 }

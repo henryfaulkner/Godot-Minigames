@@ -78,23 +78,21 @@ public partial class AnimalInteractor : Node, IAnimalInteractor
 			{
 				DateTime thresholdDate = DateTime.Now - timeSpan.Value;
 
-				var aeNutureEntityList = 
-					(await unitOfWork.AnimalEventRepository
-						.QueryAsync(
-							q => q.Where(x => x.AnimalId == id)
-								.Where(x => x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Nurture)
-								.Where(x => x.CreatedDate >= thresholdDate)
-						)).ToList();
-				result.NurtureCount = aeNutureEntityList.Count;
+				result.NurtureCount = 
+					await unitOfWork.AnimalEventRepository
+						.QueryScalarAsync(
+							q => q.Count(x => x.AnimalId == id
+								&& x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Nurture
+								&& x.CreatedDate >= thresholdDate)
+						);
 
-				var aeFeedEntityList = 
-					(await unitOfWork.AnimalEventRepository
-						.QueryAsync(
-							q => q.Where(x => x.AnimalId == id)
-								.Where(x => x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Feed)
-								.Where(x => x.CreatedDate >= thresholdDate)
-						)).ToList();
-				result.FeedCount = aeFeedEntityList.Count;		
+				result.FeedCount = 
+					await unitOfWork.AnimalEventRepository
+						.QueryScalarAsync(
+							q => q.Count(x => x.AnimalId == id
+								&& x.AnimalEventTypeId == (int)Enumerations.AnimalEventTypes.Feed
+								&& x.CreatedDate >= thresholdDate)
+						);		
 			}
 			_logger.LogDebug("End AnimalInteractor GetAnimalEventSummary");
 		}

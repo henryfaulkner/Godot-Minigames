@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 public partial class EggInteractor : Node, IEggInteractor
 {
-	public static readonly string[] DefaultFarmAnimalNames = new string[]
+	static readonly string[] DefaultFarmAnimalNames = new string[]
 	{
 		"Bessie", "Daisy", "Moo Moo", "Clucky", "Woolly", 
 		"Ginger", "Nibbles", "Spot", "Fluffy", "Buster",
@@ -19,6 +20,8 @@ public partial class EggInteractor : Node, IEggInteractor
 		"Dandelion", "Oreo", "Rosie", "Gizmo", "Gus", 
 		"Beatrice", "Petunia", "Chester", "Duchess", "Toby"
 	};
+
+	static readonly TimeSpan DEFAULT_ACTION_COUNT_HATCH_Span = new TimeSpan(1, 0, 0, 0);
 
 	private ILoggerService _logger { get; set; }
 
@@ -131,9 +134,78 @@ public partial class EggInteractor : Node, IEggInteractor
 		}
 	}
 
+	public bool IsReadyToHatch(int eggId, TimeSpan? timeSpan = null)
+	{
+		if (timeSpan == null) timeSpan = DEFAULT_ACTION_COUNT_HATCH_Span;
+
+		var result = false;
+		try
+		{
+			_logger.LogDebug("Start EggInteractor IsReadyToHatch");
+			using (var _context = new AppDbContext())
+			{
+				var egg =_context.Eggs
+					.Include(x => x.HatchRequirement)
+					.Where(x => x.Id == eggId)
+					.FirstOrDefault();
+				_logger.LogInfo($"IsReadyToHatch egg?.HatchRequirementId {egg?.HatchRequirementId ?? -1}");
+				_logger.LogInfo($"IsReadyToHatch egg?.HatchRequirement?.Goal {egg?.HatchRequirement?.Goal ?? -1}");
+
+				// Get Ready Eggs by Action Count requirement
+				DateTime thresholdDate = DateTime.Now - timeSpan.Value;
+				int actionCount = _context.AnimalEvents.Count(x => x.CreatedDate >= thresholdDate);
+				_logger.LogInfo($"IsReadyToHatch actionCount {actionCount}");
+				result = result || (egg?.HatchRequirement?.Goal ?? -1) <= actionCount;
+
+				// Add other requirements here...
+
+			}
+			_logger.LogDebug("End EggInteractor IsReadyToHatch");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggInteractor IsReadyToHatch Error: {ex.Message}", ex);
+			throw;
+		}
+		return result;
+	}
+
+	public async Task<List<CreatureModel>> GetReadyEggs(TimeSpan? timeSpan = null)
+	{
+		if (timeSpan == null) timeSpan = DEFAULT_ACTION_COUNT_HATCH_Span;
+
+		var result = new List<CreatureModel>();
+		try
+		{
+			_logger.LogDebug("Start EggInteractor GetReadyEggs");
+			using (var _context = new AppDbContext())
+			{
+				// Get Ready Eggs by Action Count requirement
+				DateTime thresholdDate = DateTime.Now - timeSpan.Value;
+				int actionCount = _context.AnimalEvents.Count(x => x.CreatedDate >= thresholdDate);
+				var actionCountReadyEggList = await _context.Eggs
+					.Include(x => x.HatchRequirement)
+					.Where(x => x.HatchRequirement.Goal <= actionCount)
+					.ToListAsync();
+
+				actionCountReadyEggList.ForEach(x => result.Add(x.MapToModel()));	;
+
+				// Add other requirements here...
+
+			}
+			_logger.LogDebug("End EggInteractor GetReadyEggs");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggInteractor GetReadyEggs Error: {ex.Message}", ex);
+			throw;
+		}
+		return result;
+	}
+
 	public async Task<CreatureModel> HatchEgg(int id)
 	{
-		CreatureModel result;
+		CreatureModel animal;
 		try
 		{
 			_logger.LogDebug("Start EggInteractor HatchEgg");
@@ -155,9 +227,8 @@ public partial class EggInteractor : Node, IEggInteractor
 					NurtureCount = 0,
 					FeedCount = 0,
 				}; 
-				result = aEntity.MapToModel(eventSummary);
+				animal = aEntity.MapToModel(eventSummary);
 			}
-			
 			_logger.LogDebug("End EggInteractor HatchEgg");
 		}
 		catch (Exception ex)
@@ -165,7 +236,7 @@ public partial class EggInteractor : Node, IEggInteractor
 			_logger.LogError($"EggInteractor HatchEgg Error: {ex.Message}", ex);
 			throw;
 		}
-		return result;
+		return animal;
 	}
 	
 	public async Task AddEggToGallery(int id)
@@ -186,6 +257,31 @@ public partial class EggInteractor : Node, IEggInteractor
 			_logger.LogError($"EggInteractor AddEggToGallery Error: {ex.Message}", ex);
 			throw;
 		}
+	}
+
+	public async Task<List<CreatureModel>> HatchReadyEggs()
+	{
+		var animalList = new List<CreatureModel>();
+		try
+		{
+			_logger.LogDebug("Start EggInteractor HatchReadyEggs");
+			using (var unitOfWork = new UnitOfWork(new AppDbContext()))
+			{
+				List<CreatureModel> readyEggList = await GetReadyEggs();
+
+				foreach (var readyEgg in readyEggList)
+				{
+					animalList.Add(await HatchEgg(readyEgg.Id));
+				}
+			}
+			_logger.LogDebug("End EggInteractor HatchReadyEggs");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"EggInteractor HatchReadyEggs Error: {ex.Message}", ex);
+			throw;
+		}
+		return animalList;
 	}
 
 	private string GetRandomName()
@@ -231,8 +327,8 @@ public partial class EggInteractor : Node, IEggInteractor
 		HatchRequirement result; 
 		switch (hatchRequirementType)
 		{
-			case Enumerations.HatchRequirementTypes.Time:
-				result = CreateTimeHatchRequirement(egg);
+			case Enumerations.HatchRequirementTypes.ActionCount:
+				result = CreateActionCountHatchRequirement(egg);
 				break;
 			default:
 				_logger.LogError($"EggInteractor GetHatchRequirementTypes failed to map state. Egg name: {egg.Name}.");
@@ -242,7 +338,7 @@ public partial class EggInteractor : Node, IEggInteractor
 		return result;
 	}
 
-	private HatchRequirement CreateTimeHatchRequirement(Egg egg)
+	private HatchRequirement CreateActionCountHatchRequirement(Egg egg)
 	{
 		throw new NotImplementedException();
 	}

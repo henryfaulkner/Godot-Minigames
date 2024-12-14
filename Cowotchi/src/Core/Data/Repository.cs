@@ -81,6 +81,11 @@ public class Repository<T> : IRepository<T>, IDisposable where T : class
 	{
 		return await _context.Set<T>().AnyAsync();
 	}
+	
+	public async Task<TResult> QueryScalarAsync<TResult>(Func<IQueryable<T>, TResult> queryFunc)
+	{
+		return await Task.FromResult(queryFunc(_context.Set<T>()));
+	}
 
 	public async Task<List<T>> QueryAsync(Func<IQueryable<T>, IQueryable<T>> queryFunc)
 	{

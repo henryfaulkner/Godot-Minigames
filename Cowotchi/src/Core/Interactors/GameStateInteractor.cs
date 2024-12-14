@@ -5,10 +5,12 @@ using System.Collections.Generic;
 
 public partial class GameStateInteractor : Node, IGameStateInteractor 
 {
+	public List<CreatureModel> ReadyEggList { get; set; }
+
 	private List<CreatureModel> CreatureList { get; set; }
 	private Menu Menu { get; set; }
 	private List<ICharacter<CreatureModel>> BgGallery { get; set; }
-	private List<ICharacter<CreatureModel>> BgNewEggs { get; set; }
+	private List<ICharacter<CreatureModel>> BgNewEggsList { get; set; }
 	private ICharacter<CreatureModel> ForegroundCharacter { get; set; }
 	private int ForegroundCreatureIndex { get; set; } = 0;
 
@@ -32,7 +34,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		CreatureList = creatureList;
 		Menu = menu;
 		BgGallery = new List<ICharacter<CreatureModel>>();
-		BgNewEggs = new List<ICharacter<CreatureModel>>();
+		BgNewEggsList = new List<ICharacter<CreatureModel>>();
 		foreach (var creature in CreatureList)
 		{
 			AddBackgroundSubject(creature);
@@ -70,12 +72,12 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		if (model.CreatureType == Enumerations.CreatureTypes.Egg) 
 		{
 			result = _characterFactory.SpawnFgEgg(GetNode("."), (CreatureModel)model, position);
-			Menu.SwapPage(Enumerations.MenuPageType.Egg);
+			Menu.SwapPage(model, Enumerations.MenuPageType.Egg);
 		}
 		else
 		{ 
 			result = _characterFactory.SpawnFgAnimal(GetNode("."), (CreatureModel)model, position);
-			Menu.SwapPage(Enumerations.MenuPageType.Animal);
+			Menu.SwapPage(model, Enumerations.MenuPageType.Animal);
 		}
 		return result;	
 	}
@@ -135,7 +137,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		else if (model.CreatureType == Enumerations.CreatureTypes.Egg && !model.IsInGallery)
 		{
 			var bgCharacter = _characterFactory.SpawnBgEgg(GetNode(Constants.KeyNodePaths.FarmWanderers), (CreatureModel)model, spawnPoint);
-			BgNewEggs.Add(bgCharacter);
+			BgNewEggsList.Add(bgCharacter);
 		}
 		else
 		{
@@ -199,7 +201,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		_logger.LogError($"instanceId {instanceId}");
 
 		ICharacter<CreatureModel>? newEggCharacter = null;
-		foreach (var character in BgNewEggs)
+		foreach (var character in BgNewEggsList)
 		{
 			if (character.Model.InstanceId == instanceId)
 			{
@@ -209,7 +211,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 
 		if (newEggCharacter != null) 
 		{
-			BgNewEggs.Remove(newEggCharacter);
+			BgNewEggsList.Remove(newEggCharacter);
 			BgGallery.Add(newEggCharacter);
 			newEggCharacter.Model.IsInGallery = true;
 			_eggInteractor.AddEggToGallery(newEggCharacter.Model.Id);

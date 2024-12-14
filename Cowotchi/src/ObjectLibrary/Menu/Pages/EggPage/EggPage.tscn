@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dartqtw3mjdww" path="res://src/Assets/Icons/StatsIconFA.png" id="3_mmo3q"]
 [ext_resource type="Texture2D" uid="uid://74whe3k0h1tq" path="res://src/Assets/Icons/SwapIcon.png" id="4_5saoh"]
 
-[node name="EggPage" type="Control" node_paths=PackedStringArray("Stats", "Swap")]
+[node name="EggPage" type="Control" node_paths=PackedStringArray("Stats", "Swap", "Hatch")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -17,6 +17,7 @@ grow_vertical = 2
 script = ExtResource("1_jnh5u")
 Stats = NodePath("OptionContainer/Stats")
 Swap = NodePath("OptionContainer/Swap")
+Hatch = NodePath("OptionContainer/Hatch")
 
 [node name="OptionContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -36,3 +37,7 @@ HoverTexture = ExtResource("3_mmo3q")
 layout_mode = 2
 NormalTexture = ExtResource("4_5saoh")
 HoverTexture = ExtResource("4_5saoh")
+
+[node name="Hatch" parent="OptionContainer" instance=ExtResource("2_hd573")]
+modulate = Color(0.627451, 0.627451, 0.627451, 1)
+layout_mode = 2

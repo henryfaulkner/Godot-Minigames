@@ -87,6 +87,29 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			throw;
 		}
 	}
+	
+	public async Task<int> CountAnimalEventsSinceDate(DateTime sinceDate)
+	{
+		var result = 0;
+		try
+		{
+			_logger.LogDebug("Start CommonInteractor CountAnimalEventsSinceDate");
+			using (var animalEventRepository = new Repository<AnimalEvent>(new AppDbContext()))
+			{
+				result = await animalEventRepository
+					.QueryScalarAsync(
+						q => q.Count(x => x.CreatedDate > sinceDate)
+					);
+			}
+			_logger.LogDebug("End CommonInteractor CountAnimalEventsSinceDate");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"CommonInteractor GetHatchRequirementTypes Error: {ex.Message}");
+			throw;
+		}
+		return result;
+	}
 
 	private async Task InitAnimalEventTypes(IRepository<AnimalEventType> animalEventTypeRepository)
 	{
@@ -165,8 +188,8 @@ public partial class CommonInteractor : Node, ICommonInteractor
 			hrtList.Add(
 				new HatchRequirementType()
 				{
-					Id = (int)Enumerations.HatchRequirementTypes.Time,
-					Name = Enumerations.HatchRequirementTypes.Time.GetDescription(),
+					Id = (int)Enumerations.HatchRequirementTypes.ActionCount,
+					Name = Enumerations.HatchRequirementTypes.ActionCount.GetDescription(),
 				}
 			);
 			await hatchRequirementRepository.AddRangeAsync(hrtList);

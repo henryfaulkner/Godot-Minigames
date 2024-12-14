@@ -5,6 +5,8 @@ public partial class ActionButton : Control
 {	
 	[Signal]
 	public delegate void PressedEventHandler();
+
+	public bool IsDisabled { get; set; }
 	
 	private static readonly StringName PANEL_STYLEBOX_NAME = new StringName("panel");
 	private static readonly StringName NORMAL_PANEL_STYLE = new StringName("res://src/ObjectLibrary/Menu/PageStyles/Disabled_PagePanelOption.tres");
@@ -72,5 +74,14 @@ public partial class ActionButton : Control
 	public void ApplyInactivePagePanelOption(Panel panel)
 	{
 		panel.AddThemeStyleboxOverride(PANEL_STYLEBOX_NAME, InactivePagePanelOptionStyle);
+	}
+	
+	public void ToggleIsDisabled(bool? toggleValue = null)
+	{
+		if (toggleValue == null) IsDisabled = !IsDisabled;
+		else IsDisabled = toggleValue.Value;
+
+		if (IsDisabled) Modulate = new Color(0.5f, 0.5f, 0.5f, 1);
+		else Modulate = new Color(1, 1, 1, 1);
 	}
 }

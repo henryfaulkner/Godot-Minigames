@@ -16,5 +16,6 @@ public interface IRepository<T> where T : class
 	void RemoveRange(IEnumerable<T> entities);
 	Task<bool> SaveRepositoryAsync();
 	Task<bool> AnyAsync();
+	Task<TResult> QueryScalarAsync<TResult>(Func<IQueryable<T>, TResult> queryFunc);
 	Task<List<T>> QueryAsync(Func<IQueryable<T>, IQueryable<T>> queryFunc);
 }

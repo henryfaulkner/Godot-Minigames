@@ -68,8 +68,13 @@ public class AppDbContext : DbContext
 
 		modelBuilder.Entity<Egg>(entity =>
 		{
-			entity.Property(e => e.Id)
-				.ValueGeneratedOnAdd();
+			entity.Property(e => e.Id);
+
+			entity.HasOne(e => e.HatchRequirement) // Navigation property
+				.WithMany()                      // Assuming HatchRequirement does not have a collection of Eggs
+				.HasForeignKey(e => e.HatchRequirementId) // Foreign key in Egg
+				.OnDelete(DeleteBehavior.Restrict); // Adjust delete behavior as needed
+
 			ConfigureAuditEntityFields(entity);
 		});
 
