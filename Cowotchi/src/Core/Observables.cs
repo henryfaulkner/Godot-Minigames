@@ -97,4 +97,11 @@ public partial class Observables: Node
 		EmitSignal(SignalName.UpdateCurrentCreatureInfo);
 	}
 	#endregion
+
+	[Signal]
+	public delegate void SpinTheWheelEventHandler(int animalEntityId);
+	public void EmitSpinTheWheel(int animalEntityId)
+	{
+		EmitSignal(SignalName.SpinTheWheel);
+	}
 }

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public partial class GameStateInteractor : Node, IGameStateInteractor 
 {
-	public List<CreatureModel> ReadyEggList { get; set; }
-
 	private List<CreatureModel> CreatureList { get; set; }
 	private Menu Menu { get; set; }
 	private List<ICharacter<CreatureModel>> BgGallery { get; set; }
@@ -46,7 +44,7 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		
 		// Remove foreground creature from background
 		var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
-		RemoveBackgroundSubject(GetBackgroundSubject(newFgInstanceId));
+		RemoveBackgroundSubject(GetBackgroundSubject(newFgInstanceId).Model);
 		
 		_observables.EmitUpdateSubjectNameLabel(ForegroundCharacter.Model.Name);
 		_observables.EmitUpdateCurrentCreatureInfo();
@@ -106,9 +104,8 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			} while (nextModel == null || !nextModel.IsInGallery);
 			ForegroundCharacter = SetCreatureInForeground(nextModel, fgPos);
 
-			// Remove foreground creature from background
-			var newFgInstanceId = ForegroundCharacter.Subject.Model.InstanceId;
-			RemoveBackgroundSubject(GetBackgroundSubject(newFgInstanceId));
+			// Remove new foreground creature from background
+			RemoveBackgroundSubject(nextModel);
 
 			if (oldFgModel != null) AddBackgroundSubject(oldFgModel);
 		} 
@@ -119,8 +116,9 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		}
 	}
 	
-	public void RemoveBackgroundSubject(ICharacter<CreatureModel> bgCharacter)
+	public void RemoveBackgroundSubject(CreatureModel model)
 	{
+		var bgCharacter = GetBackgroundSubject(model.InstanceId);
 		BgGallery.Remove(bgCharacter);
 		bgCharacter.Subject.CharacterBody3D.QueueFree();
 	}
@@ -146,6 +144,38 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 		}
 	}
 
+	public void ToggleInfoContainer()
+	{
+		var toggleValue = !Menu.IsOn_InfoContainer;
+		Menu.ToggleInfoContainer(toggleValue);
+	}
+
+	/// <param name="newFgModel"></param>
+	/// <returns>oldFgModel</returns>
+	public CreatureModel SwapBackgroundToForeground(CreatureModel newFgModel)
+	{
+		try
+		{
+			var fgPos = ForegroundCharacter.Subject.CharacterBody3D.GlobalPosition;
+			var oldFgModel = ForegroundCharacter.Subject.Model;
+			ForegroundCharacter.Subject.CharacterBody3D.QueueFree();
+
+			ForegroundCharacter = SetCreatureInForeground(newFgModel, fgPos);
+
+			// Remove new foreground creature from background
+			RemoveBackgroundSubject(newFgModel);
+
+			if (oldFgModel != null) AddBackgroundSubject(oldFgModel);
+
+			return oldFgModel;
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"Main SwapBackgroundToForeground Error: {ex.Message}", ex);
+			throw;
+		}
+	}
+
 	private Vector3 AlterSpawnPoint(Vector3 spawnPoint)
 	{
 		var r = new Random();
@@ -161,12 +191,6 @@ public partial class GameStateInteractor : Node, IGameStateInteractor
 			spawnPoint.Y,
 			spawnPoint.Z + (float)zPos
 		);
-	}
-
-	public void ToggleInfoContainer()
-	{
-		var toggleValue = !Menu.IsOn_InfoContainer;
-		Menu.ToggleInfoContainer(toggleValue);
 	}
 
 	private CreatureModel GetCreatureInstance(ulong instanceId)
