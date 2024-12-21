@@ -3,8 +3,8 @@ using System;
 
 public partial class CharacterFactory : Node
 {
-	private readonly StringName BG_EGG_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgEggCharacter.tscn";
-	private readonly StringName BG_ANIMAL_SCENE_PATH = "res://src/ObjectLibrary/Characters/BgAnimalCharacter.tscn";
+	private readonly StringName BG_EGG_SCENE_PATH = new StringName("res://src/ObjectLibrary/Characters/BgEggCharacter.tscn");
+	private readonly StringName BG_ANIMAL_SCENE_PATH = new StringName("res://src/ObjectLibrary/Characters/BgAnimalCharacter.tscn");
 	private readonly StringName FG_EGG_SCENE_PATH = new StringName("res://src/ObjectLibrary/Characters/FgEggCharacter.tscn");
 	private readonly StringName FG_ANIMAL_SCENE_PATH = new StringName("res://src/ObjectLibrary/Characters/FgAnimalCharacter.tscn");
 

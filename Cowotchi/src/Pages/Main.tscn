@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cmsrhcdpl7cal"]
+[gd_scene load_steps=12 format=3 uid="uid://cmsrhcdpl7cal"]
 
 [ext_resource type="Script" path="res://src/Pages/Main.cs" id="1_bw4bp"]
 [ext_resource type="PackedScene" uid="uid://wgd5aw53wek4" path="res://src/ObjectLibrary/Characters/FgEggCharacter.tscn" id="2_5onax"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bfr7trnw28fod" path="res://src/ObjectLibrary/Characters/BgEggCharacter.tscn" id="7_a0ut1"]
 [ext_resource type="PackedScene" uid="uid://bevmsq8ke4xum" path="res://src/ObjectLibrary/NameLabel/SubjectNameLabel.tscn" id="8_1itm6"]
 [ext_resource type="Script" path="res://src/Pages/MainCamera.cs" id="9_gywr0"]
+[ext_resource type="PackedScene" uid="uid://cuvdt0gjejfyi" path="res://src/ObjectLibrary/SpinToWin/SpinToWin.tscn" id="11_mkofw"]
 [ext_resource type="PackedScene" uid="uid://c0h8lewoneqst" path="res://src/ObjectLibrary/RenameModal/RenameModal.tscn" id="11_w0ylu"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("Menu", "RenameModal")]
@@ -61,6 +62,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9338, -2.08784)
 
 [node name="Menu" parent="HUD" instance=ExtResource("2_sae3e")]
 
+[node name="PopupPanel" type="PopupPanel" parent="HUD"]
+title = "Win an Animal!"
+initial_position = 1
+size = Vector2i(400, 300)
+visible = true
+borderless = false
+min_size = Vector2i(400, 300)
+
+[node name="SpinToWin" parent="HUD/PopupPanel" instance=ExtResource("11_mkofw")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+
 [node name="RenameModal" parent="HUD" instance=ExtResource("11_w0ylu")]
+visible = false
 
 [node name="Commands" type="Node" parent="."]
