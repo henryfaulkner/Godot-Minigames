@@ -3,7 +3,7 @@ using System;
 
 public partial class BoidFactory : Node, IBoidFactory
 {
-	readonly StringName BOID_SCENE_PATH = new StringName("res://ObjectLibrary/Boid.tscn");
+	readonly StringName BOID_SCENE_PATH = new StringName("res://ObjectLibrary/Boid/Boid.tscn");
 
 	readonly PackedScene _boidScene;
 

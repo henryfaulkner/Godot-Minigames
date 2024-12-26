@@ -20,6 +20,8 @@ public partial class Boid : CharacterBody2D
 	[Export]
 	Area2D Area2D { get; set; }
 	[Export]
+	CollisionShape2D AreaCollisionShape2D { get; set; }
+	[Export]
 	CollisionShape2D CollisionShape2D { get; set; }
 	[Export]
 	MeshInstance2D MeshInstance2D { get; set; }
@@ -28,6 +30,8 @@ public partial class Boid : CharacterBody2D
 	{
 		// Initialize random movement direction
 		Velocity = Random_InsideUnitCircle();
+		
+		((CircleShape2D)AreaCollisionShape2D.Shape).Radius = NeighborRadius;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -49,7 +53,7 @@ public partial class Boid : CharacterBody2D
 	}
 
 	// Steer toward the average heading of nearby agents
-	private Vector2 Align()
+	Vector2 Align()
 	{
 		Vector2 result = Vector2.Zero;
 
@@ -70,7 +74,7 @@ public partial class Boid : CharacterBody2D
 	}
 	
 	// Move towards the center of nearby agents
-	private Vector2 Cohere()
+	Vector2 Cohere()
 	{
 		Vector2 result = Vector2.Zero;
 
@@ -91,7 +95,7 @@ public partial class Boid : CharacterBody2D
 	}
 	
 	// Avoid crowding nearby agents
-	private Vector2 Separate()
+	Vector2 Separate()
 	{
 		Vector2 result = Vector2.Zero;
 
@@ -115,7 +119,7 @@ public partial class Boid : CharacterBody2D
 		return result;
 	}
 
-	private List<Boid> GetBoidNeighbors()
+	List<Boid> GetBoidNeighbors()
 	{
 		var result = new List<Boid>();
 		
@@ -131,9 +135,22 @@ public partial class Boid : CharacterBody2D
 		return result;
 	}
 
-	private Vector2 Random_InsideUnitCircle()
+	Vector2 Random_InsideUnitCircle()
 	{
 		Vector2 vec = Vector2.Right * GD.RandRange(0, 100);
 		return vec.Rotated((float)GD.RandRange(0, Mathf.Pi));
 	}
+
+	// void CheckForFood()
+	// {
+	// 	int len = GetSlideCollsionCount();
+	// 	for (int i = 0; i < len; i += 1)
+	// 	{
+	// 		var collisionNode = (Node)GetSlideCollision(i).GetCollider();  
+	// 		if (collisionNode.IsInGroup("Food"))
+	// 		{
+	// 			result.Add((Food)collisionNode);
+	// 		}
+	// 	}
+	// }
 }
