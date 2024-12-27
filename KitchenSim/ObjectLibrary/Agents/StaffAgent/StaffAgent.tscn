@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4cneyf8fgayy"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/Agents/StaffAgent/StaffAgent.cs" id="1_mvreo"]
+[ext_resource type="Texture2D" uid="uid://bj6uvq1lig1e0" path="res://Assets/Staff.png" id="2_scgdv"]
+
+[node name="StaffAgent" type="Area2D"]
+script = ExtResource("1_mvreo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_scgdv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
