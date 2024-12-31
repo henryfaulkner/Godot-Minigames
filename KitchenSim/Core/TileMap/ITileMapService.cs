@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 public interface ITileMapService
 {
-	List<List<IGridTile>> GetTileGrid();
-	void SetTileGrid(List<List<IGridTile>> tileGrid);
+	int GetTileSize();
+	void SetTileSize(int tileSize);
+	List<List<ITile>> GetTileGrid();
+	void SetTileGrid(List<List<ITile>> tileGrid);
 }

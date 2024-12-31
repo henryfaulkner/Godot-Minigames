@@ -1,15 +1,29 @@
 [gd_scene load_steps=3 format=3 uid="uid://b4cneyf8fgayy"]
 
 [ext_resource type="Script" path="res://ObjectLibrary/Agents/StaffAgent/StaffAgent.cs" id="1_mvreo"]
-[ext_resource type="Texture2D" uid="uid://bj6uvq1lig1e0" path="res://Assets/Staff.png" id="2_scgdv"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="2_0j0kj"]
 
 [node name="StaffAgent" type="Area2D"]
 script = ExtResource("1_mvreo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_scgdv")
+texture = ExtResource("2_0j0kj")
+hframes = 2
+vframes = 2
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
+[node name="RayCasts" type="Node" parent="."]
+
+[node name="RayCast_Up" type="RayCast2D" parent="RayCasts"]
+rotation = 3.14159
+
+[node name="RayCast_Right" type="RayCast2D" parent="RayCasts"]
+rotation = -1.5708
+
+[node name="RayCast_Down" type="RayCast2D" parent="RayCasts"]
+
+[node name="RayCast_Left" type="RayCast2D" parent="RayCasts"]
+rotation = 1.5708

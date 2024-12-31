@@ -1,27 +1,28 @@
+using System;
 using System.Collections.Generic;
 
 public class TileMapService : ITileMapService
 {
-    int _tileSize = -1;
-    List<List<IGridTile>> _tileGrid = new List<List<IGridTile>>();     
+	int _tileSize = -1;
+	List<List<ITile>> _tileGrid = new List<List<ITile>>();     
 
-    public int GetTileSize()
-    {
-        return _tileSize;        
-    } 
+	public int GetTileSize()
+	{
+		return _tileSize;        
+	} 
 
-    public void SetTileSize(int tileSize)
-    {
-        _tileGrid = tileSize;
-    }
+	public void SetTileSize(int tileSize)
+	{
+		_tileSize = tileSize;
+	}
 
-    public List<List<IGridTile>> GetTileGrid()
-    {
-        return _tileGrid;
-    }
+	public List<List<ITile>> GetTileGrid()
+	{
+		return _tileGrid;
+	}
 
-    public void SetTileGrid(List<List<IGridTile>> tileGrid)
-    {
-        _tileGrid = tileGrid;
-    }
+	public void SetTileGrid(List<List<ITile>> tileGrid)
+	{
+		_tileGrid = tileGrid;
+	}
 }

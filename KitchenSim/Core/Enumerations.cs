@@ -12,4 +12,11 @@ public static class Enumerations
 		[Description("Error")]
 		Error = 2,
 	}
+
+	public enum TileTypes
+	{
+		Floor = 1,
+		Wall = 2,
+		StaffAgent = 3,
+	}
 }

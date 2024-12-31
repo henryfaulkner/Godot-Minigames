@@ -4,9 +4,17 @@ using System.Collections.Generic;
 
 public partial class Main : Node2D
 {
+	[Export]
+	TileMap TileMap { get; set; }
+	[Export]
+	int GridDimension_X { get; set; }
+	[Export]
+	int GridDimension_Y { get; set; } 
+
 	ILoggerService _logger;
 	ITileMapService _tileMapService;
 	IAgentFactory _agentFactory;
+	ITileFactory _tileFactory;
 
 	List<IAgent> _agentList = new List<IAgent>();
 
@@ -15,6 +23,7 @@ public partial class Main : Node2D
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_tileMapService = GetNode<ITileMapService>(Constants.SingletonNodes.TileMapService);
 		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.AgentFactory);
+		_tileFactory = GetNode<ITileFactory>(Constants.SingletonNodes.TileFactory);
 
 		_tileMapService.SetTileSize(GetTileSize());
 		_tileMapService.SetTileGrid(ScanTileGrid());
@@ -31,11 +40,44 @@ public partial class Main : Node2D
 
 	private int GetTileSize()
 	{
-		throw NotImplementedException();
+		return _tileMapService.GetTileSize();
 	}
 
-	private List<List<ITileGrid>> ScanTileGrid()
+	private List<List<ITile>> ScanTileGrid()
 	{
-		throw NotImplementedException();
+		var result = new List<List<ITile>>();
+		for (int x = 0; x < GridDimension_X; x += 1)
+		{
+			var innerList = new List<ITile>();
+			for (int y = 0; y < GridDimension_Y; y += 1)
+			{
+				TileData tileData = TileMap.GetCellTileData(layer: 0, coords: new Vector2(x, y));
+				ITile tileElement = GetTileTypeFromCustomData(tileData, new Tuple<int, int>(x, y));
+				innerList.Add(tileElement);
+			}
+			result.Add(innerList);
+		}
+		return result;
+	}
+
+	private ITile? GetTileTypeFromCustomData(TileData tileData, Tuple<int, int> coordinateXY)
+	{
+		ITile result;
+		switch (tileData)
+		{
+			case Enumerations.TileTypes.Floor:
+				result = _tileFactory.CreateFloorTile(TileMap, tileData);
+				break;
+			case Enumerations.TileTypes.Wall:
+				result = _tileFactory.CreateWallTile(TileMap, tileData);
+				break;
+			case Enumerations.TileTypes.Staff:
+				result = _tileFactory.CreateStaffAgentTile(TileMap, tileData, coordinateXY, _tileMapService.GetTileSize, self);
+				break;
+			default: 
+				_logger.LogWarning("Main GetTileTypeFromCustomData did not map to a TileType!");
+				break;
+		}	
+		return result;
 	}
 }

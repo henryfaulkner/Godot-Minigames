@@ -12,7 +12,7 @@ public partial class AgentFactory : Node, IAgentFactory
 	private readonly PackedScene _staffScene;
 	#endregion
 
-	private ILoggerService _logger { get; set; }
+	ILoggerService _logger;
 
 	public AgentFactory()
 	{

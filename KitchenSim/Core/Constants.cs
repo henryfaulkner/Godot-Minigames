@@ -5,5 +5,6 @@ public static class Constants
         public const string LoggerService = "/root/LoggerService";
         public const string TileMapService = "/root/TileMapService";
         public const string AgentFactory = "/root/AgentFactory";
+        public const string TileFactory = "/root/TileFactory";
     }
 }
