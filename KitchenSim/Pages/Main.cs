@@ -63,7 +63,7 @@ public partial class Main : Node2D
 	private ITile? GetTileTypeFromCustomData(TileData tileData, Tuple<int, int> coordinateXY)
 	{
 		ITile result;
-		switch (tileData)
+		switch (tileData["TileTypeEnum"])
 		{
 			case Enumerations.TileTypes.Floor:
 				result = _tileFactory.CreateFloorTile(TileMap, tileData);
@@ -75,7 +75,7 @@ public partial class Main : Node2D
 				result = _tileFactory.CreateStaffAgentTile(TileMap, tileData, coordinateXY, _tileMapService.GetTileSize, self);
 				break;
 			default: 
-				_logger.LogWarning("Main GetTileTypeFromCustomData did not map to a TileType!");
+				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
 				break;
 		}	
 		return result;

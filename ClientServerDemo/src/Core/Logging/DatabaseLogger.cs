@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public class DatabaseLogger : ILogger 
+public class DatabaseLogger : ILoggerService 
 {
 	private readonly AppDbContext _context;
 	private Enumerations.LogLevels LogLevel { get; set; }
