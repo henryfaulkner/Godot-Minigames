@@ -8,14 +8,14 @@ public class WallTile : ITile
 
 public class AgentTile : ITile
 {
-    IAgent _agent { get; set; }
+	IAgent _agent { get; set; }
 
-    public AgentTile()
-    {
-    }
+	public AgentTile()
+	{
+	}
 
-    public void SetAgent(IAgent agent)
-    {
-        _agent = agent;
-    } 
+	public void SetAgent(IAgent agent)
+	{
+		_agent = agent;
+	} 
 }

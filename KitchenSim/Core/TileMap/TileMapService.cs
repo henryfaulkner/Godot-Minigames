@@ -1,7 +1,8 @@
+using Godot;
 using System;
 using System.Collections.Generic;
 
-public class TileMapService : ITileMapService
+public partial class TileMapService : Node, ITileMapService
 {
 	int _tileSize = -1;
 	List<List<ITile>> _tileGrid = new List<List<ITile>>();     

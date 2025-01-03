@@ -1,11 +1,12 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public partial class Main : Node2D
 {
 	[Export]
-	TileMap TileMap { get; set; }
+	TileMapLayer TileMapLayer { get; set; }
 	[Export]
 	int GridDimension_X { get; set; }
 	[Export]
@@ -51,7 +52,8 @@ public partial class Main : Node2D
 			var innerList = new List<ITile>();
 			for (int y = 0; y < GridDimension_Y; y += 1)
 			{
-				TileData tileData = TileMap.GetCellTileData(layer: 0, coords: new Vector2(x, y));
+				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
+				_logger.LogInfo(JsonConvert.SerializeObject(tileData));
 				ITile tileElement = GetTileTypeFromCustomData(tileData, new Tuple<int, int>(x, y));
 				innerList.Add(tileElement);
 			}
@@ -62,22 +64,23 @@ public partial class Main : Node2D
 
 	private ITile? GetTileTypeFromCustomData(TileData tileData, Tuple<int, int> coordinateXY)
 	{
-		ITile result;
-		switch (tileData["TileTypeEnum"])
-		{
-			case Enumerations.TileTypes.Floor:
-				result = _tileFactory.CreateFloorTile(TileMap, tileData);
-				break;
-			case Enumerations.TileTypes.Wall:
-				result = _tileFactory.CreateWallTile(TileMap, tileData);
-				break;
-			case Enumerations.TileTypes.Staff:
-				result = _tileFactory.CreateStaffAgentTile(TileMap, tileData, coordinateXY, _tileMapService.GetTileSize, self);
-				break;
-			default: 
-				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
-				break;
-		}	
+		ITile result = _tileFactory.CreateFloorTile(TileMapLayer, tileData);
+		//switch (tileData["TileTypeEnum"])
+		//{
+			//case Enumerations.TileTypes.Floor:
+				//result = _tileFactory.CreateFloorTile(TileMapLayer, tileData);
+				//break;
+			//case Enumerations.TileTypes.Wall:
+				//result = _tileFactory.CreateWallTile(TileMapLayer, tileData);
+				//break;
+			//case Enumerations.TileTypes.Staff:
+				//result = _tileFactory.CreateStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize, self);
+				//break;
+			//default: 
+				//_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
+				//break;
+		//}	
+		_logger.LogError(JsonConvert.SerializeObject(tileData));
 		return result;
 	}
 }

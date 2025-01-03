@@ -3,9 +3,9 @@ using System;
 
 public interface ITileFactory
 {
-	FloorTile CreateFloorTile(TileMap tileMap, TileData tileData);
-	WallTile CreateWallTile(TileMap tileMap, TileData tileData);
-	AgentTile CreateStaffAgentTile(TileMap tileMap, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent); 
+	FloorTile CreateFloorTile(TileMapLayer tileMapLayer, TileData tileData);
+	WallTile CreateWallTile(TileMapLayer tileMapLayer, TileData tileData);
+	AgentTile CreateStaffAgentTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent); 
 }
 
 public partial class TileFactory : Node, ITileFactory
@@ -14,20 +14,20 @@ public partial class TileFactory : Node, ITileFactory
 
 	public override void _Ready()
 	{
-		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.TileFactory);
+		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.AgentFactory);
 	}
 
-	public FloorTile CreateFloorTile(TileMap tileMap, TileData tileData)
+	public FloorTile CreateFloorTile(TileMapLayer tileMapLayer, TileData tileData)
 	{
 		return new FloorTile();
 	}
 
-	public WallTile CreateWallTile(TileMap tileMap, TileData tileData)
+	public WallTile CreateWallTile(TileMapLayer tileMapLayer, TileData tileData)
 	{
 		return new WallTile();
 	}
 
-	public AgentTile CreateStaffAgentTile(TileMap tileMap, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
+	public AgentTile CreateStaffAgentTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
 	{
 		var result = new AgentTile();
 		var staffAgent = _agentFactory.SpawnStaffAgent(parent, 
