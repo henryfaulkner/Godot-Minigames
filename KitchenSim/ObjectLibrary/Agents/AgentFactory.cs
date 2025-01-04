@@ -2,7 +2,7 @@ using Godot;
 
 public interface IAgentFactory 
 {
-	IAgent SpawnStaffAgent(Node parent, Vector2 position);
+	StaffAgent SpawnStaffAgent(Node parent, Vector2 position);
 }
 
 public partial class AgentFactory : Node, IAgentFactory
@@ -24,7 +24,7 @@ public partial class AgentFactory : Node, IAgentFactory
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 	}
 
-	public IAgent SpawnStaffAgent(Node parent, Vector2 position)
+	public StaffAgent SpawnStaffAgent(Node parent, Vector2 position)
 	{
 		var result = _staffScene.Instantiate<StaffAgent>();
 		parent.AddChild(result);

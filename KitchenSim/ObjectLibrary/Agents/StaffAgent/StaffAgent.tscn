@@ -1,19 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4cneyf8fgayy"]
+[gd_scene load_steps=4 format=3 uid="uid://b4cneyf8fgayy"]
 
 [ext_resource type="Script" path="res://ObjectLibrary/Agents/StaffAgent/StaffAgent.cs" id="1_mvreo"]
 [ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="2_0j0kj"]
 
-[node name="StaffAgent" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgs4"]
+size = Vector2(32, 32)
+
+[node name="StaffAgent" type="CharacterBody2D"]
 script = ExtResource("1_mvreo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_0j0kj")
 hframes = 2
 vframes = 2
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bbgs4")
 
 [node name="RayCasts" type="Node" parent="."]
 

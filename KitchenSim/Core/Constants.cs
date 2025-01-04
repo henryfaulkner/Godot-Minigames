@@ -7,5 +7,6 @@ public static class Constants
         public const string AgentFactory = "/root/AgentFactory";
         public const string TileFactory = "/root/TileFactory";
         public const string RecipeBuilderFactory = "/root/RecipeBuilderFactory";
+        public const string EnvironmentFactory = "/root/EnvironmentFactory";
     }
 }

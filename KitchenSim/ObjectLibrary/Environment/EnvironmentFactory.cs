@@ -1,0 +1,34 @@
+using Godot;
+
+public interface IEnvironmentFactory
+{
+	Wall SpawnWall(Node parent, Vector2 position);
+}
+
+public partial class EnvironmentFactory : Node, IEnvironmentFactory
+{
+	#region Staff
+	private readonly StringName WALL_SCENE_PATH = "res://ObjectLibrary/Environment/Wall/Wall.tscn";
+	private readonly PackedScene _wallScene;
+	#endregion
+
+	ILoggerService _logger;
+
+	public EnvironmentFactory()
+	{
+		_wallScene = (PackedScene)ResourceLoader.Load(WALL_SCENE_PATH);
+	}
+
+	public override void _Ready()
+	{
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
+	}
+
+	public Wall SpawnWall(Node parent, Vector2 position)
+	{
+		var result = _wallScene.Instantiate<Wall>();
+		parent.AddChild(result);
+		result.Position = position;
+		return result;
+	}
+}

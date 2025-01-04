@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class TileMapService : Node, ITileMapService
 {
-	int _tileSize = -1;
+	int _tileSize = 32;
 	List<List<ITile>> _tileGrid = new List<List<ITile>>();     
 
 	public int GetTileSize()

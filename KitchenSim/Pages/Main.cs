@@ -5,6 +5,11 @@ using Newtonsoft.Json;
 
 public partial class Main : Node2D
 {
+	const int TileSet_MainCellSourceId = 1;
+	static Vector2I TileSet_AtlaCoords_Floor = new Vector2I(0, 0);
+	static Vector2I TileSet_AtlaCoords_StaffAgent = new Vector2I(1, 0);
+	static Vector2I TileSet_AtlaCoords_Wall = new Vector2I(0, 1);
+
 	[Export]
 	TileMapLayer TileMapLayer { get; set; }
 	[Export]
@@ -53,8 +58,13 @@ public partial class Main : Node2D
 			for (int y = 0; y < GridDimension_Y; y += 1)
 			{
 				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
-				_logger.LogInfo(JsonConvert.SerializeObject(tileData));
-				ITile tileElement = GetTileTypeFromCustomData(tileData, new Tuple<int, int>(x, y));
+				_logger.LogInfo($"Atlas Coords: {TileMapLayer.GetCellAtlasCoords(new Vector2I(x, y))}");
+				_logger.LogInfo($"Source Id: {TileMapLayer.GetCellSourceId(new Vector2I(x, y))}");
+				ITile tileElement = CreateTileElement(tileData, new Tuple<int, int>(x, y));
+
+				// After creating Tile nodes,
+				// Set the TileMapLayer as all floor atlases.
+				TileMapLayer.SetCell(new Vector2I(x, y), TileSet_MainCellSourceId, TileSet_AtlaCoords_Floor);
 				innerList.Add(tileElement);
 			}
 			result.Add(innerList);
@@ -62,25 +72,21 @@ public partial class Main : Node2D
 		return result;
 	}
 
-	private ITile? GetTileTypeFromCustomData(TileData tileData, Tuple<int, int> coordinateXY)
+	private ITile? CreateTileElement(TileData tileData, Tuple<int, int> coordinateXY)
 	{
-		ITile result = _tileFactory.CreateFloorTile(TileMapLayer, tileData);
-		//switch (tileData["TileTypeEnum"])
-		//{
-			//case Enumerations.TileTypes.Floor:
-				//result = _tileFactory.CreateFloorTile(TileMapLayer, tileData);
-				//break;
-			//case Enumerations.TileTypes.Wall:
-				//result = _tileFactory.CreateWallTile(TileMapLayer, tileData);
-				//break;
-			//case Enumerations.TileTypes.Staff:
-				//result = _tileFactory.CreateStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize, self);
-				//break;
-			//default: 
-				//_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
-				//break;
-		//}	
-		_logger.LogError(JsonConvert.SerializeObject(tileData));
+		ITile result = null;
+ 		switch ((Enumerations.TileTypes)(int)tileData.GetCustomData("TileTypeEnum"))
+  		{
+ 			case Enumerations.TileTypes.Wall:
+ 				//result = _tileFactory.CreateWallTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+ 				break;
+ 			case Enumerations.TileTypes.StaffAgent:
+ 				result = _tileFactory.CreateStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+ 				break;
+ 			default: 
+ 				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
+ 				break;
+ 		}	
 		return result;
 	}
 }

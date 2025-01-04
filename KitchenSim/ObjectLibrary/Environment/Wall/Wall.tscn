@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bu60bi4rvsvdy"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/Environment/Wall/Wall.cs" id="1_n1idd"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="2_lclm2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ritdh"]
+size = Vector2(32, 32)
+
+[node name="Wall" type="StaticBody2D"]
+script = ExtResource("1_n1idd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_lclm2")
+hframes = 2
+vframes = 2
+frame = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ritdh")
