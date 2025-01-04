@@ -1,8 +1,22 @@
 using Godot;
 using System;
 
-public partial class StaffAgent : CharacterBody2D, IAgent
+public partial class StaffAgent : CharacterBody2D, IAgent, ITile
 {
+	[ExportGroup("RayCasts")]
+	[Export]
+	RayCast2D RayCastUp;
+	[Export]
+	RayCast2D RayCastRight;
+	[Export]
+	RayCast2D RayCastDown;
+	[Export]
+	RayCast2D RayCastLeft;
+
+	[ExportGroup("Movement")]
+	[Export]
+	Timer MovementTimer;
+
 	ITileMapService _tileMapService;
 	ILoggerService _logger;
 
@@ -22,6 +36,8 @@ public partial class StaffAgent : CharacterBody2D, IAgent
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_tileMapService = GetNode<ITileMapService>(Constants.SingletonNodes.TileMapService);
+
+		MovementTimer.Timeout += HandleTimerTimeout;
 	}
 
 	public override void _Input(InputEvent @event)
@@ -48,75 +64,59 @@ public partial class StaffAgent : CharacterBody2D, IAgent
 			CurrentState = States.Idle;
 		}
 	}
+	
+	public void HandleTimerTimeout()
+	{
+		HandleCollision();
+		HandleMovement();
+	}
 
-	public override void _PhysicsProcess(double delta)
+	public void HandleMovement()
 	{
 		int tileSize = _tileMapService.GetTileSize();
-		Vector2 movement = Vector2.Zero;
+		var movement = Vector2.Zero;
 
-		if (CurrentState == States.MoveUp)
+		switch (CurrentState)
 		{
-			movement = new Vector2(0, -tileSize);
-		}
-		else if (CurrentState == States.MoveRight)
-		{
-			movement = new Vector2(tileSize, 0);
-		}
-		else if (CurrentState == States.MoveDown)
-		{
-			movement = new Vector2(0, tileSize);
-		}
-		else if (CurrentState == States.MoveLeft)
-		{
-			movement = new Vector2(-tileSize, 0);
+			case States.MoveUp:
+				movement = new Vector2(0, -tileSize);
+				break;
+			case States.MoveRight:
+				movement = new Vector2(tileSize, 0);
+				break;
+			case States.MoveDown:
+				movement = new Vector2(0, tileSize);
+				break;
+			case States.MoveLeft:
+				movement = new Vector2(-tileSize, 0);
+				break;
+			default:
+				break;
 		}
 
+		// Update the position instantly
 		if (movement != Vector2.Zero)
 		{
-			// Divide the movement into smaller steps for collision detection
-			int stepCount = 10; // Number of steps to divide the movement
-			Vector2 step = movement / stepCount;
-
-			for (int i = 0; i < stepCount; i++)
-			{
-				KinematicCollision2D collision = MoveAndCollide(step);
-				if (collision != null)
-				{
-					// Collision detected, stop further movement
-					_logger.LogInfo($"Collision detected with: {collision.GetCollider()}");
-					break;
-				}
-			}
+			Position += movement;
 		}
 	}
 
-	
-	// public override void _PhysicsProcess(double delta)
-	// {
-	// 	int tileSize = _tileMapService.GetTileSize();
-	// 	var movement = Vector2.Zero;
-
-	// 	if (CurrentState == States.MoveUp)
-	// 	{
-	// 		movement = new Vector2(0, -tileSize);
-	// 	}
-	// 	else if (CurrentState == States.MoveRight)
-	// 	{
-	// 		movement = new Vector2(tileSize, 0);
-	// 	}
-	// 	else if (CurrentState == States.MoveDown)
-	// 	{
-	// 		movement = new Vector2(0, tileSize);
-	// 	}
-	// 	else if (CurrentState == States.MoveLeft)
-	// 	{
-	// 		movement = new Vector2(-tileSize, 0);
-	// 	}
-
-	// 	// Update the position instantly
-	// 	if (movement != Vector2.Zero)
-	// 	{
-	// 		Position += movement;
-	// 	}
-	// }
+	public void HandleCollision()
+	{
+		switch (CurrentState)
+		{
+			case States.MoveUp: 
+				if (RayCastUp.IsColliding()) CurrentState = States.Idle;
+				break;
+			case States.MoveRight:
+				if (RayCastRight.IsColliding()) CurrentState = States.Idle;
+				break;
+			case States.MoveDown:
+				if (RayCastDown.IsColliding()) CurrentState = States.Idle;
+				break;
+			case States.MoveLeft:
+				if (RayCastLeft.IsColliding()) CurrentState = States.Idle;
+				break;
+		}
+	}
 }

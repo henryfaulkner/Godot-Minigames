@@ -20,7 +20,7 @@ config/icon="res://icon.svg"
 TileMapService="*res://Core/TileMap/TileMapService.cs"
 LoggerService="*res://Core/Logging/LoggerService.cs"
 AgentFactory="*res://ObjectLibrary/Agents/AgentFactory.cs"
-TileFactory="*res://Core/Tiles/TileFactory.cs"
+TileFactory="*res://ObjectLibrary/TileFactory.cs"
 EnvironmentFactory="*res://ObjectLibrary/Environment/EnvironmentFactory.cs"
 
 [dotnet]

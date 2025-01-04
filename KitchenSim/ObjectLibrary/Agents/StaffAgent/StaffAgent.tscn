@@ -6,8 +6,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgs4"]
 size = Vector2(32, 32)
 
-[node name="StaffAgent" type="CharacterBody2D"]
+[node name="StaffAgent" type="CharacterBody2D" node_paths=PackedStringArray("RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "MovementTimer")]
 script = ExtResource("1_mvreo")
+RayCastUp = NodePath("RayCast_Up")
+RayCastRight = NodePath("RayCast_Right")
+RayCastDown = NodePath("RayCast_Down")
+RayCastLeft = NodePath("RayCast_Left")
+MovementTimer = NodePath("MovementTimer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_0j0kj")
@@ -18,15 +23,24 @@ frame = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_bbgs4")
 
-[node name="RayCasts" type="Node" parent="."]
-
-[node name="RayCast_Up" type="RayCast2D" parent="RayCasts"]
+[node name="RayCast_Up" type="RayCast2D" parent="."]
 rotation = 3.14159
+target_position = Vector2(0, 32)
+collide_with_areas = true
 
-[node name="RayCast_Right" type="RayCast2D" parent="RayCasts"]
+[node name="RayCast_Right" type="RayCast2D" parent="."]
 rotation = -1.5708
+target_position = Vector2(0, 32)
+collide_with_areas = true
 
-[node name="RayCast_Down" type="RayCast2D" parent="RayCasts"]
+[node name="RayCast_Down" type="RayCast2D" parent="."]
+target_position = Vector2(0, 32)
+collide_with_areas = true
 
-[node name="RayCast_Left" type="RayCast2D" parent="RayCasts"]
+[node name="RayCast_Left" type="RayCast2D" parent="."]
 rotation = 1.5708
+target_position = Vector2(0, 32)
+collide_with_areas = true
+
+[node name="MovementTimer" type="Timer" parent="."]
+autostart = true

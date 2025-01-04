@@ -58,27 +58,28 @@ public partial class Main : Node2D
 			for (int y = 0; y < GridDimension_Y; y += 1)
 			{
 				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
-				_logger.LogInfo($"Atlas Coords: {TileMapLayer.GetCellAtlasCoords(new Vector2I(x, y))}");
-				_logger.LogInfo($"Source Id: {TileMapLayer.GetCellSourceId(new Vector2I(x, y))}");
-				ITile tileElement = CreateTileElement(tileData, new Tuple<int, int>(x, y));
+				ITile tileNode = CreateTileNodes(tileData, new Tuple<int, int>(x, y));
 
 				// After creating Tile nodes,
 				// Set the TileMapLayer as all floor atlases.
 				TileMapLayer.SetCell(new Vector2I(x, y), TileSet_MainCellSourceId, TileSet_AtlaCoords_Floor);
-				innerList.Add(tileElement);
+				
+				innerList.Add(tileNode);
 			}
 			result.Add(innerList);
 		}
 		return result;
 	}
 
-	private ITile? CreateTileElement(TileData tileData, Tuple<int, int> coordinateXY)
+	private ITile? CreateTileNodes(TileData tileData, Tuple<int, int> coordinateXY)
 	{
 		ITile result = null;
  		switch ((Enumerations.TileTypes)(int)tileData.GetCustomData("TileTypeEnum"))
   		{
+			case Enumerations.TileTypes.Floor:
+ 				break;
  			case Enumerations.TileTypes.Wall:
- 				//result = _tileFactory.CreateWallTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+ 				result = _tileFactory.CreateWallTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
  				break;
  			case Enumerations.TileTypes.StaffAgent:
  				result = _tileFactory.CreateStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
