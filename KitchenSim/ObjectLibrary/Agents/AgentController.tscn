@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4cneyf8fgayy"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/Agents/AgentController.cs" id="1_027jn"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="2_0j0kj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgs4"]
+size = Vector2(32, 32)
+
+[node name="AgentController" type="CharacterBody2D" node_paths=PackedStringArray("RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "NavAgent", "MovementTimer")]
+script = ExtResource("1_027jn")
+RayCastUp = NodePath("RayCast_Up")
+RayCastRight = NodePath("RayCast_Right")
+RayCastDown = NodePath("RayCast_Down")
+RayCastLeft = NodePath("RayCast_Left")
+NavAgent = NodePath("NavigationAgent2D")
+MovementTimer = NodePath("MovementTimer")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_0j0kj")
+hframes = 2
+vframes = 2
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bbgs4")
+
+[node name="RayCast_Up" type="RayCast2D" parent="."]
+rotation = 3.14159
+target_position = Vector2(0, 32)
+collide_with_areas = true
+
+[node name="RayCast_Right" type="RayCast2D" parent="."]
+rotation = -1.5708
+target_position = Vector2(0, 32)
+collide_with_areas = true
+
+[node name="RayCast_Down" type="RayCast2D" parent="."]
+target_position = Vector2(0, 32)
+collide_with_areas = true
+
+[node name="RayCast_Left" type="RayCast2D" parent="."]
+rotation = 1.5708
+target_position = Vector2(0, 32)
+collide_with_areas = true
+
+[node name="MovementTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
