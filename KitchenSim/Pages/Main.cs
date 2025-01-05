@@ -59,11 +59,6 @@ public partial class Main : Node2D
 			{
 				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
 				ITile tileNode = CreateTileNodes(tileData, new Tuple<int, int>(x, y));
-
-				// After creating Tile nodes,
-				// Set the TileMapLayer as all floor atlases.
-				TileMapLayer.SetCell(new Vector2I(x, y), TileSet_MainCellSourceId, TileSet_AtlaCoords_Floor);
-				
 				innerList.Add(tileNode);
 			}
 			result.Add(innerList);
@@ -76,18 +71,33 @@ public partial class Main : Node2D
 		ITile result = null;
  		switch ((Enumerations.TileTypes)(int)tileData.GetCustomData("TileTypeEnum"))
   		{
+			// These tile will be handled automatically by the TileMap + TileSet's Physics and Navigation Layers
 			case Enumerations.TileTypes.Floor:
- 				break;
  			case Enumerations.TileTypes.Wall:
- 				result = _tileFactory.CreateWallTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
  				break;
  			case Enumerations.TileTypes.StaffAgent:
- 				result = _tileFactory.CreateStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+ 				var staffAgent = _tileFactory.SpawnStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				var tempTable = GetNode<Table>("./Table");
+				_logger.LogInfo($"TempTable is null: {tempTable == null}"); 
+				staffAgent.SetNavTarget(tempTable);
+				result = staffAgent;
+				SetTileMapCellAsFloor(coordinateXY);
+ 				break;
+			case Enumerations.TileTypes.Table:
+ 				result = _tileFactory.SpawnTableTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				SetTileMapCellAsFloor(coordinateXY);
  				break;
  			default: 
  				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
  				break;
  		}	
 		return result;
+	}
+	
+	// After creating Tile nodes,
+	// Set the TileMapLayer as all floor atlases.
+	private void SetTileMapCellAsFloor(Tuple<int, int> coordinateXY)
+	{
+		TileMapLayer.SetCell(new Vector2I(coordinateXY.Item1, coordinateXY.Item2), TileSet_MainCellSourceId, TileSet_AtlaCoords_Floor);
 	}
 }

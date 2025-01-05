@@ -18,5 +18,6 @@ public static class Enumerations
 		Floor = 1,
 		Wall = 2,
 		StaffAgent = 3,
+		Table = 4,
 	}
 }

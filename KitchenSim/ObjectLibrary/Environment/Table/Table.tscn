@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dck56x6vg6mnq"]
+
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="1_bo77a"]
+[ext_resource type="Script" path="res://ObjectLibrary/Environment/Table/Table.cs" id="1_la2b7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_re6hw"]
+size = Vector2(32, 32)
+
+[node name="Table" type="Area2D"]
+script = ExtResource("1_la2b7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_bo77a")
+hframes = 2
+vframes = 2
+frame = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_re6hw")

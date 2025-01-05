@@ -6,12 +6,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgs4"]
 size = Vector2(32, 32)
 
-[node name="StaffAgent" type="CharacterBody2D" node_paths=PackedStringArray("RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "MovementTimer")]
+[node name="StaffAgent" type="CharacterBody2D" node_paths=PackedStringArray("RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "NavAgent", "MovementTimer")]
 script = ExtResource("1_mvreo")
 RayCastUp = NodePath("RayCast_Up")
 RayCastRight = NodePath("RayCast_Right")
 RayCastDown = NodePath("RayCast_Down")
 RayCastLeft = NodePath("RayCast_Left")
+NavAgent = NodePath("NavigationAgent2D")
 MovementTimer = NodePath("MovementTimer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -44,3 +45,5 @@ collide_with_areas = true
 
 [node name="MovementTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
