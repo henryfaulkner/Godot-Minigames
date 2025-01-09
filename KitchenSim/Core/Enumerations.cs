@@ -19,5 +19,9 @@ public static class Enumerations
 		Wall = 2,
 		StaffAgent = 3,
 		Table = 4,
+		CounterTop = 5,
+		Fridge = 6,
+		CuttingBoard = 7,
+		OvenAndStove = 8,
 	}
 }

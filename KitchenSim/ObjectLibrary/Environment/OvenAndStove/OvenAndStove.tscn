@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://eqrxs1xa8ksa"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/Environment/OvenAndStove/OvenAndStove.cs" id="1_823pi"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="1_d04tj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8du5"]
+size = Vector2(32, 32)
+
+[node name="OvenAndStove" type="Area2D"]
+script = ExtResource("1_823pi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_d04tj")
+hframes = 2
+vframes = 4
+frame = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_u8du5")

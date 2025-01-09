@@ -8,5 +8,7 @@ public static class Constants
         public const string TileFactory = "/root/TileFactory";
         public const string RecipeBuilderFactory = "/root/RecipeBuilderFactory";
         public const string EnvironmentFactory = "/root/EnvironmentFactory";
+        public const string OrderQueueSingleton = "/root/OrderQueueSingleton";
+        public const string Observables = "/root/Observables";
     }
 }

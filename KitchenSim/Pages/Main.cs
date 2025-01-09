@@ -22,7 +22,16 @@ public partial class Main : Node2D
 	IAgentFactory _agentFactory;
 	ITileFactory _tileFactory;
 
-	List<IAgent> _agentList = new List<IAgent>();
+	#region Agents
+	List<StaffAgent> _staffList = new List<StaffAgent>();
+	#endregion
+
+	#region Environment
+	List<Table> _tableList = new List<Table>();
+	List<CuttingBoard> _cuttingBoardList = new List<>();
+	List<Fridge> _fridgeList = new List<Fridge>();
+	List<OvenAndStove> _ovenAndStoveList = new List<OvenAndStove>();
+	#endregion
 
 	public override void _Ready()
 	{
@@ -32,7 +41,6 @@ public partial class Main : Node2D
 		_tileFactory = GetNode<ITileFactory>(Constants.SingletonNodes.TileFactory);
 
 		_tileMapService.SetTileSize(GetTileSize());
-		_tileMapService.SetTileGrid(ScanTileGrid());
 
 		// It would be better for the simulation to place initial agents and environment 	
 		// from the scene editor. 
@@ -49,26 +57,20 @@ public partial class Main : Node2D
 		return _tileMapService.GetTileSize();
 	}
 
-	private List<List<ITile>> ScanTileGrid()
+	private void ScanTileGrid()
 	{
-		var result = new List<List<ITile>>();
 		for (int x = 0; x < GridDimension_X; x += 1)
 		{
-			var innerList = new List<ITile>();
 			for (int y = 0; y < GridDimension_Y; y += 1)
 			{
 				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
 				ITile tileNode = CreateTileNodes(tileData, new Tuple<int, int>(x, y));
-				innerList.Add(tileNode);
 			}
-			result.Add(innerList);
 		}
-		return result;
 	}
 
-	private ITile? CreateTileNodes(TileData tileData, Tuple<int, int> coordinateXY)
+	private void CreateTileNodes(TileData tileData, Tuple<int, int> coordinateXY)
 	{
-		ITile result = null;
  		switch ((Enumerations.TileTypes)(int)tileData.GetCustomData("TileTypeEnum"))
   		{
 			// These tile will be handled automatically by the TileMap + TileSet's Physics and Navigation Layers
@@ -77,14 +79,28 @@ public partial class Main : Node2D
  				break;
  			case Enumerations.TileTypes.StaffAgent:
  				var staffAgent = _tileFactory.SpawnStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
-				var tempTable = GetNode<Table>("./Table");
-				_logger.LogInfo($"TempTable is null: {tempTable == null}"); 
-				staffAgent.SetNavTarget(tempTable);
-				result = staffAgent;
+				staffAgent.SetNavTarget(GetNode<Table>("./Table"));
+				_staffList.Add(staffAgent);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
 			case Enumerations.TileTypes.Table:
- 				result = _tileFactory.SpawnTableTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+ 				var table = _tileFactory.SpawnTableTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				_tableList.Add(table);
+				SetTileMapCellAsFloor(coordinateXY);
+ 				break;
+			case Enumerations.TileTypes.Fridge:
+ 				var fridge = _tileFactory.SpawnFridgeTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				_fridgeList.Add(fridge);
+				SetTileMapCellAsFloor(coordinateXY);
+ 				break;
+			case Enumerations.TileTypes.CuttingBoard:
+ 				var cuttingBoard = _tileFactory.SpawnCuttingBoardTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				_cuttingBoardList.Add(cuttingBoard);
+				SetTileMapCellAsFloor(coordinateXY);
+ 				break;
+			case Enumerations.TileTypes.OvenAndStove:
+ 				var ovenAndStove = _tileFactory.SpawnOvenAndStoveTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
+				_ovenAndStoveList.Add(ovenAndStove);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
  			default: 
