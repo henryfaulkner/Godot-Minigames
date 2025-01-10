@@ -6,11 +6,13 @@ public class BurgerBuilder : IRecipeBuilder
 {
 	readonly ILoggerService _logger;
 	Recipe _recipe;
+	IToolsSingleton _toolsSingleton;
 
-	public BurgerBuilder(ILoggerService logger)
+	public BurgerBuilder(ILoggerService logger, IToolsSingleton toolsSingleton)
 	{
 		_recipe = new Recipe("Burger", new List<IRecipeComponent>());
 		_logger = logger;
+		_toolsSingleton = toolsSingleton;
 	}
 
 	public void Reset()
@@ -32,7 +34,55 @@ public class BurgerBuilder : IRecipeBuilder
 			&& productComponent.HasProperty("Cheese");
 	}
 
-	public void GrabPatty()
+	public ITool? CheckForBestNextStep()
+	{
+		var pattyComponent = _recipe.TryGetComponent("Patty"); 
+		if (pattyComponent == null)
+		{
+			var availableFridge = _toolsSingleton.TryGetAvailableFridge();
+			if (availableFridge != null) return availableFridge;
+
+			// exit 
+			return null;
+		}
+
+		var donenessProp = pattyComponent.TryGetValue("Doneness");
+		if (donenessProp != "Cooked")
+		{
+			var availableOvenAndStove = _toolsSingleton.TryGetAvailableOvenAndStove();
+			if (availableOvenAndStove != null) return availableOvenAndStove;
+		}
+
+		var productComponent = _recipe.TryGetComponent("Product"); 
+		if (productComponent == null
+			|| productCommonent.HasProperty("Bun")
+			|| pattyComponent.HasProperty("Cheese"))
+		{
+			var availableFridge = _toolsSingleton.TryGetAvailableFridge();
+			if (availableFridge != null) return availableFridge;
+		}
+	}
+
+	public void CheckFridge()
+	{
+		GrabPatty();
+		AddBun();
+		AddCheese();
+	}
+
+	public void CookWithOvenAndStove()
+	{
+		CookPatty();
+		AddCookedPatty();
+	}
+
+	public void ChopIngredients()
+	{
+		return;
+	}
+
+
+	private void GrabPatty()
 	{
 		_recipe.AddComponent(
 			new RecipeComponent("Patty", new Dictionary<string, string> {
@@ -41,7 +91,7 @@ public class BurgerBuilder : IRecipeBuilder
 		);
 	}
 
-	public void CookPatty()
+	private void CookPatty()
 	{
 		var pattyComponent = _recipe.TryGetComponent("Patty"); 
 		if (pattyComponent == null)
@@ -60,7 +110,7 @@ public class BurgerBuilder : IRecipeBuilder
 		pattyComponent.SetPropertyValue("Doneness", "Cooked");
 	}
 
-	public void AddCookedPatty()
+	private void AddCookedPatty()
 	{
 		var pattyComponent = _recipe.TryGetComponent("Patty"); 
 		if (pattyComponent == null)
@@ -93,7 +143,7 @@ public class BurgerBuilder : IRecipeBuilder
 		_recipe.RemoveComponent(pattyComponent);
 	}
 
-	public void AddBun()
+	private void AddBun()
 	{
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null)
@@ -110,7 +160,7 @@ public class BurgerBuilder : IRecipeBuilder
 		}
 	}
 
-	public void AddCheese()
+	private void AddCheese()
 	{
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bei0tjnx8r8u2"]
 
-[ext_resource type="Script" path="res://ObjectLibrary/Environment/Fridge/Fridge.cs" id="1_wdtyo"]
+[ext_resource type="Script" path="res://ObjectLibrary/Tools/Fridge/Fridge.cs" id="1_wdtyo"]
 [ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="1_yeavi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1vlxv"]

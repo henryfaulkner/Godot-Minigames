@@ -11,7 +11,7 @@ public partial class StaffAgent : Agent, ITile
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-		_orderQueueSingleton = GetNode<ILoggerService>(Constants.SingletonNodes.OrderQueueSingleton);
+		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 	}
 
 	public override void _Process()

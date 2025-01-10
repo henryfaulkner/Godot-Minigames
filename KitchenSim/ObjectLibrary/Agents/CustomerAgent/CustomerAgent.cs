@@ -12,7 +12,7 @@ public class CustomerAgent : Agent, ITile
     public override void _Ready()
     {
         _logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
-		_orderQueueSingleton = GetNode<ILoggerService>(Constants.SingletonNodes.OrderQueueSingleton);
+		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 
         _orderToPlaceList = GenerateOrdersToPlace();
     }
@@ -25,6 +25,6 @@ public class CustomerAgent : Agent, ITile
 
     public List<Order> GenerateOrdersToPlace()
     {
-        
+
     }
 }

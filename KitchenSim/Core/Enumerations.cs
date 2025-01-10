@@ -24,4 +24,13 @@ public static class Enumerations
 		CuttingBoard = 7,
 		OvenAndStove = 8,
 	}
+
+	public enum OrderTypes
+	{
+		Burger,
+		Salad,
+		FrenchFries,
+	}
+	
+	public enum Commands {}
 }

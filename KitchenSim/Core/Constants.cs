@@ -10,5 +10,6 @@ public static class Constants
         public const string EnvironmentFactory = "/root/EnvironmentFactory";
         public const string OrderQueueSingleton = "/root/OrderQueueSingleton";
         public const string Observables = "/root/Observables";
+        public const string OrderFactory = "/root/OrderFactory";
     }
 }
