@@ -6,11 +6,13 @@ public class FrenchFryBuilder : IRecipeBuilder
 {
 	readonly ILoggerService _logger;
 	Recipe _recipe;
+	IToolsSingleton _toolsSingleton;
 
-	public FrenchFryBuilder(ILoggerService logger)
+	public FrenchFryBuilder(ILoggerService logger, IToolsSingleton toolsSingleton)
 	{
 		_recipe = new Recipe("FrenchFries", new List<IRecipeComponent>());
 		_logger = logger;
+		_toolsSingleton = toolsSingleton;
 	}
 
 	public void Reset()

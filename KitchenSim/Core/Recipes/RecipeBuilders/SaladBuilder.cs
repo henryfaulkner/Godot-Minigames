@@ -6,11 +6,13 @@ public class SaladBuilder : IRecipeBuilder
 {
 	readonly ILoggerService _logger;
 	Recipe _recipe;
+	IToolsSingleton _toolsSingleton;
 
-	public SaladBuilder(ILoggerService logger)
+	public SaladBuilder(ILoggerService logger, IToolsSingleton toolsSingleton)
 	{
 		_recipe = new Recipe("Salad", new List<IRecipeComponent>());
 		_logger = logger;
+		_toolsSingleton = toolsSingleton;
 	}
 
 	public void Reset()
