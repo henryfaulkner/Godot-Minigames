@@ -2,33 +2,41 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Text;
 
 public partial class Main : Node2D
 {
-	const int TileSet_MainCellSourceId = 1;
-	static Vector2I TileSet_AtlaCoords_Floor = new Vector2I(0, 0);
-	static Vector2I TileSet_AtlaCoords_StaffAgent = new Vector2I(1, 0);
-	static Vector2I TileSet_AtlaCoords_Wall = new Vector2I(0, 1);
-
+	[ExportGroup("TileMap")]
 	[Export]
 	TileMapLayer TileMapLayer { get; set; }
 	[Export]
 	int GridDimension_X { get; set; }
 	[Export]
-	int GridDimension_Y { get; set; } 
+	int GridDimension_Y { get; set; }
+
+	[ExportGroup("UI")]
+	[Export]
+	DebugPopup DebugPopup { get; set; } 
+
+	const int TileSet_MainCellSourceId = 1;
+	static Vector2I TileSet_AtlaCoords_Floor = new Vector2I(0, 0);
+	static Vector2I TileSet_AtlaCoords_StaffAgent = new Vector2I(1, 0);
+	static Vector2I TileSet_AtlaCoords_Wall = new Vector2I(0, 1);
 
 	ILoggerService _logger;
 	ITileMapService _tileMapService;
 	IAgentFactory _agentFactory;
 	ITileFactory _tileFactory;
+	IOrderQueueSingleton _orderQueueSingleton;
 
 	#region Agents
 	List<StaffAgent> _staffList = new List<StaffAgent>();
+	List<CustomerAgent> _customerList = new List<CustomerAgent>();
 	#endregion
 
 	#region Environment
 	List<Table> _tableList = new List<Table>();
-	List<CuttingBoard> _cuttingBoardList = new List<>();
+	List<CuttingBoard> _cuttingBoardList = new List<CuttingBoard>();
 	List<Fridge> _fridgeList = new List<Fridge>();
 	List<OvenAndStove> _ovenAndStoveList = new List<OvenAndStove>();
 	#endregion
@@ -39,17 +47,23 @@ public partial class Main : Node2D
 		_tileMapService = GetNode<ITileMapService>(Constants.SingletonNodes.TileMapService);
 		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.AgentFactory);
 		_tileFactory = GetNode<ITileFactory>(Constants.SingletonNodes.TileFactory);
+		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 
 		_tileMapService.SetTileSize(GetTileSize());
-
-		// It would be better for the simulation to place initial agents and environment 	
-		// from the scene editor. 
-		// Maybe read editor textures and replace them with nodes.
-		// Obviously, customers will be spawn programatically.
 	}
 
 	public override void _Process(double delta)
 	{
+		HandleDebugMenu();
+	}
+	
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionReleased("debug"))
+		{
+			// toggle menu on
+			DebugPopup.Visible = !DebugPopup.Visible;
+		}
 	}
 
 	private int GetTileSize()
@@ -64,7 +78,7 @@ public partial class Main : Node2D
 			for (int y = 0; y < GridDimension_Y; y += 1)
 			{
 				TileData tileData = TileMapLayer.GetCellTileData(new Vector2I(x, y));
-				ITile tileNode = CreateTileNodes(tileData, new Tuple<int, int>(x, y));
+				CreateTileNodes(tileData, new Tuple<int, int>(x, y));
 			}
 		}
 	}
@@ -107,7 +121,6 @@ public partial class Main : Node2D
  				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
  				break;
  		}	
-		return result;
 	}
 	
 	// After creating Tile nodes,
@@ -115,5 +128,22 @@ public partial class Main : Node2D
 	private void SetTileMapCellAsFloor(Tuple<int, int> coordinateXY)
 	{
 		TileMapLayer.SetCell(new Vector2I(coordinateXY.Item1, coordinateXY.Item2), TileSet_MainCellSourceId, TileSet_AtlaCoords_Floor);
+	}
+	
+	private void HandleDebugMenu()
+	{
+		var debugTextBuilder = new StringBuilder(string.Empty);
+		debugTextBuilder.Append(GetStaffDebugText());
+		DebugPopup.SetText(debugTextBuilder.ToString());
+	}
+	
+	private string GetStaffDebugText()
+	{
+		var staffDebugTextBuilder = new StringBuilder(string.Empty);
+		foreach (var staff in _staffList)
+		{
+			staffDebugTextBuilder.Append($"{staff.GetActivity()}\n");
+		}
+		return staffDebugTextBuilder.ToString();
 	}
 }

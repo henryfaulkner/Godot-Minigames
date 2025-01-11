@@ -2,29 +2,29 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class CustomerAgent : Agent, ITile
+public partial class CustomerAgent : Agent, ITile
 {
-    List<Order> _ordersToPlace;
+	List<Order> _ordersToPlace;
 
 	ILoggerService _logger;
 	IOrderQueueSingleton _orderQueueSingleton;
 
-    public override void _Ready()
-    {
-        _logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
+	public override void _Ready()
+	{
+		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 
-        _orderToPlaceList = GenerateOrdersToPlace();
-    }
+		//_ordersToPlace = GenerateOrdersToPlace();
+	}
 
-    public void PlaceOrder(Order order)
-    {
-        _orderQueueSingleton.Enqueue(order);
-        _ordersToPlace.Remove(order);
-    }
+	public void PlaceOrder(Order order)
+	{
+		_orderQueueSingleton.Enqueue(order);
+		_ordersToPlace.Remove(order);
+	}
 
-    public List<Order> GenerateOrdersToPlace()
-    {
-
-    }
+	//public List<Order> GenerateOrdersToPlace()
+	//{
+//
+	//}
 }

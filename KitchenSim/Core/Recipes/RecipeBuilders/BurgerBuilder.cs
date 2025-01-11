@@ -55,12 +55,14 @@ public class BurgerBuilder : IRecipeBuilder
 
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null
-			|| productCommonent.HasProperty("Bun")
+			|| pattyComponent.HasProperty("Bun")
 			|| pattyComponent.HasProperty("Cheese"))
 		{
 			var availableFridge = _toolsSingleton.TryGetAvailableFridge();
 			if (availableFridge != null) return availableFridge;
 		}
+		
+		return null;
 	}
 
 	public void CheckFridge()

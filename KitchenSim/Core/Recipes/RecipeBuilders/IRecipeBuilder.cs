@@ -7,7 +7,7 @@ public interface IRecipeBuilder
     IRecipe GetResult();
     bool CheckDoneness();
 
-    ITool? CheckForNextStep();
+    ITool? CheckForBestNextStep();
     void CheckFridge();
     void CookWithOvenAndStove();
     void ChopIngredients();

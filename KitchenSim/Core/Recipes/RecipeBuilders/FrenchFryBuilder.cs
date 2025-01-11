@@ -54,6 +54,24 @@ public class FrenchFryBuilder : IRecipeBuilder
 			var availableOvenAndStove = _toolsSingleton.TryGetAvailableOvenAndStove();
 			if (availableOvenAndStove != null) return availableOvenAndStove;
 		}
+		
+		return null;
+	}
+
+	public void CheckFridge()
+	{
+		GrabPotato();
+	}
+
+	public void CookWithOvenAndStove()
+	{
+		FryPotatoSlices();
+		AddFrenchFries();
+	}
+
+	public void ChopIngredients()
+	{
+		SlicePotato();
 	}
 
 	public bool CheckDoneness()

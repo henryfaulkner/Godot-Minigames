@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://msf03topa7sj"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/UI/DebugPopup.cs" id="1_4dq3n"]
+[ext_resource type="FontFile" uid="uid://d4jmdiojkdhmx" path="res://Assets/Fonts/HelvetiPixel.ttf" id="2_v5ij7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ue1dd"]
+font = ExtResource("2_v5ij7")
+font_size = 20
+
+[node name="DebugPopup" type="PopupPanel"]
+auto_translate_mode = 1
+title = "Debug"
+size = Vector2i(352, 131)
+visible = true
+min_size = Vector2i(300, 100)
+script = ExtResource("1_4dq3n")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 348.0
+offset_bottom = 127.0
+text = "hello world"
+label_settings = SubResource("LabelSettings_ue1dd")
+autowrap_mode = 3
+uppercase = true

@@ -15,11 +15,13 @@ public partial class TileFactory : Node, ITileFactory
 {
 	IAgentFactory _agentFactory;
 	IEnvironmentFactory _environmentFactory;
+	IToolFactory _toolFactory;
 
 	public override void _Ready()
 	{
 		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.AgentFactory);
 		_environmentFactory = GetNode<IEnvironmentFactory>(Constants.SingletonNodes.EnvironmentFactory);
+		_toolFactory = GetNode<IToolFactory>(Constants.SingletonNodes.ToolFactory);
 	}
 
 	public Wall SpawnWallTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
@@ -38,21 +40,21 @@ public partial class TileFactory : Node, ITileFactory
 
 	public CuttingBoard SpawnCuttingBoardTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
 	{
-		return _environmentFactory.SpawnCuttingBoard(parent, 
+		return _toolFactory.SpawnCuttingBoard(parent, 
 			new Vector2((coordinateXY.Item1*tileSize) + (tileSize/2), (coordinateXY.Item2*tileSize) + (tileSize/2))
 		);
 	}
 
 	public Fridge SpawnFridgeTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
 	{
-		return _environmentFactory.SpawnSpawnFridgeTile(parent, 
+		return _toolFactory.SpawnFridge(parent, 
 			new Vector2((coordinateXY.Item1*tileSize) + (tileSize/2), (coordinateXY.Item2*tileSize) + (tileSize/2))
 		);
 	}
 
 	public OvenAndStove SpawnOvenAndStoveTile(TileMapLayer tileMapLayer, TileData tileData, Tuple<int, int> coordinateXY, int tileSize, Node parent)
 	{
-		return _environmentFactory.SpawnOvenAndStove(parent, 
+		return _toolFactory.SpawnOvenAndStove(parent, 
 			new Vector2((coordinateXY.Item1*tileSize) + (tileSize/2), (coordinateXY.Item2*tileSize) + (tileSize/2))
 		);
 	}

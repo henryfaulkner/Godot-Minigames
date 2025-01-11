@@ -10,12 +10,12 @@ public partial class EnvironmentFactory : Node, IEnvironmentFactory
 {
 	#region Wall
 	private readonly StringName WALL_SCENE_PATH = "res://ObjectLibrary/Environment/Wall/Wall.tscn";
-	private readonly PackedScene _wallScene;
+	private PackedScene _wallScene;
 	#endregion
 
 	#region Table
 	private readonly StringName TABLE_SCENE_PATH = "res://ObjectLibrary/Environment/Table/Table.tscn";
-	private readonly PackedScene _tableScene;
+	private PackedScene _tableScene;
 	#endregion
 
 	ILoggerService _logger;

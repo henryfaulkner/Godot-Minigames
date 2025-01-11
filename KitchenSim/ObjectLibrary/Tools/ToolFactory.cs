@@ -1,23 +1,28 @@
 using Godot;
 using System;
 
-public interface 
+public interface IToolFactory
+{
+	CuttingBoard SpawnCuttingBoard(Node parent, Vector2 position);
+	Fridge SpawnFridge(Node parent, Vector2 position);
+	OvenAndStove SpawnOvenAndStove(Node parent, Vector2 position);
+}
 
-public partial class ToolFactory : Node
+public partial class ToolFactory : Node, IToolFactory
 {
 	#region 
-	private readonly StringName CUTTING_BOARD_SCENE_PATH = "res://ObjectLibrary/Environment/CuttingBoard/CuttingBoard.tscn";
-	private readonly PackedScene _cuttingBoardScene;
+	private readonly StringName CUTTING_BOARD_SCENE_PATH = "res://ObjectLibrary/Tools/CuttingBoard/CuttingBoard.tscn";
+	private PackedScene _cuttingBoardScene;
 	#endregion
 
 	#region 
-	private readonly StringName FRIDGE_SCENE_PATH = "res://ObjectLibrary/Environment/Fridge/Fridge.tscn";
-	private readonly PackedScene _fridgeScene;
+	private readonly StringName FRIDGE_SCENE_PATH = "res://ObjectLibrary/Tools/Fridge/Fridge.tscn";
+	private PackedScene _fridgeScene;
 	#endregion
 
 	#region 
-	private readonly StringName OVEN_AND_STOVE_SCENE_PATH = "res://ObjectLibrary/Environment/OvenAndStove/OvenAndStove.tscn";
-	private readonly PackedScene _ovenAndStoveScene;
+	private readonly StringName OVEN_AND_STOVE_SCENE_PATH = "res://ObjectLibrary/Tools/OvenAndStove/OvenAndStove.tscn";
+	private PackedScene _ovenAndStoveScene;
 	#endregion
 	
 	ILoggerService _logger;

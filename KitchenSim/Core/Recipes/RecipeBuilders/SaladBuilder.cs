@@ -62,6 +62,8 @@ public class SaladBuilder : IRecipeBuilder
 			// exit
 			return null;
 		}
+		
+		return null;
 	}
 
 	public void CheckFridge()
@@ -71,7 +73,7 @@ public class SaladBuilder : IRecipeBuilder
 		AddDressing();
 	}
 
-	public void CookWithOvenAndStove
+	public void CookWithOvenAndStove()
 	{
 		return;
 	}
