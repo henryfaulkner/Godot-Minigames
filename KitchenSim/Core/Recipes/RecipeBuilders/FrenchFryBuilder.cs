@@ -23,6 +23,37 @@ public class FrenchFryBuilder : IRecipeBuilder
 		return _recipe;
 	}
 
+	public ITool? CheckForBestNextStep()
+	{
+		var potatoComponent = _recipe.TryGetComponent("Potato");
+		var productComponent = _recipe.TryGetComponent("Product");
+
+		if (potatoComponent == null)
+		{
+			var availableFridge = _toolsSingleton.TryGetAvailableFridge();
+			if (availableFridge != null) return availableFridge;
+
+			// exit 
+			return null;
+		}
+
+		var isSlicedProp = potatoComponent.TryGetValue("IsSliced");
+		if (isSlicedProp == null
+			|| isSlicedProp == "false")
+		{
+			var availableCuttingBoard = _toolsSingleton.TryGetAvailableCuttingBoard();
+			if (availableCuttingBoard != null) return availableCuttingBoard;
+		}
+
+		var isFriedProp = potatoComponent.TryGetValue("IsFried");
+		if (isFriedProp == null
+			|| isFriedProp == "false")
+		{
+			var availableOvenAndStove = _toolsSingleton.TryGetAvailableOvenAndStove();
+			if (availableOvenAndStove != null) return availableOvenAndStove;
+		}
+	}
+
 	public bool CheckDoneness()
 	{
 		var productComponent = _recipe.TryGetComponent("Product"); 

@@ -9,13 +9,13 @@ public class SaladBuilder : IRecipeBuilder
 
 	public SaladBuilder(ILoggerService logger)
 	{
-		_recipe = new Recipe("Burger", new List<IRecipeComponent>());
+		_recipe = new Recipe("Salad", new List<IRecipeComponent>());
 		_logger = logger;
 	}
 
 	public void Reset()
 	{
-		_recipe = new Recipe("Burger", new List<IRecipeComponent>());
+		_recipe = new Recipe("Salad", new List<IRecipeComponent>());
 	}
 
 	public IRecipe GetResult()
@@ -30,6 +30,56 @@ public class SaladBuilder : IRecipeBuilder
 			&& productComponent.HasProperty("ChoppedLettuce")
 			&& productComponent.HasProperty("DicedTomato")
 			&& productComponent.HasProperty("Dressing");
+	}
+
+	public ITool? CheckForBestNextStep()
+	{
+		var lettuceComponent = _recipe.TryGetComponent("Lettuce");
+		var tomatoComponent = _recipe.TryGetComponent("Tomato");
+		var productComponent = _recipe.TryGetComponent("Product");
+
+		if (lettuceComponent == null
+			|| tomatoComponent == null)
+		{
+			var availableFridge = _toolsSingleton.TryGetAvailableFridge();
+			if (availableFridge != null) return availableFridge;
+
+			// exit 
+			return null;
+		}
+
+		var lettuceDoneness = lettuceComponent.TryGetValue("Doneness");
+		var tomatoDoneness = tomatoComponent.TryGetValue("Doneness");
+
+		if (lettuceDoneness == "NotChopped"
+			|| tomatoDoneness == "NotDiced")
+		{
+			var availableCuttingBoard = _toolsSingleton.TryGetAvailableCuttingBoard();
+			if (availableCuttingBoard != null) return availableCuttingBoard;
+
+			// exit
+			return null;
+		}
+	}
+
+	public void CheckFridge()
+	{
+		GrabLettuce();
+		GrabTomato();
+		AddDressing();
+	}
+
+	public void CookWithOvenAndStove
+	{
+		return;
+	}
+
+	public void ChopIngredients()
+	{
+		ChopLettuce();
+		AddChoppedLettuce();
+		DiceTomato();
+		AddDicedTomato();
 	}
 
 	public void GrabLettuce()
