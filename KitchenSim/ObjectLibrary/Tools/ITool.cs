@@ -7,4 +7,6 @@ public interface ITool
 	bool CheckIfInUse();
 
 	Node2D GetNodeSelf();
+
+	Enumerations.ToolTypes GetToolType();
 }

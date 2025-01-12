@@ -9,6 +9,8 @@ public partial class StaffAgent : Agent, ITile
 	string _lastName;
 	Order? _activeOrder;
 
+	ITool? _toolTarget;
+
 	ILoggerService _logger;
 	IOrderQueueSingleton _orderQueueSingleton;
 	INamePickerService _namePickerService;
@@ -18,6 +20,8 @@ public partial class StaffAgent : Agent, ITile
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
+
+		ReadyAgent();
 		
 		_firstName = _namePickerService.GetRandomName();
 		_lastName = "Staffer";
@@ -34,11 +38,13 @@ public partial class StaffAgent : Agent, ITile
 		{
 			// take to customer
 		}
-		else
+		else if (_toolTarget == null)
 		{
-			var toolForNextStep = _activeOrder.RecipeBuilder.CheckForBestNextStep();
-			if (toolForNextStep != null) 
-				SetNavTarget(toolForNextStep.GetNodeSelf());
+			_toolTarget = _activeOrder.RecipeBuilder.CheckForBestNextStep();
+			if (_toolTarget != null) 
+			{
+				SetNavTarget(_toolTarget.GetNodeSelf());
+			}
 		}
 	}
 
@@ -53,5 +59,31 @@ public partial class StaffAgent : Agent, ITile
 		strBuilder.Append($"{_firstName} {_lastName}: ");
 		if (_activeOrder != null) strBuilder.Append(_activeOrder.ToString());
 		return strBuilder.ToString();
+	}
+
+	public override void HandleNavTargetArrival()
+	{
+		// Do tool action immediately
+		// TODO: add action delay to give work weight 
+		_logger.LogInfo("STAFF: An agent reached its target.");
+		switch (_toolTarget.GetToolType())
+		{
+			case Enumerations.ToolTypes.CuttingBoard:
+				_activeOrder.RecipeBuilder.ChopIngredients();
+				break;
+			case Enumerations.ToolTypes.Fridge:
+				_activeOrder.RecipeBuilder.CheckFridge();
+				break;
+			case Enumerations.ToolTypes.OvenAndStove:
+				_activeOrder.RecipeBuilder.CookWithOvenAndStove();
+				break;
+			default:
+				_logger.LogError("StaffAgent HandleNavTargetArrival ToolTypes did not map properly.");
+				break;
+		}
+
+		// leave tool
+		SetNavTarget(null);
+		_toolTarget = null;
 	}
 }

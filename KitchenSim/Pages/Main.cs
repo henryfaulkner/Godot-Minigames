@@ -28,6 +28,7 @@ public partial class Main : Node2D
 	IAgentFactory _agentFactory;
 	ITileFactory _tileFactory;
 	IOrderQueueSingleton _orderQueueSingleton;
+	IToolsSingleton _toolsSingleton;
 
 	#region Agents
 	List<StaffAgent> _staffList = new List<StaffAgent>();
@@ -36,9 +37,6 @@ public partial class Main : Node2D
 
 	#region Environment
 	List<Table> _tableList = new List<Table>();
-	List<CuttingBoard> _cuttingBoardList = new List<CuttingBoard>();
-	List<Fridge> _fridgeList = new List<Fridge>();
-	List<OvenAndStove> _ovenAndStoveList = new List<OvenAndStove>();
 	#endregion
 
 	public override void _Ready()
@@ -48,6 +46,7 @@ public partial class Main : Node2D
 		_agentFactory = GetNode<IAgentFactory>(Constants.SingletonNodes.AgentFactory);
 		_tileFactory = GetNode<ITileFactory>(Constants.SingletonNodes.TileFactory);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
+		_toolsSingleton = GetNode<IToolsSingleton>(Constants.SingletonNodes.ToolsSingleton);
 
 		_tileMapService.SetTileSize(GetTileSize());
 
@@ -106,17 +105,17 @@ public partial class Main : Node2D
  				break;
 			case Enumerations.TileTypes.Fridge:
  				var fridge = _tileFactory.SpawnFridgeTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
-				_fridgeList.Add(fridge);
+				_toolsSingleton.AddFridge(fridge);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
 			case Enumerations.TileTypes.CuttingBoard:
  				var cuttingBoard = _tileFactory.SpawnCuttingBoardTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
-				_cuttingBoardList.Add(cuttingBoard);
+				_toolsSingleton.AddCuttingBoard(cuttingBoard);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
 			case Enumerations.TileTypes.OvenAndStove:
  				var ovenAndStove = _tileFactory.SpawnOvenAndStoveTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
-				_ovenAndStoveList.Add(ovenAndStove);
+				_toolsSingleton.AddOvenAndStove(ovenAndStove);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
  			default: 

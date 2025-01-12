@@ -36,4 +36,14 @@ public static class Enumerations
 	}
 	
 	public enum Commands {}
+
+	public enum ToolTypes
+	{
+		[Description("Cutting Board")]
+		CuttingBoard,
+		[Description("Fridge")]
+		Fridge,
+		[Description("Oven and Stove")]
+		OvenAndStove,
+	}
 }

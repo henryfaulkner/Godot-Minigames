@@ -3,6 +3,9 @@ using System;
 
 public partial class AgentController : CharacterBody2D
 {
+	[Signal]
+	public delegate void WithinOneCardinalBlockFromNavTargetEventHandler();
+
 	[ExportGroup("RayCasts")]
 	[Export]
 	protected RayCast2D RayCastUp;
@@ -62,6 +65,7 @@ public partial class AgentController : CharacterBody2D
 		HandlePathFinding();
 		HandleCollision();
 		HandleMovement();
+		HandleArrival();
 	}
 
 	private void HandleMovement()
@@ -117,7 +121,6 @@ public partial class AgentController : CharacterBody2D
 	{
 		NavAgent.TargetPosition = _navTarget.GlobalPosition;
 		var dir = ToLocal(NavAgent.GetNextPathPosition()).Normalized();
-		_logger.LogInfo($"PathFinding Vector: {dir.ToString()}");
 		
 		bool useX = Mathf.Abs(dir.X) >= Mathf.Abs(dir.Y);
 		bool useY = Mathf.Abs(dir.X) < Mathf.Abs(dir.Y);
@@ -161,6 +164,40 @@ public partial class AgentController : CharacterBody2D
 				 @event.IsActionReleased("down") || @event.IsActionReleased("left"))
 		{
 			CurrentState = States.Idle;
+		}
+	}
+
+	private void HandleArrival()
+	{
+		int tileSize = _tileMapService.GetTileSize();
+
+		if (GlobalPosition.Y == _navTarget.GlobalPosition.Y + tileSize
+			&& GlobalPosition.X == _navTarget.GlobalPosition.X)
+		{
+			// if target is immeidately north 
+			_logger.LogDebug($"target is immediately north");
+			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
+		}
+		else if (GlobalPosition.X == _navTarget.GlobalPosition.X - tileSize
+			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y)
+		{
+			// if target is immeidately east 
+			_logger.LogDebug($"target is immediately east");
+			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
+		} 
+		else if (GlobalPosition.Y == _navTarget.GlobalPosition.Y - tileSize
+			&& GlobalPosition.X == _navTarget.GlobalPosition.X)
+		{
+			// if target is immeidately south 
+			_logger.LogDebug($"target is immediately south");
+			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
+		} 
+		else if (GlobalPosition.X == _navTarget.GlobalPosition.X + tileSize
+			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y)
+		{
+			// if target is immeidately west 
+			_logger.LogDebug($"target is immediately west");
+			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
 		}
 	}
 }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public interface IToolsSingleton
 {
+	void AddCuttingBoard(CuttingBoard cuttingBoard);
+	void AddOvenAndStove(OvenAndStove ovenAndStove);
+	void AddFridge(Fridge fridge);
 	CuttingBoard? TryGetAvailableCuttingBoard();
 	OvenAndStove? TryGetAvailableOvenAndStove();
 	Fridge? TryGetAvailableFridge();
@@ -15,11 +18,19 @@ public partial class ToolsSingleton : Node, IToolsSingleton
 	List<OvenAndStove> _ovenAndStoveList = new List<OvenAndStove>();
 	List<Fridge> _fridgeList = new List<Fridge>();
 
-	public void SetToolsList(List<CuttingBoard> cuttingBoardList, List<OvenAndStove> ovenAndStoveList, List<Fridge> fridgeList)
+	public void AddCuttingBoard(CuttingBoard cuttingBoard)
 	{
-		_cuttingBoardList = cuttingBoardList;
-		_ovenAndStoveList = ovenAndStoveList;
-		_fridgeList = fridgeList;
+		_cuttingBoardList.Add(cuttingBoard);
+	}
+
+	public void AddOvenAndStove(OvenAndStove ovenAndStove)
+	{
+		_ovenAndStoveList.Add(ovenAndStove);
+	}
+
+	public void AddFridge(Fridge fridge)
+	{
+		_fridgeList.Add(fridge);
 	}
 
 	public CuttingBoard? TryGetAvailableCuttingBoard()

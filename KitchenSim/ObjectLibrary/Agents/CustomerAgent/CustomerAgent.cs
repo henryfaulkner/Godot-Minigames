@@ -14,6 +14,8 @@ public partial class CustomerAgent : Agent, ITile
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_orderFactory = GetNode<IOrderFactory>(Constants.SingletonNodes.OrderFactory);
 
+		ReadyAgent();
+
 		// temporary for testing staff
 		// in real implementation, have customers search for an available table
 		// once the customer reaches a table, place the order
@@ -47,5 +49,10 @@ public partial class CustomerAgent : Agent, ITile
 				break;
 		}
 		return result;
+	}
+	
+	public override void HandleNavTargetArrival()
+	{
+		_logger.LogInfo("CUSTOMER: An agent reached its target.");
 	}
 }
