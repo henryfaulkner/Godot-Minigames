@@ -7,18 +7,19 @@
 font = ExtResource("2_v5ij7")
 font_size = 20
 
-[node name="DebugPopup" type="PopupPanel"]
+[node name="DebugPopup" type="PopupPanel" node_paths=PackedStringArray("Label")]
 auto_translate_mode = 1
 title = "Debug"
-size = Vector2i(352, 131)
+size = Vector2i(1024, 131)
 visible = true
-min_size = Vector2i(300, 100)
+min_size = Vector2i(1024, 100)
 script = ExtResource("1_4dq3n")
+Label = NodePath("Label")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 348.0
+offset_right = 1020.0
 offset_bottom = 127.0
 text = "hello world"
 label_settings = SubResource("LabelSettings_ue1dd")

@@ -58,6 +58,7 @@ public partial class AgentController : CharacterBody2D
 	
 	private void HandleTimerTimeout()
 	{
+		if (_navTarget == null) return;
 		HandlePathFinding();
 		HandleCollision();
 		HandleMovement();

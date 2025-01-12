@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cynqpo2ls1q1k"]
+
+[ext_resource type="Script" path="res://ObjectLibrary/Agents/CustomerAgent/CustomerAgent.cs" id="1_1i8tx"]
+[ext_resource type="PackedScene" uid="uid://b4cneyf8fgayy" path="res://ObjectLibrary/Agents/AgentController.tscn" id="2_wekqf"]
+
+[node name="CustomerAgent" type="Node2D"]
+script = ExtResource("1_1i8tx")
+
+[node name="AgentController" parent="." instance=ExtResource("2_wekqf")]

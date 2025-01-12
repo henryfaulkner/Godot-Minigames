@@ -27,9 +27,12 @@ public static class Enumerations
 
 	public enum OrderTypes
 	{
-		Burger,
-		Salad,
-		FrenchFries,
+		[Description("Burger")]
+		Burger = 0,
+		[Description("Salad")]
+		Salad = 1,
+		[Description("FrenchFries")]
+		FrenchFries = 2,
 	}
 	
 	public enum Commands {}

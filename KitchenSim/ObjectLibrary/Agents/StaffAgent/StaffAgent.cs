@@ -1,3 +1,4 @@
+
 using Godot;
 using System;
 using System.Text;
@@ -24,9 +25,20 @@ public partial class StaffAgent : Agent, ITile
 
 	public override void _Process(double delta)
 	{
-		if (_activeOrder == null || _activeOrder.IsCompleted)
+		if (_activeOrder == null)
 		{
 			_activeOrder = TryTakeOrder();
+			if (_activeOrder != null) _activeOrder.State = Order.States.Preparing;
+		}
+		else if (_activeOrder.State == Order.States.Delivering)
+		{
+			// take to customer
+		}
+		else
+		{
+			var toolForNextStep = _activeOrder.RecipeBuilder.CheckForBestNextStep();
+			if (toolForNextStep != null) 
+				SetNavTarget(toolForNextStep.GetNodeSelf());
 		}
 	}
 
@@ -39,7 +51,7 @@ public partial class StaffAgent : Agent, ITile
 	{
 		var strBuilder = new StringBuilder(string.Empty);
 		strBuilder.Append($"{_firstName} {_lastName}: ");
-		
+		if (_activeOrder != null) strBuilder.Append(_activeOrder.ToString());
 		return strBuilder.ToString();
 	}
 }

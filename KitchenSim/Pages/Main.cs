@@ -50,6 +50,8 @@ public partial class Main : Node2D
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 
 		_tileMapService.SetTileSize(GetTileSize());
+
+		ScanTileGrid();
 	}
 
 	public override void _Process(double delta)
@@ -90,10 +92,10 @@ public partial class Main : Node2D
 			// These tile will be handled automatically by the TileMap + TileSet's Physics and Navigation Layers
 			case Enumerations.TileTypes.Floor:
  			case Enumerations.TileTypes.Wall:
+ 			case Enumerations.TileTypes.CounterTop:
  				break;
  			case Enumerations.TileTypes.StaffAgent:
  				var staffAgent = _tileFactory.SpawnStaffAgentTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
-				staffAgent.SetNavTarget(GetNode<Table>("./Table"));
 				_staffList.Add(staffAgent);
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
@@ -118,7 +120,7 @@ public partial class Main : Node2D
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
  			default: 
- 				_logger.LogInfo ("Main GetTileTypeFromCustomData did not map to a TileType!");
+ 				_logger.LogError("Main GetTileTypeFromCustomData did not map to a TileType!");
  				break;
  		}	
 	}

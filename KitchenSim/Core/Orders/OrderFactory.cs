@@ -11,17 +11,19 @@ public interface IOrderFactory
 public partial class OrderFactory : Node, IOrderFactory
 {
 	ILoggerService _logger;
+	IRecipeBuilderFactory _recipeBuilderFactory;
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
+		_recipeBuilderFactory = GetNode<IRecipeBuilderFactory>(Constants.SingletonNodes.RecipeBuilderFactory);
 	}
 
 	public Order CreateBurgerOrder()
 	{
 		var result = new Order();
 		result.OrderType = Enumerations.OrderTypes.Burger;
-		result.IsCompleted = false;
+		result.RecipeBuilder = _recipeBuilderFactory.CreateBurgerBuilder();
 		return result;
 	}
 
@@ -29,7 +31,7 @@ public partial class OrderFactory : Node, IOrderFactory
 	{
 		var result = new Order();
 		result.OrderType = Enumerations.OrderTypes.Salad;
-		result.IsCompleted = false;
+		result.RecipeBuilder = _recipeBuilderFactory.CreateSaladBuilder();
 		return result;
 	}
 
@@ -37,7 +39,7 @@ public partial class OrderFactory : Node, IOrderFactory
 	{
 		var result = new Order();
 		result.OrderType = Enumerations.OrderTypes.FrenchFries;
-		result.IsCompleted = false;
+		result.RecipeBuilder = _recipeBuilderFactory.CreateFrenchFryBuilder();
 		return result;
 	}
 }
