@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class FrenchFryBuilder : IRecipeBuilder
 {
+	string _currentActivity;
+
 	readonly ILoggerService _logger;
 	Recipe _recipe;
 	IToolsSingleton _toolsSingleton;
@@ -58,6 +60,18 @@ public class FrenchFryBuilder : IRecipeBuilder
 		return null;
 	}
 
+	public bool CheckDoneness()
+	{
+		var productComponent = _recipe.TryGetComponent("Product"); 
+		return productComponent != null 
+			&& productComponent.HasProperty("FrenchFries");
+	}
+
+	public string GetCurrentActivity()
+	{
+		return _currentActivity;
+	}
+
 	public void CheckFridge()
 	{
 		GrabPotato();
@@ -74,15 +88,10 @@ public class FrenchFryBuilder : IRecipeBuilder
 		SlicePotato();
 	}
 
-	public bool CheckDoneness()
-	{
-		var productComponent = _recipe.TryGetComponent("Product"); 
-		return productComponent != null 
-			&& productComponent.HasProperty("FrenchFries");
-	}
-
 	public void GrabPotato()
 	{
+		_currentActivity = "Grabbing potato";
+
 		_recipe.AddComponent(
 			new RecipeComponent("Potato", new Dictionary<string, string> {
 				{"IsSliced", "false"},
@@ -93,6 +102,8 @@ public class FrenchFryBuilder : IRecipeBuilder
 
 	public void SlicePotato()
 	{
+		_currentActivity = "Slicing potato";
+
 		var potatoComponent = _recipe.TryGetComponent("Potato");
 		if (potatoComponent == null)
 		{
@@ -112,6 +123,8 @@ public class FrenchFryBuilder : IRecipeBuilder
 
 	public void FryPotatoSlices()
 	{
+		_currentActivity = "Frying potato";
+
 		var potatoComponent = _recipe.TryGetComponent("Potato");
 		if (potatoComponent == null)
 		{
@@ -131,6 +144,8 @@ public class FrenchFryBuilder : IRecipeBuilder
 
 	public void AddFrenchFries()
 	{
+		_currentActivity = "Adding french fries to product";
+
 		var potatoComponent = _recipe.TryGetComponent("Potato");
 		if (potatoComponent == null)
 		{
@@ -165,7 +180,5 @@ public class FrenchFryBuilder : IRecipeBuilder
 		{
 			productComponent.SetPropertyValue("FrenchFries", "");
 		}
-
-		_recipe.RemoveComponent(potatoComponent);
 	}
 }

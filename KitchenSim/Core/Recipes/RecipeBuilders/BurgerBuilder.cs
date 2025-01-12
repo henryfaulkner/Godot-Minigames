@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class BurgerBuilder : IRecipeBuilder
 {
+	string _currentActivity;
+
 	readonly ILoggerService _logger;
 	Recipe _recipe;
 	IToolsSingleton _toolsSingleton;
@@ -32,6 +34,11 @@ public class BurgerBuilder : IRecipeBuilder
 			&& productComponent.HasProperty("CookedPatty")
 			&& productComponent.HasProperty("Bun")
 			&& productComponent.HasProperty("Cheese");
+	}
+
+	public string GetCurrentActivity()
+	{
+		return _currentActivity;
 	}
 
 	public ITool? CheckForBestNextStep()
@@ -86,6 +93,8 @@ public class BurgerBuilder : IRecipeBuilder
 
 	private void GrabPatty()
 	{
+		_currentActivity = "Grabbing patty";
+
 		_recipe.AddComponent(
 			new RecipeComponent("Patty", new Dictionary<string, string> {
 				{"Doneness", "NotCooked"}
@@ -95,6 +104,8 @@ public class BurgerBuilder : IRecipeBuilder
 
 	private void CookPatty()
 	{
+		_currentActivity = "Cooking patty";
+
 		var pattyComponent = _recipe.TryGetComponent("Patty"); 
 		if (pattyComponent == null)
 		{
@@ -114,6 +125,8 @@ public class BurgerBuilder : IRecipeBuilder
 
 	private void AddCookedPatty()
 	{
+		_currentActivity = "Adding cooked patty to product";
+
 		var pattyComponent = _recipe.TryGetComponent("Patty"); 
 		if (pattyComponent == null)
 		{
@@ -141,12 +154,12 @@ public class BurgerBuilder : IRecipeBuilder
 		{
 			productComponent.SetPropertyValue("CookedPatty", "");
 		}
-		
-		_recipe.RemoveComponent(pattyComponent);
 	}
 
 	private void AddBun()
 	{
+		_currentActivity = "Adding bun to product";
+
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null)
 		{
@@ -164,6 +177,8 @@ public class BurgerBuilder : IRecipeBuilder
 
 	private void AddCheese()
 	{
+		_currentActivity = "Adding cheese to product";
+
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null)
 		{

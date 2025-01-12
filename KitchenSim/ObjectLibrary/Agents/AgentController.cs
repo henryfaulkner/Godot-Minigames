@@ -47,6 +47,9 @@ public partial class AgentController : CharacterBody2D
 		_tileMapService = GetNode<ITileMapService>(Constants.SingletonNodes.TileMapService);
 
 		MovementTimer.Timeout += HandleTimerTimeout;
+		NavAgent.VelocityComputed += HandleNavAgentVelocityComputed; // I am trying to get the agents to avoid each other
+
+		Velocity = new Vector2(1, 1);
 	}
 
 	public override void _Input(InputEvent @event)
@@ -63,7 +66,7 @@ public partial class AgentController : CharacterBody2D
 	{
 		if (_navTarget == null) return;
 		HandlePathFinding();
-		HandleCollision();
+		//HandleCollision();
 		HandleMovement();
 		HandleArrival();
 	}
@@ -121,22 +124,25 @@ public partial class AgentController : CharacterBody2D
 	{
 		NavAgent.TargetPosition = _navTarget.GlobalPosition;
 		var dir = ToLocal(NavAgent.GetNextPathPosition()).Normalized();
+
+		NavAgent.Velocity // I am trying to get the agents to avoid each other
+			= GlobalPosition.DirectionTo(NavAgent.TargetPosition) * _tileMapService.GetTileSize();
 		
 		bool useX = Mathf.Abs(dir.X) >= Mathf.Abs(dir.Y);
 		bool useY = Mathf.Abs(dir.X) < Mathf.Abs(dir.Y);
-		if (useY && dir.Y < 0)
+		if (useY && dir.Y < 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
 		{
 			CurrentState = States.MoveUp;
 		}
-		else if (useX && dir.X >= 0)
+		else if (useX && dir.X >= 0 && Mathf.Floor(NavAgent.Velocity.X) != 0)
 		{
 			CurrentState = States.MoveRight;
 		}
-		else if (useY && dir.Y >= 0)
+		else if (useY && dir.Y >= 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
 		{
 			CurrentState = States.MoveDown;
 		}
-		else if (useX && dir.X < 0)
+		else if (useX && dir.X < 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
 		{
 			CurrentState = States.MoveLeft;
 		}
@@ -167,37 +173,51 @@ public partial class AgentController : CharacterBody2D
 		}
 	}
 
+	// Signal should only be emitted once per target
+	Vector2 _globalPositionAtArrival = Vector2.Zero;
 	private void HandleArrival()
 	{
 		int tileSize = _tileMapService.GetTileSize();
+		bool shouldEmitSignal = GlobalPosition != _globalPositionAtArrival;
 
-		if (GlobalPosition.Y == _navTarget.GlobalPosition.Y + tileSize
+		if (shouldEmitSignal
+			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y + tileSize
 			&& GlobalPosition.X == _navTarget.GlobalPosition.X)
 		{
-			// if target is immeidately north 
+			// if target is immediately north 
 			_logger.LogDebug($"target is immediately north");
 			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
 		}
-		else if (GlobalPosition.X == _navTarget.GlobalPosition.X - tileSize
+		else if (shouldEmitSignal
+			&& GlobalPosition.X == _navTarget.GlobalPosition.X - tileSize
 			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y)
 		{
-			// if target is immeidately east 
+			// if target is immediately east 
 			_logger.LogDebug($"target is immediately east");
 			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
 		} 
-		else if (GlobalPosition.Y == _navTarget.GlobalPosition.Y - tileSize
+		else if (shouldEmitSignal
+			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y - tileSize
 			&& GlobalPosition.X == _navTarget.GlobalPosition.X)
 		{
-			// if target is immeidately south 
+			// if target is immediately south 
 			_logger.LogDebug($"target is immediately south");
 			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
 		} 
-		else if (GlobalPosition.X == _navTarget.GlobalPosition.X + tileSize
+		else if (shouldEmitSignal
+			&& GlobalPosition.X == _navTarget.GlobalPosition.X + tileSize
 			&& GlobalPosition.Y == _navTarget.GlobalPosition.Y)
 		{
-			// if target is immeidately west 
+			// if target is immediately west 
 			_logger.LogDebug($"target is immediately west");
 			EmitSignal(SignalName.WithinOneCardinalBlockFromNavTarget);
 		}
+	}
+
+	// I am trying to get the agents to avoid each other
+	private void HandleNavAgentVelocityComputed(Vector2 safeVelocity)
+	{
+		_logger.LogDebug($"Safe Velocity {safeVelocity.ToString()}");
+		Velocity = safeVelocity;
 	}
 }

@@ -51,6 +51,9 @@ public partial class Main : Node2D
 		_tileMapService.SetTileSize(GetTileSize());
 
 		ScanTileGrid();
+
+		// have DebugMenu open as default
+		DebugPopup.Visible = true;
 	}
 
 	public override void _Process(double delta)
@@ -114,6 +117,7 @@ public partial class Main : Node2D
 				SetTileMapCellAsFloor(coordinateXY);
  				break;
 			case Enumerations.TileTypes.OvenAndStove:
+				_logger.LogInfo("Try create OvenAndStoveTile");
  				var ovenAndStove = _tileFactory.SpawnOvenAndStoveTile(TileMapLayer, tileData, coordinateXY, _tileMapService.GetTileSize(), this);
 				_toolsSingleton.AddOvenAndStove(ovenAndStove);
 				SetTileMapCellAsFloor(coordinateXY);

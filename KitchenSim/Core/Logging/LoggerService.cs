@@ -9,7 +9,7 @@ public partial class LoggerService : Node, ILoggerService
 	public LoggerService()
 	{
 		Loggers = new List<ILogger>();
-		Loggers.Add(new LocalLogger(Enumerations.LogLevels.Debug));
+		Loggers.Add(new LocalLogger(Enumerations.LogLevels.Info));
 	}
 
 	public void LogDebug(string message, Exception? exception = null)

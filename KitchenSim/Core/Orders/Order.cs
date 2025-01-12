@@ -27,7 +27,8 @@ public class Order
 	public string ToString()
 	{
 		var strBuilder = new StringBuilder(string.Empty);
-		strBuilder.Append($"Order:{OrderType.GetDescription()} ");
+		strBuilder.Append($"Preparing {OrderType.GetDescription()} order | ");
+		strBuilder.Append($"Current activity is {RecipeBuilder.GetCurrentActivity()}.");
 		return strBuilder.ToString();
 	}
 }

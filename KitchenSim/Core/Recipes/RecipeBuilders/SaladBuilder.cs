@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class SaladBuilder : IRecipeBuilder
 {
+	string _currentActivity;
+
 	readonly ILoggerService _logger;
 	Recipe _recipe;
 	IToolsSingleton _toolsSingleton;
@@ -32,6 +34,11 @@ public class SaladBuilder : IRecipeBuilder
 			&& productComponent.HasProperty("ChoppedLettuce")
 			&& productComponent.HasProperty("DicedTomato")
 			&& productComponent.HasProperty("Dressing");
+	}
+
+	public string GetCurrentActivity()
+	{
+		return _currentActivity;
 	}
 
 	public ITool? CheckForBestNextStep()
@@ -88,6 +95,8 @@ public class SaladBuilder : IRecipeBuilder
 
 	public void GrabLettuce()
 	{
+		_currentActivity = "Grabbing lettuce";
+
 		_recipe.AddComponent(
 			new RecipeComponent("Lettuce", new Dictionary<string, string> {
 				{"Doneness", "NotChopped"}
@@ -97,6 +106,8 @@ public class SaladBuilder : IRecipeBuilder
 
 	public void ChopLettuce()
 	{
+		_currentActivity = "Chopping lettuce";
+
 		var lettuceComponent = _recipe.TryGetComponent("Lettuce"); 
 		if (lettuceComponent == null)
 		{
@@ -116,6 +127,8 @@ public class SaladBuilder : IRecipeBuilder
 
 	public void AddChoppedLettuce()
 	{
+		_currentActivity = "Adding chopped lettuce to product";
+
 		var lettuceComponent = _recipe.TryGetComponent("Lettuce"); 
 		if (lettuceComponent == null)
 		{
@@ -143,13 +156,13 @@ public class SaladBuilder : IRecipeBuilder
 		{
 			productComponent.SetPropertyValue("ChoppedLettuce", "");
 		}
-		
-		_recipe.RemoveComponent(lettuceComponent);
 	}
 
 	// Diced tomato
 	public void GrabTomato()
 	{
+		_currentActivity = "Grabbing tomato";
+
 		_recipe.AddComponent(
 			new RecipeComponent("Tomato", new Dictionary<string, string> {
 				{"Doneness", "NotDiced"}
@@ -159,6 +172,8 @@ public class SaladBuilder : IRecipeBuilder
 
 	public void DiceTomato()
 	{
+		_currentActivity = "Dicing tomato";
+
 		var tomatoComponent = _recipe.TryGetComponent("Tomato"); 
 		if (tomatoComponent == null)
 		{
@@ -178,7 +193,9 @@ public class SaladBuilder : IRecipeBuilder
 
 	public void AddDicedTomato()
 	{
-		var tomatoComponent = _recipe.TryGetComponent("TomatoLettuce"); 
+		_currentActivity = "Adding diced tomato to product";
+
+		var tomatoComponent = _recipe.TryGetComponent("Tomato"); 
 		if (tomatoComponent == null)
 		{
 			_logger.LogInfo ("Tomato cannot be added. No tomato in inventory.");
@@ -205,12 +222,12 @@ public class SaladBuilder : IRecipeBuilder
 		{
 			productComponent.SetPropertyValue("DicedTomato", "");
 		}
-		
-		_recipe.RemoveComponent(tomatoComponent);
 	}
 
 	public void AddDressing()
 	{
+		_currentActivity = "Adding dressing to product";
+
 		var productComponent = _recipe.TryGetComponent("Product"); 
 		if (productComponent == null)
 		{

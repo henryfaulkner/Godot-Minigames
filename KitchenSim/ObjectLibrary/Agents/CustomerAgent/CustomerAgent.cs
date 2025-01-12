@@ -19,7 +19,8 @@ public partial class CustomerAgent : Agent, ITile
 		// temporary for testing staff
 		// in real implementation, have customers search for an available table
 		// once the customer reaches a table, place the order
-		PlaceOrder(DecideOrder());
+		//PlaceOrder(DecideOrder());
+		PlaceOrder(_orderFactory.CreateFrenchFriesOrder());
 	}
 
 	public void PlaceOrder(Order order)

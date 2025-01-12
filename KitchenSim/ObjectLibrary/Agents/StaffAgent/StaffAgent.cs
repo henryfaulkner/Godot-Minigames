@@ -63,27 +63,29 @@ public partial class StaffAgent : Agent, ITile
 
 	public override void HandleNavTargetArrival()
 	{
-		// Do tool action immediately
-		// TODO: add action delay to give work weight 
-		_logger.LogInfo("STAFF: An agent reached its target.");
-		switch (_toolTarget.GetToolType())
-		{
-			case Enumerations.ToolTypes.CuttingBoard:
-				_activeOrder.RecipeBuilder.ChopIngredients();
-				break;
-			case Enumerations.ToolTypes.Fridge:
-				_activeOrder.RecipeBuilder.CheckFridge();
-				break;
-			case Enumerations.ToolTypes.OvenAndStove:
-				_activeOrder.RecipeBuilder.CookWithOvenAndStove();
-				break;
-			default:
-				_logger.LogError("StaffAgent HandleNavTargetArrival ToolTypes did not map properly.");
-				break;
-		}
-
-		// leave tool
 		SetNavTarget(null);
-		_toolTarget = null;
+
+		// Do tool action with delay
+		TimingFunctions.SetTimeout(() => {
+			_logger.LogInfo("STAFF: An agent reached its target.");
+			switch (_toolTarget.GetToolType())
+			{
+				case Enumerations.ToolTypes.CuttingBoard:
+					_activeOrder.RecipeBuilder.ChopIngredients();
+					break;
+				case Enumerations.ToolTypes.Fridge:
+					_activeOrder.RecipeBuilder.CheckFridge();
+					break;
+				case Enumerations.ToolTypes.OvenAndStove:
+					_activeOrder.RecipeBuilder.CookWithOvenAndStove();
+					break;
+				default:
+					_logger.LogError("StaffAgent HandleNavTargetArrival ToolTypes did not map properly.");
+					break;
+			}
+
+			_toolTarget.StopUsing();
+			_toolTarget = null;
+		}, 3000);
 	}
 }
