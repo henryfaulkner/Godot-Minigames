@@ -4,23 +4,31 @@ using System.Collections.Generic;
 
 public partial class CustomerAgent : Agent, ITile
 {
+	string _firstName;
+	string _lastName;
+	Order? _unrequestedOrder;
+	Table _tableTarget;
+
 	ILoggerService _logger;
 	IOrderQueueSingleton _orderQueueSingleton;
 	IOrderFactory _orderFactory;
+	_namePickerService _namePickerService;
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_orderFactory = GetNode<IOrderFactory>(Constants.SingletonNodes.OrderFactory);
+		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
 
 		ReadyAgent();
 
-		// temporary for testing staff
-		// in real implementation, have customers search for an available table
-		// once the customer reaches a table, place the order
-		//PlaceOrder(DecideOrder());
-		PlaceOrder(_orderFactory.CreateFrenchFriesOrder());
+		_firstName = _namePickerService.GetRandomName();
+		_lastName = "Customer";
+		_unrequestedOrder = DecideOrder();
+
+		// Have customer search for a table
+		// then PlaceOrder()
 	}
 
 	public void PlaceOrder(Order order)

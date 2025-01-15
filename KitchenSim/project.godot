@@ -26,9 +26,10 @@ RecipeBuilderFactory="*res://Core/Recipes/RecipeBuilderFactory.cs"
 OrderQueueSingleton="*res://Core/Orders/OrderQueueSingleton.cs"
 Observables="*res://Core/Observables.cs"
 OrderFactory="*res://Core/Orders/OrderFactory.cs"
-ToolsSingleton="*res://Core/ToolsSingleton.cs"
+ToolsSingleton="*res://Core/Resources/ToolsSingleton.cs"
 ToolFactory="*res://ObjectLibrary/Tools/ToolFactory.cs"
-NamePickerService="*res://Core/NamePickerService.cs"
+NamePickerService="*res://Core/Resources/NamePickerService.cs"
+TablesSingleton="*res://Core/Resources/TablesSingleton.cs"
 
 [dotnet]
 

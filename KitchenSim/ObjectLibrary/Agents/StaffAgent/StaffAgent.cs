@@ -8,7 +8,6 @@ public partial class StaffAgent : Agent, ITile
 	string _firstName;
 	string _lastName;
 	Order? _activeOrder;
-
 	ITool? _toolTarget;
 
 	ILoggerService _logger;
