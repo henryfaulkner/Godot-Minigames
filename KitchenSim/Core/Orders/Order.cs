@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 
 public class Order
-{    
+{ 
+	public Guid Id { get; set; }   	
 	public Enumerations.OrderTypes OrderType { get; set; } 
 	public IRecipeBuilder RecipeBuilder { get; set; }
+	public bool IsRequested { get; set; }
 	
 	#region State Machine
 	public States State { get; set; }
@@ -22,6 +24,7 @@ public class Order
 	public Order()
 	{
 		State = States.Available;
+		IsRequested = false;
 	}
 
 	public string ToString()

@@ -3,6 +3,8 @@ using System;
 
 public partial class Table : Area2D, IEnvironment, ITile
 {
+	public Order? Order { get; set; }
+
     bool _isUsing = false;
 
 	public void SetToUsing() { _isUsing = true; }

@@ -31,7 +31,7 @@ public partial class TablesSingleton : Node, ITablesSingleton
 		{
 			if (table.CheckIfInUse() == false) 
 			{
-				_logger.LogInfo("Found Cutting Board");
+				_logger.LogInfo("Found Table");
 				table.SetToUsing();
 				return table;
 			} 

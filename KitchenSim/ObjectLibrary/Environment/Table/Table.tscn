@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dck56x6vg6mnq"]
 
-[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="1_bo77a"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/Images/KitchenSim.TileMap.png" id="1_bo77a"]
 [ext_resource type="Script" path="res://ObjectLibrary/Environment/Table/Table.cs" id="1_la2b7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_re6hw"]

@@ -6,13 +6,24 @@ public partial class CustomerAgent : Agent, ITile
 {
 	string _firstName;
 	string _lastName;
-	Order? _unrequestedOrder;
+	Order? _order;
 	Table _tableTarget;
 
 	ILoggerService _logger;
 	IOrderQueueSingleton _orderQueueSingleton;
 	IOrderFactory _orderFactory;
-	_namePickerService _namePickerService;
+	INamePickerService _namePickerService;
+	ITablesSingleton _tablesSingleton;
+
+	#region State Machine
+	States _state;
+	enum States
+	{
+		MovingToTable,
+		WaitingAtTable,
+		Leaving,
+	}
+	#endregion
 
 	public override void _Ready()
 	{
@@ -20,15 +31,34 @@ public partial class CustomerAgent : Agent, ITile
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_orderFactory = GetNode<IOrderFactory>(Constants.SingletonNodes.OrderFactory);
 		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
+		_tablesSingleton = GetNode<ITablesSingleton>(Constants.SingletonNodes.TablesSingleton);
 
 		ReadyAgent();
 
 		_firstName = _namePickerService.GetRandomName();
 		_lastName = "Customer";
-		_unrequestedOrder = DecideOrder();
+		_order = DecideOrder();
 
-		// Have customer search for a table
-		// then PlaceOrder()
+		_state = States.MovingToTable;
+		
+		_logger.LogInfo("End of Customer _Ready");
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_order == null) return;
+
+		if (_state == States.WaitingAtTable) return;
+
+		if (_tableTarget == null)
+		{
+			_logger.LogInfo("Customer looking for table");
+			_tableTarget = _tablesSingleton.TryGetAvailableTable();
+			if (_tableTarget != null)
+			{
+				SetNavTarget(_tableTarget.GetNodeSelf());
+			}
+		}
 	}
 
 	public void PlaceOrder(Order order)
@@ -62,6 +92,27 @@ public partial class CustomerAgent : Agent, ITile
 	
 	public override void HandleNavTargetArrival()
 	{
+		SetNavTarget(null);
+
 		_logger.LogInfo("CUSTOMER: An agent reached its target.");
+		switch (_state)
+		{
+			case States.MovingToTable:
+				_state = States.WaitingAtTable; 
+
+				PlaceOrder(_order);
+				_order.IsRequested = true;
+				_tableTarget.Order = _order;
+
+				_tableTarget.StopUsing();
+				_tableTarget = null;
+				break;
+			case States.WaitingAtTable:
+				break;
+			case States.Leaving:
+				break;
+			default:
+				break;
+		}
 	}
 }

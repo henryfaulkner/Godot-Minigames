@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bc4mbenosnu6y"
-path="res://.godot/imported/KitchenSim.TileMap.png-cb99dc573bcdc3d84c0f5462b162105f.ctex"
+path="res://.godot/imported/KitchenSim.TileMap.png-87b23e0b2d4831c4d8f1f8ca3de963fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/KitchenSim.TileMap.png"
-dest_files=["res://.godot/imported/KitchenSim.TileMap.png-cb99dc573bcdc3d84c0f5462b162105f.ctex"]
+source_file="res://Assets/Images/KitchenSim.TileMap.png"
+dest_files=["res://.godot/imported/KitchenSim.TileMap.png-87b23e0b2d4831c4d8f1f8ca3de963fc.ctex"]
 
 [params]
 

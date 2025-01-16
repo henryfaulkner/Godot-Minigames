@@ -13,12 +13,14 @@ public partial class StaffAgent : Agent, ITile
 	ILoggerService _logger;
 	IOrderQueueSingleton _orderQueueSingleton;
 	INamePickerService _namePickerService;
+	ITablesSingleton _tablesSingleton;
 
 	public override void _Ready()
 	{
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
+		_tablesSingleton = GetNode<ITablesSingleton>(Constants.SingletonNodes.TablesSingleton);
 
 		ReadyAgent();
 		
@@ -36,6 +38,11 @@ public partial class StaffAgent : Agent, ITile
 		else if (_activeOrder.State == Order.States.Delivering)
 		{
 			// take to customer
+			Table? table = _tablesSingleton.TryFindTableByOrderId(_activeOrder.Id);
+			if (table != null)
+			{
+				SetNavTarget(table.GetNodeSelf());
+			}
 		}
 		else if (_toolTarget == null)
 		{

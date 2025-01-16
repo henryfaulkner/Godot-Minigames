@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=4 uid="uid://b541j8vb8d6x3"]
+[gd_scene load_steps=11 format=4 uid="uid://b541j8vb8d6x3"]
 
-[ext_resource type="Texture2D" uid="uid://pa70cm3vln7g" path="res://Assets/texture_06.png" id="1_aj1rq"]
+[ext_resource type="Texture2D" uid="uid://pa70cm3vln7g" path="res://Assets/Images/texture_06.png" id="1_aj1rq"]
 [ext_resource type="Script" path="res://Pages/Main.cs" id="1_r2gr2"]
-[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/KitchenSim.TileMap.png" id="2_lseic"]
-[ext_resource type="Texture2D" uid="uid://p4nv0bs4m3y7" path="res://Assets/texture_08.png" id="2_wotqu"]
+[ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/Images/KitchenSim.TileMap.png" id="2_lseic"]
+[ext_resource type="Texture2D" uid="uid://p4nv0bs4m3y7" path="res://Assets/Images/texture_08.png" id="2_wotqu"]
 [ext_resource type="PackedScene" uid="uid://msf03topa7sj" path="res://ObjectLibrary/UI/DebugPopup.tscn" id="6_qdnl8"]
-[ext_resource type="PackedScene" uid="uid://cynqpo2ls1q1k" path="res://ObjectLibrary/Agents/CustomerAgent/CustomerAgent.tscn" id="6_sdh67"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_yiwhd"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
@@ -4406,12 +4405,13 @@ sources/2 = SubResource("TileSetAtlasSource_63q03")
 sources/3 = SubResource("TileSetAtlasSource_1tqx8")
 sources/1 = SubResource("TileSetAtlasSource_nqsh5")
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("TileMapLayer", "DebugPopup")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("TileMapLayer", "DebugPopup", "CustomerSpawnPoint")]
 script = ExtResource("1_r2gr2")
 TileMapLayer = NodePath("TileMapLayer")
 GridDimension_X = 36
 GridDimension_Y = 20
 DebugPopup = NodePath("DebugPopup")
+CustomerSpawnPoint = NodePath("CustomerSpawnPoint")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(0, 2)
@@ -4422,6 +4422,5 @@ tile_set = SubResource("TileSet_7gmxc")
 position = Vector2i(0, 512)
 size = Vector2i(1152, 131)
 
-[node name="CustomerAgent" parent="." instance=ExtResource("6_sdh67")]
-
-[node name="CustomerAgent2" parent="." instance=ExtResource("6_sdh67")]
+[node name="CustomerSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(16, -48)
