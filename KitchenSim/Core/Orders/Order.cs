@@ -9,21 +9,12 @@ public class Order
 	public Enumerations.OrderTypes OrderType { get; set; } 
 	public IRecipeBuilder RecipeBuilder { get; set; }
 	public bool IsRequested { get; set; }
-	
-	#region State Machine
-	public States State { get; set; }
-	public enum States 
-	{
-		Available,
-		Preparing,
-		Delivering,
-		Delivered,
-	}
-	#endregion
+	public bool IsAvailable { get; set; }
 	
 	public Order()
 	{
-		State = States.Available;
+		Id = new Guid();
+		IsAvailable = true;
 		IsRequested = false;
 	}
 

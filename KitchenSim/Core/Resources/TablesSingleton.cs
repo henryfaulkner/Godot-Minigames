@@ -1,11 +1,13 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public interface ITablesSingleton
 {
 	void AddTable(Table table);
 	Table? TryGetAvailableTable();  
+	Table? TryFindTableByOrderId(Guid id);
 }
 
 public partial class TablesSingleton : Node, ITablesSingleton
@@ -37,5 +39,11 @@ public partial class TablesSingleton : Node, ITablesSingleton
 			} 
 		}
 		return null;
+	}
+
+	public Table? TryFindTableByOrderId(Guid id)
+	{
+		return _tableList
+			.FirstOrDefault(x => x.Order.Id == id);
 	}
 }

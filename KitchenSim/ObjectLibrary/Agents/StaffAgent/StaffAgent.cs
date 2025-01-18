@@ -5,6 +5,9 @@ using System.Text;
 
 public partial class StaffAgent : Agent, ITile
 {
+	// Assume this node exists on the same tree-level as StaffAgent
+	Marker2D StaffWaitingPoint { get; set; }
+
 	string _firstName;
 	string _lastName;
 	Order? _activeOrder;
@@ -15,8 +18,21 @@ public partial class StaffAgent : Agent, ITile
 	INamePickerService _namePickerService;
 	ITablesSingleton _tablesSingleton;
 
+	#region State Machine
+	States _state;
+	enum States
+	{
+		Waiting,
+		PreparingOrder,
+		DeliveringOrder,
+		ReturningToKitchen,
+	}
+	#endregion
+
 	public override void _Ready()
 	{
+		StaffWaitingPoint = GetNode<Marker2D>("../StaffWaitingPoint");
+
 		_logger = GetNode<ILoggerService>(Constants.SingletonNodes.LoggerService);
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
@@ -26,6 +42,8 @@ public partial class StaffAgent : Agent, ITile
 		
 		_firstName = _namePickerService.GetRandomName();
 		_lastName = "Staffer";
+
+		_state = States.Waiting;
 	}
 
 	public override void _Process(double delta)
@@ -33,9 +51,9 @@ public partial class StaffAgent : Agent, ITile
 		if (_activeOrder == null)
 		{
 			_activeOrder = TryTakeOrder();
-			if (_activeOrder != null) _activeOrder.State = Order.States.Preparing;
+			if (_activeOrder != null) _state = States.PreparingOrder;
 		}
-		else if (_activeOrder.State == Order.States.Delivering)
+		else if (_state == States.DeliveringOrder)
 		{
 			// take to customer
 			Table? table = _tablesSingleton.TryFindTableByOrderId(_activeOrder.Id);
@@ -43,6 +61,10 @@ public partial class StaffAgent : Agent, ITile
 			{
 				SetNavTarget(table.GetNodeSelf());
 			}
+		}
+		else if (_activeOrder.RecipeBuilder.CheckDoneness())
+		{
+			_state = States.DeliveringOrder;
 		}
 		else if (_toolTarget == null)
 		{
@@ -71,27 +93,42 @@ public partial class StaffAgent : Agent, ITile
 	{
 		SetNavTarget(null);
 
-		// Do tool action with delay
-		TimingFunctions.SetTimeout(() => {
-			_logger.LogInfo("STAFF: An agent reached its target.");
-			switch (_toolTarget.GetToolType())
-			{
-				case Enumerations.ToolTypes.CuttingBoard:
-					_activeOrder.RecipeBuilder.ChopIngredients();
-					break;
-				case Enumerations.ToolTypes.Fridge:
-					_activeOrder.RecipeBuilder.CheckFridge();
-					break;
-				case Enumerations.ToolTypes.OvenAndStove:
-					_activeOrder.RecipeBuilder.CookWithOvenAndStove();
-					break;
-				default:
-					_logger.LogError("StaffAgent HandleNavTargetArrival ToolTypes did not map properly.");
-					break;
-			}
+		_logger.LogInfo("STAFF: An agent reached its target.");
+		switch (_state)
+		{
+			case States.PreparingOrder:
+				// Do tool action with delay
+				TimingFunctions.SetTimeout(() => {
+					switch (_toolTarget.GetToolType())
+					{
+						case Enumerations.ToolTypes.CuttingBoard:
+							_activeOrder.RecipeBuilder.ChopIngredients();
+							break;
+						case Enumerations.ToolTypes.Fridge:
+							_activeOrder.RecipeBuilder.CheckFridge();
+							break;
+						case Enumerations.ToolTypes.OvenAndStove:
+							_activeOrder.RecipeBuilder.CookWithOvenAndStove();
+							break;
+						default:
+							_logger.LogError("StaffAgent HandleNavTargetArrival ToolTypes did not map properly.");
+							break;
+					}
 
-			_toolTarget.StopUsing();
-			_toolTarget = null;
-		}, 3000);
+					_toolTarget.StopUsing();
+					_toolTarget = null;
+				}, 3000);
+				break;
+			case States.DeliveringOrder:
+				_activeOrder = null;
+				SetNavTarget(StaffWaitingPoint);
+				_state = States.ReturningToKitchen;
+				break;
+			case States.ReturningToKitchen:
+				_state = States.Waiting;
+				break;
+			default:
+				break;
+		}
 	}
 }
