@@ -1,4 +1,3 @@
-
 using Godot;
 using System;
 using System.Text;
@@ -17,6 +16,7 @@ public partial class StaffAgent : Agent, ITile
 	IOrderQueueSingleton _orderQueueSingleton;
 	INamePickerService _namePickerService;
 	ITablesSingleton _tablesSingleton;
+	Observables _observables;
 
 	#region State Machine
 	States _state;
@@ -37,6 +37,7 @@ public partial class StaffAgent : Agent, ITile
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_namePickerService = GetNode<INamePickerService>(Constants.SingletonNodes.NamePickerService);
 		_tablesSingleton = GetNode<ITablesSingleton>(Constants.SingletonNodes.TablesSingleton);
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 
 		ReadyAgent();
 		
@@ -44,6 +45,8 @@ public partial class StaffAgent : Agent, ITile
 		_lastName = "Staffer";
 
 		_state = States.Waiting;
+
+		_observables.SetDebugTargetMarker += SetNavTarget;
 	}
 
 	public override void _Process(double delta)

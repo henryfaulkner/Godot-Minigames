@@ -34,11 +34,14 @@ public partial class Main : Node2D
 	IOrderQueueSingleton _orderQueueSingleton;
 	IToolsSingleton _toolsSingleton;
 	ITablesSingleton _tablesSingleton;
+	Observables _observables;
 
 	#region Agents
 	List<StaffAgent> _staffList = new List<StaffAgent>();
 	List<CustomerAgent> _customerList = new List<CustomerAgent>();
 	#endregion
+
+	Marker2D? DebugTargetMarker { get; set; }
 
 	public override void _Ready()
 	{
@@ -49,6 +52,7 @@ public partial class Main : Node2D
 		_orderQueueSingleton = GetNode<IOrderQueueSingleton>(Constants.SingletonNodes.OrderQueueSingleton);
 		_toolsSingleton = GetNode<IToolsSingleton>(Constants.SingletonNodes.ToolsSingleton);
 		_tablesSingleton = GetNode<ITablesSingleton>(Constants.SingletonNodes.TablesSingleton);
+		_observables = GetNode<Observables>(Constants.SingletonNodes.Observables);
 
 		_tileMapService.SetTileSize(GetTileSize());
 
@@ -74,6 +78,18 @@ public partial class Main : Node2D
 		if (@event.IsActionReleased("spawn_customer"))
 		{
 			_customerList.Add(_agentFactory.SpawnCustomerAgent(GetNode<Node>("."), CustomerSpawnPoint.Position));
+		}
+
+		if (@event.IsActionReleased("click"))
+		{
+			// Spawn marker at mouse position 
+			if (DebugTargetMarker != null) 
+				DebugTargetMarker.QueueFree();
+			var cursor = GetViewport().GetMousePosition();
+			DebugTargetMarker = new Marker2D();
+			GetNode(".").AddChild(DebugTargetMarker);
+			DebugTargetMarker.Position = cursor;
+			_observables.EmitSetDebugTargetMarker(DebugTargetMarker);
 		}
 	}
 

@@ -7,6 +7,13 @@ public partial class Observables : Node
 	public delegate void OpenAdminPanelEventHandler();
 	public void EmitOpenAdminPanel()
 	{
-		EmitOpenAdminPanel();
+		EmitSignal(SignalName.OpenAdminPanel);
+	}
+
+	[Signal]
+	public delegate void SetDebugTargetMarkerEventHandler(Node2D node);
+	public void EmitSetDebugTargetMarker(Node2D node)
+	{
+		EmitSignal(SignalName.SetDebugTargetMarker, node);
 	}
 }
