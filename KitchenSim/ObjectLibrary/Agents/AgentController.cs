@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class AgentController : CharacterBody2D
 {
@@ -25,6 +26,10 @@ public partial class AgentController : CharacterBody2D
 	protected Timer MovementTimer;
 
 	Node2D _navTarget;
+	const float _seekWeight = 1.0f;
+	const float _avoidWeight = 1.5f;
+	[Export] public float _avoidRadius = 50f;     // Radius for obstacle detection
+	[Export] public float _avoidStrength = 100f;  // Multiplier for avoidance force
 
 	ITileMapService _tileMapService;
 	ILoggerService _logger;
@@ -47,9 +52,9 @@ public partial class AgentController : CharacterBody2D
 		_tileMapService = GetNode<ITileMapService>(Constants.SingletonNodes.TileMapService);
 
 		MovementTimer.Timeout += HandleTimerTimeout;
-		NavAgent.VelocityComputed += HandleNavAgentVelocityComputed; // I am trying to get the agents to avoid each other
 
-		Velocity = new Vector2(1, 1);
+		// disable automatic behavior
+		NavAgent.Velocity = Vector2.Zero;
 	}
 
 	public override void _Input(InputEvent @event)
@@ -65,6 +70,8 @@ public partial class AgentController : CharacterBody2D
 	private void HandleTimerTimeout()
 	{
 		if (_navTarget == null) return;
+		if (NavAgent.IsNavigationFinished()) return;
+
 		HandlePathFinding();
 		//HandleCollision();
 		HandleMovement();
@@ -122,11 +129,14 @@ public partial class AgentController : CharacterBody2D
 
 	private void HandlePathFinding()
 	{
-		NavAgent.TargetPosition = _navTarget.GlobalPosition;
-		var dir = ToLocal(NavAgent.GetNextPathPosition()).Normalized();
+		var nextPathPosition = NavAgent.GetNextPathPosition();
 
-		NavAgent.Velocity // I am trying to get the agents to avoid each other
-			= GlobalPosition.DirectionTo(NavAgent.TargetPosition) * _tileMapService.GetTileSize();
+		// Calc Context-based steering
+		var seek = SeekForce(nextPathPosition);
+		var avoid = AvoidanceForce(_avoidRadius, _avoidStrength);
+		var steering = (seek * _seekWeight + avoid * _avoidWeight);
+
+		var dir = steering;
 		
 		bool useX = Mathf.Abs(dir.X) >= Mathf.Abs(dir.Y);
 		bool useY = Mathf.Abs(dir.X) < Mathf.Abs(dir.Y);
@@ -214,10 +224,29 @@ public partial class AgentController : CharacterBody2D
 		}
 	}
 
-	// I am trying to get the agents to avoid each other
-	private void HandleNavAgentVelocityComputed(Vector2 safeVelocity)
+	#region Context-based steering
+
+	// Calculate a force to move toward the next waypoint from NavigationAgent.
+	private Vector2 SeekForce(Vector2 target)
 	{
-		_logger.LogDebug($"Safe Velocity {safeVelocity.ToString()}");
-		Velocity = safeVelocity;
+		return (target - GlobalPosition).Normalized();
 	}
+
+	// Add forces to steer away from nearby obstacles or agents.
+	private Vector2 AvoidanceForce(float radius, float strength)
+	{
+		var result = Vector2.Zero;
+		var obstacles = GetNearbyObstacles(radius);
+		foreach (var obstacle in obstacles)
+		{
+			 var direction = (obstacle.GlobalPosition - GlobalPosition).Normalized();
+			var distance = GlobalPosition.DistanceTo(obstacle.GlobalPosition);
+
+			// Stronger avoidance for closer obstacles
+			result -= direction * (1.0f / distance) * strength;
+		}
+		return result;
+	}
+
+	#endregion 
 }
