@@ -28,7 +28,7 @@ public partial class Main : Node2D
 
 		for (int i = 0; i < INIT_NUM_BOIDS; i += 1)
 		{
-			_boidFactory.SpawnBoid(this, GetAlteredSpawnPoint(centerOfViewport));
+			_boidFactory.SpawnBoid(this, GetAlteredSpawnPoint(CenterOfViewport));
 		}
 	}
 	

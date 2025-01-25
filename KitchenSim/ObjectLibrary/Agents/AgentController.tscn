@@ -1,19 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4cneyf8fgayy"]
+[gd_scene load_steps=5 format=3 uid="uid://b4cneyf8fgayy"]
 
 [ext_resource type="Script" path="res://ObjectLibrary/Agents/AgentController.cs" id="1_027jn"]
 [ext_resource type="Texture2D" uid="uid://bc4mbenosnu6y" path="res://Assets/Images/KitchenSim.TileMap.png" id="2_0j0kj"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_55mue"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgs4"]
 size = Vector2(32, 32)
 
-[node name="AgentController" type="CharacterBody2D" node_paths=PackedStringArray("RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "NavAgent", "MovementTimer")]
+[node name="AgentController" type="CharacterBody2D" node_paths=PackedStringArray("Area", "AreaCollision", "Sprite", "Collision", "RayCastUp", "RayCastRight", "RayCastDown", "RayCastLeft", "NavAgent", "MovementTimer")]
 script = ExtResource("1_027jn")
+Area = NodePath("Area2D")
+AreaCollision = NodePath("Area2D/CollisionShape2D")
+Sprite = NodePath("Sprite2D")
+Collision = NodePath("CollisionShape2D")
 RayCastUp = NodePath("RayCast_Up")
 RayCastRight = NodePath("RayCast_Right")
 RayCastDown = NodePath("RayCast_Down")
 RayCastLeft = NodePath("RayCast_Left")
 NavAgent = NodePath("NavigationAgent2D")
 MovementTimer = NodePath("MovementTimer")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_55mue")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_0j0kj")

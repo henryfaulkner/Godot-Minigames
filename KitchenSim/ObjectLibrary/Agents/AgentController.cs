@@ -3,9 +3,19 @@ using System;
 using System.Collections.Generic;
 
 public partial class AgentController : CharacterBody2D
-{
+{	
 	[Signal]
 	public delegate void WithinOneCardinalBlockFromNavTargetEventHandler();
+
+	[ExportGroup("Form")]
+	[Export]
+	protected Area2D Area { get; set; }
+	[Export]
+	protected CollisionShape2D AreaCollision { get; set; }
+	[Export]
+	protected Sprite2D Sprite { get; set; }
+	[Export]
+	protected CollisionShape2D Collision { get; set; }
 
 	[ExportGroup("RayCasts")]
 	[Export]
@@ -28,8 +38,6 @@ public partial class AgentController : CharacterBody2D
 	Node2D _navTarget;
 	const float _seekWeight = 1.0f;
 	const float _avoidWeight = 1.5f;
-	[Export] public float _avoidRadius = 50f;     // Radius for obstacle detection
-	[Export] public float _avoidStrength = 100f;  // Multiplier for avoidance force
 
 	ITileMapService _tileMapService;
 	ILoggerService _logger;
@@ -70,7 +78,6 @@ public partial class AgentController : CharacterBody2D
 	private void HandleTimerTimeout()
 	{
 		if (_navTarget == null) return;
-		if (NavAgent.IsNavigationFinished()) return;
 
 		HandlePathFinding();
 		//HandleCollision();
@@ -129,33 +136,42 @@ public partial class AgentController : CharacterBody2D
 
 	private void HandlePathFinding()
 	{
+		NavAgent.TargetPosition = _navTarget.GlobalPosition;
 		var nextPathPosition = NavAgent.GetNextPathPosition();
 
 		// Calc Context-based steering
 		var seek = SeekForce(nextPathPosition);
-		var avoid = AvoidanceForce(_avoidRadius, _avoidStrength);
+		var avoid = AvoidanceForce();
 		var steering = (seek * _seekWeight + avoid * _avoidWeight);
 
 		var dir = steering;
 		
+		_logger.LogInfo($"agent position: {GlobalPosition}");
+		_logger.LogInfo($"nextPathPosition: {nextPathPosition.ToString()}");
+		_logger.LogInfo($"seek: {seek.ToString()}");
+		_logger.LogInfo($"avoid: {avoid.ToString()}");
+		_logger.LogInfo($"dir: {dir.ToString()}");
+		
 		bool useX = Mathf.Abs(dir.X) >= Mathf.Abs(dir.Y);
 		bool useY = Mathf.Abs(dir.X) < Mathf.Abs(dir.Y);
-		if (useY && dir.Y < 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
+		if (useY && dir.Y < 0)
 		{
 			CurrentState = States.MoveUp;
 		}
-		else if (useX && dir.X >= 0 && Mathf.Floor(NavAgent.Velocity.X) != 0)
+		else if (useX && dir.X >= 0)
 		{
 			CurrentState = States.MoveRight;
 		}
-		else if (useY && dir.Y >= 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
+		else if (useY && dir.Y >= 0)
 		{
 			CurrentState = States.MoveDown;
 		}
-		else if (useX && dir.X < 0 && Mathf.Floor(NavAgent.Velocity.Y) != 0)
+		else if (useX && dir.X < 0)
 		{
 			CurrentState = States.MoveLeft;
 		}
+
+		_logger.LogInfo($"CurrState {CurrentState.ToString()}");
 	}
 
 	private void HandleManualInputs(InputEvent @event)
@@ -233,17 +249,22 @@ public partial class AgentController : CharacterBody2D
 	}
 
 	// Add forces to steer away from nearby obstacles or agents.
-	private Vector2 AvoidanceForce(float radius, float strength)
+	private Vector2 AvoidanceForce()
 	{
 		var result = Vector2.Zero;
-		var obstacles = GetNearbyObstacles(radius);
+		var obstacles = Area.GetOverlappingBodies();
+		_logger.LogInfo($"obstacle count: {obstacles.Count}");
 		foreach (var obstacle in obstacles)
 		{
-			 var direction = (obstacle.GlobalPosition - GlobalPosition).Normalized();
+			var direction = (obstacle.GlobalPosition - GlobalPosition).Normalized();
+			_logger.LogInfo($"obstacle direction: {direction}");
 			var distance = GlobalPosition.DistanceTo(obstacle.GlobalPosition);
+			_logger.LogInfo($"obstacle distance: {distance}");
+			if (distance == 0) continue;
 
 			// Stronger avoidance for closer obstacles
-			result -= direction * (1.0f / distance) * strength;
+			var avoidStrength = 100f;
+			result -= direction * (1.0f / distance) * avoidStrength;
 		}
 		return result;
 	}
